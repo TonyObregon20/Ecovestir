@@ -1,18 +1,31 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import Producto from "./components/Productos";
-import "./index.css"; // CSS global con tu paleta de colores
+import Productos from "./components/Productos";
+import ProductosPage from "./pages/ProductosPage";
 import Footer from "./components/Footer";
+import "./index.css";
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <Navbar />
-      <Hero />
-      <Producto />
+      <Routes>
+        {/* Página principal */}
+        <Route
+          path="/"
+          element={
+            <>
+              <Hero />
+              <Productos />
+            </>
+          }
+        />
+        {/* Página de Productos independiente */}
+        <Route path="/productos" element={<ProductosPage />} />
+      </Routes>
       <Footer />
-      
-    </>
+    </BrowserRouter>
   );
 }
 
