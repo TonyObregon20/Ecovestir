@@ -1,0 +1,343 @@
+/* ======================================
+   Paleta de Colores EcoVestir
+====================================== */
+:root {
+  /* Colores Principales de Sostenibilidad */
+  --verde-primario: #059669;   /* Elementos principales / CTA */
+  --verde-oscuro: #047857;     /* Hover / énfasis */
+  --verde-claro: #10B981;      /* Acentos / secundarios */
+
+  /* Colores Neutros */
+  --blanco: #ffffff;            /* Fondo principal */
+  --gris-claro: #f9fafb;       /* Fondos secciones alternativas */
+  --gris-medio: #6b7280;       /* Texto secundario / descripciones */
+  --gris-oscuro: #111827;      /* Texto principal / títulos */
+
+  /* Colores de Acento */
+  --azul-acento: #3B82F6;      /* Enlaces y elementos interactivos */
+  --amarillo-acento: #FACC15;  /* Destacar ofertas / promociones */
+}
+
+/* ======================================
+   Estilos Globales
+====================================== */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--blanco);
+  color: var(--gris-oscuro);
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedores */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--gris-oscuro);
+}
+
+/* Texto secundario */
+p, span, small {
+  color: var(--gris-medio);
+}
+
+/* Botones */
+button {
+  background-color: var(--verde-primario);
+  color: var(--blanco);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--verde-oscuro);
+}
+
+/* Enlaces */
+a {
+  color: var(--azul-acento);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: var(--verde-claro);
+  text-decoration: underline;
+}
+
+/* Fondos alternativos */
+.bg-verde-claro {
+  background-color: var(--verde-claro);
+}
+
+.bg-gris-claro {
+  background-color: var(--gris-claro);
+}
+
+.bg-blanco {
+  background-color: var(--blanco);
+}
+
+/* Bordes */
+.border-verde-primario {
+  border: 1px solid var(--verde-primario);
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 32px;
+  background-color: var(--blanco);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  height: 40px;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: var(--verde-primario);
+}
+
+.navbar-links {
+  display: flex;
+  gap: 24px;
+}
+
+.navbar-links a {
+  color: var(--gris-oscuro);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navbar-links a:hover {
+  color: var(--verde-claro);
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-input {
+  padding: 6px 10px;
+  border: 1px solid var(--gris-medio);
+  border-radius: 6px;
+}
+
+.cart-button {
+  background-color: var(--verde-primario);
+  color: var(--blanco);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cart-button:hover {
+  background-color: var(--verde-oscuro);
+}
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(to right, var(--gris-claro), var(--blanco));
+  padding: 64px 24px;
+}
+
+.hero-container {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .hero-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--gris-oscuro);
+  margin-bottom: 8px;
+}
+
+.hero-subtitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--verde-primario);
+  margin-bottom: 24px;
+}
+
+.hero-description {
+  color: var(--gris-medio);
+  margin-bottom: 24px;
+}
+
+.hero-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 32px;
+}
+
+.hero-features li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.feature-dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--verde-claro);
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.btn-primary {
+  background-color: var(--verde-primario);
+  color: var(--blanco);
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: var(--verde-oscuro);
+}
+
+.btn-secondary {
+  background-color: var(--blanco);
+  color: var(--gris-oscuro);
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--gris-medio);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--gris-claro);
+}
+
+.hero-image img {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+.productos-section {
+  padding: 50px 20px;
+  background-color: var(--blanco);
+}
+
+.productos-title {
+  color: var(--verde-primario);
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.productos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-card {
+  flex: 1 1 200px;
+  border: 1px solid var(--gris-claro);
+  border-radius: 8px;
+  padding: 16px;
+  background-color: var(--blanco);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.product-title {
+  color: var(--gris-oscuro);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.product-description {
+  color: var(--gris-medio);
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.product-price {
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.btn-primary {
+  padding: 10px 16px;
+  border-radius: 6px;
+  background-color: var(--verde-primario);
+  color: var(--blanco);
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: var(--verde-secundario);
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--verde-primario);
+  border: 2px solid var(--verde-primario);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-secondary:hover {
+  background-color: var(--verde-primario);
+  color: var(--blanco);
+}
+
+.productos-footer {
+  text-align: center;
+  margin-top: 30px;
+}
