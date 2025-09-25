@@ -1,17 +1,38 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Product schema: campos básicos para un e-commerce de ropa/ecoproductos.
 const productSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: String,
-  price: { type: Number, required: true },
-  stock: { type: Number, default: 0 },
-  category: String,
-  sizes: [String],
-  images: [String], // URLs a CDN/Cloudinary/S3
-  material: String,
+  name: { 
+    type: String, 
+    required: [true, "El nombre es obligatorio"], 
+    unique: true, 
+    trim: true 
+  },
+  description: { type: String, trim: true },
+  price: { 
+    type: Number, 
+    required: true, 
+    min: [0, "El precio no puede ser negativo"] 
+  },
+  stock: { 
+    type: Number, 
+    default: 0, 
+    min: [0, "El stock no puede ser negativo"] 
+  },
+  category: { 
+    type: String, 
+    enum: ["camisetas", "pantalones", "accesorios", "otros"], 
+    default: "otros" 
+  },
+  sizes: { 
+    type: [String], 
+    enum: ["S", "M", "L", "XL"], 
+    default: [] 
+  },
+  images: { type: [String], default: [] }, // URLs
+  material: { type: String, trim: true },
   ecoFriendly: { type: Boolean, default: true },
+  isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model("Product", productSchema);

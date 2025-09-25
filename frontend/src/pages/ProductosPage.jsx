@@ -1,49 +1,53 @@
-import { useState } from "react";
+// Página de Productos
+// - Lista los productos obtenidos desde el backend (/api/products).
+// - Soporta paginación, búsqueda (`q`) y filtro por categoría.
+// - Para cambiar la URL del backend ajusta `frontend/.env` con VITE_API_URL o modifica `frontend/src/api.js`.
+import { useEffect, useState } from "react";
 import ProductCard from "../components/Productcard";
-import "../index.css"; // asegúrate de importar tu CSS
+import "../index.css";
+import api from "../api";
 
 export default function ProductosPage() {
-  const productos = [
-    {
-      id: 1,
-      nombre: "Camiseta de Algodón Orgánico Premium",
-      categoria: "Camisetas",
-      precio: 45,
-      precioAntes: 60,
-      imagen: "https://images.unsplash.com/photo-1643286131725-5e0ad3b3ca02",
-      reviews: 124,
-    },
-    {
-      id: 2,
-      nombre: "Pantalón de Cáñamo Ecológico",
-      categoria: "Pantalones",
-      precio: 86,
-      precioAntes: null,
-      imagen: "https://images.unsplash.com/photo-1543121032-68865adeff3f",
-      reviews: 98,
-    },
-  ];
-
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [category, setCategory] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+  useEffect(() => {
+    let mounted = true;
+    const fetch = async () => {
+      try {
+        setLoading(true);
+        const q = search ? `&q=${encodeURIComponent(search)}` : '';
+        const cat = category ? `&category=${encodeURIComponent(category)}` : '';
+        const res = await api.get(`/api/products?page=${page}&limit=12${q}${cat}`);
+        const data = res.data && res.data.data ? res.data.data : res.data;
+        const meta = res.data && res.data.meta ? res.data.meta : { total: data.length, page: 1, limit: data.length };
+        if (mounted) {
+          setProductos(data.map(mapProductToUI));
+          setTotalPages(meta.totalPages || 1);
+        }
+      } catch (err) {
+        console.error(err);
+        if (mounted) setError('No se pudieron cargar los productos');
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    fetch();
+    return () => { mounted = false; };
+  }, [search, category, page]);
+
+  const handleCategoryChange = (cat) => {
+    setCategory((prev) => (prev === cat ? '' : cat));
+    setPage(1);
   };
-
-  const filteredProducts = productos.filter(
-    (p) =>
-      p.nombre.toLowerCase().includes(search.toLowerCase()) &&
-      (selectedCategories.length === 0 || selectedCategories.includes(p.categoria))
-  );
 
   return (
     <main className="productos-page">
-      {/* Sidebar filtros */}
       <aside className="filtros-sidebar">
         <h3>Filtros</h3>
 
@@ -60,12 +64,12 @@ export default function ProductosPage() {
 
         <fieldset className="filtro-categorias">
           <legend>Categorías</legend>
-          {["Camisetas", "Vestidos", "Pantalones", "Camisas"].map((cat) => (
+          {["camisetas", "pantalones", "accesorios", "otros"].map((cat) => (
             <label key={cat} htmlFor={cat}>
               <input
                 type="checkbox"
                 id={cat}
-                checked={selectedCategories.includes(cat)}
+                checked={category === cat}
                 onChange={() => handleCategoryChange(cat)}
               />
               {cat}
@@ -77,28 +81,50 @@ export default function ProductosPage() {
           className="btn-limpiar"
           onClick={() => {
             setSearch("");
-            setSelectedCategories([]);
+            setCategory("");
           }}
         >
           Limpiar filtros
         </button>
       </aside>
 
-      {/* Listado productos */}
       <section className="productos-listado">
         <header>
           <h2>Nuestra Colección Orgánica</h2>
           <p>Descubre nuestra gama de ropa sostenible fabricada con materiales 100% orgánicos.</p>
         </header>
 
-        <div className="grid-productos">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((p) => <ProductCard key={p.id} producto={p} />)
-          ) : (
-            <p className="sin-productos">No se encontraron productos.</p>
-          )}
+        {loading ? (
+          <p style={{ padding: 20 }}>Cargando productos...</p>
+        ) : error ? (
+          <p style={{ padding: 20, color: 'red' }}>{error}</p>
+        ) : (
+          <div className="grid-productos">
+            {productos.length > 0 ? (
+              productos.map((p) => <ProductCard key={p._id} producto={p} />)
+            ) : (
+              <p className="sin-productos">No se encontraron productos.</p>
+            )}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+          <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>Anterior</button>
+          <span style={{ margin: '0 12px' }}>Página {page} / {totalPages}</span>
+          <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Siguiente</button>
         </div>
       </section>
     </main>
   );
+}
+
+function mapProductToUI(p) {
+  return {
+    _id: p._id,
+    nombre: p.name,
+    descripcion: p.description || '',
+    precio: p.price,
+    imagen: p.images && p.images.length ? p.images[0] : 'https://via.placeholder.com/400x400?text=No+Image',
+    categoria: p.category,
+  };
 }
