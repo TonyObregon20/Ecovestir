@@ -341,3 +341,114 @@ a:hover {
   text-align: center;
   margin-top: 30px;
 }
+
+/* Estructura principal */
+.productos-page {
+  display: flex;
+  gap: 20px;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+/* Sidebar filtros */
+.filtros-sidebar {
+  flex: 0 0 250px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.filtros-sidebar h3 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+/* Filtro búsqueda */
+.filtro-busqueda {
+  margin-bottom: 20px;
+}
+
+.filtro-busqueda label {
+  display: block;
+  margin-bottom: 5px;
+  color: #777;
+}
+
+.filtro-busqueda input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #333;
+}
+
+/* Filtro categorías */
+.filtro-categorias {
+  border: none;
+  margin-bottom: 20px;
+}
+
+.filtro-categorias legend {
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.filtro-categorias label {
+  display: block;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.filtro-categorias input {
+  margin-right: 8px;
+}
+
+/* Botón limpiar filtros */
+.btn-limpiar {
+  padding: 10px;
+  background-color: #059669;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+/* Listado de productos */
+.productos-listado {
+  flex: 1;
+}
+
+.productos-listado header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.productos-listado h2 {
+  font-size: 2rem;
+}
+
+.productos-listado p {
+  color: #777;
+}
+
+.grid-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.sin-productos {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #777;
+}
+
