@@ -1,33 +1,42 @@
+// Componente Productos
+// - Muestra una selección de productos destacados en la página principal.
+// - Obtiene datos del backend mediante el cliente `api` (frontend/src/api.js).
+// - Maneja estados: loading, error y mapea el shape del backend al shape de la UI.
+// - Si el backend no responde verás el mensaje de error en la UI.
+// Nota: este componente hace una petición GET a `/api/products?limit=6`.
 import ProductCard from "./Productcard";
+import { useEffect, useState } from "react";
+import api from "../api";
 
 export default function Productos() {
-  const productos = [
-    {
-      nombre: "Camiseta Orgánica",
-      descripcion: "Algodón 100% orgánico.",
-      precio: 25,
-      imagen:
-        "https://images.unsplash.com/photo-1643286131725-5e0ad3b3ca02?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwbGluZW4lMjBzaGlydCUyMG5hdHVyYWwlMjBmYWJyaWN8ZW58MXx8fHwxNzU3NTUwMzA0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      nuevo: true,
-      organico: true,
-      estrellas: 4,
-    },
-    {
-      nombre: "Pantalón Sostenible",
-      descripcion: "Material reciclado.",
-      precio: 40,
-      imagen:
-        "https://images.unsplash.com/photo-1543121032-68865adeff3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGhlbXAlMjBjbG90aGluZ3xlbnwxfHx8fDE3NTc1NTAzMDR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      nuevo: false,
-      organico: true,
-      estrellas: 5,
-    },
-  ];
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get('/api/products?limit=6');
+        const data = res.data && res.data.data ? res.data.data : res.data;
+        if (mounted) setProductos(data.map(mapProductToUI));
+      } catch (err) {
+        console.error(err);
+        if (mounted) setError('No se pudieron cargar los productos');
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    fetchProducts();
+    return () => { mounted = false; };
+  }, []);
+
+  if (loading) return <p style={{ padding: 20 }}>Cargando productos...</p>;
+  if (error) return <p style={{ padding: 20, color: 'red' }}>{error}</p>;
 
   return (
-    <section
-      style={{ padding: "50px 20px", backgroundColor: "var(--blanco)" }}
-    >
+    <section style={{ padding: "50px 20px", backgroundColor: "var(--blanco)" }}>
       <div className="container">
         <h2
           style={{
@@ -39,34 +48,42 @@ export default function Productos() {
           Productos Destacados
         </h2>
 
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "20px",
-          }}
-        >
-          {productos.map((p, index) => (
-            <ProductCard key={index} producto={p} />
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+          {productos.slice(0, 2).map((p) => (
+            <ProductCard key={p._id} producto={p} />
           ))}
         </div>
 
-        {/* Botón centrado */}
         <div style={{ textAlign: "center", marginTop: "30px" }}>
-          <button
-            style={{
-              padding: "10px 20px",
-              borderRadius: "6px",
-              backgroundColor: "var(--verde-primario)",
-              color: "var(--blanco)",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Ver Todos los Productos
-          </button>
+          <a href="/productos">
+            <button
+              style={{
+                padding: "10px 20px",
+                borderRadius: "6px",
+                backgroundColor: "var(--verde-primario)",
+                color: "var(--blanco)",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Ver Todos los Productos
+            </button>
+          </a>
         </div>
       </div>
     </section>
   );
+}
+
+function mapProductToUI(p) {
+  return {
+    _id: p._id,
+    nombre: p.name,
+    descripcion: p.description || '',
+    precio: p.price,
+    imagen: p.images && p.images.length ? p.images[0] : 'https://via.placeholder.com/400x400?text=No+Image',
+    nuevo: false,
+    organico: p.ecoFriendly || false,
+    estrellas: 4,
+  };
 }
