@@ -49,7 +49,7 @@ export default function Productos() {
         </h2>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
-          {productos.map((p) => (
+          {productos.slice(0, 2).map((p) => (
             <ProductCard key={p._id} producto={p} />
           ))}
         </div>
