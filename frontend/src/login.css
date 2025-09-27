@@ -1,0 +1,261 @@
+/* === AUTH FORM STYLES === */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #e6f9f0; /* Fondo verde claro */
+  padding: 20px;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.auth-card h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.auth-card p {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 20px;
+}
+
+.auth-tabs {
+  display: flex;
+  background: #ecf0f1;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.auth-tab.active {
+  background: #27ae60;
+  color: white;
+}
+
+.auth-tab:hover:not(.active) {
+  background: #dfe6e9;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.auth-input-group {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.auth-input-group label {
+  display: block;
+  font-size: 14px;
+  color: #2c3e50;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 12px 15px 12px 40px; /* Ajuste para que el texto esté alineado con el placeholder */
+  border: 1px solid #bdc3c7;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: #f8faf9;
+  outline: none;
+  box-sizing: border-box;
+  line-height: 1.4; /* Asegura alineación vertical */
+}
+
+.auth-input:focus {
+  border-color: #27ae60;
+  box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.1);
+}
+
+.auth-input::placeholder {
+  color: #95a5a6;
+  font-style: italic;
+  line-height: 1.4; /* Asegura que el placeholder tenga la misma altura */
+}
+
+/* Ícono dentro del input — AJUSTADO PARA ALINEAR CON EL TEXTO */
+.auth-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 52%; /* 👈 AJUSTE CLAVE: 52% en lugar de 50% */
+  transform: translateY(-50%);
+  color: #7f8c8d;
+  pointer-events: none;
+  font-size: 16px;
+}
+
+/* Botón de mostrar/ocultar contraseña */
+.auth-password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 52%; /* 👈 AJUSTE CLAVE: 52% en lugar de 50% */
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #7f8c8d;
+  font-size: 16px;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.auth-password-toggle:hover {
+  color: #27ae60;
+}
+
+/* Checkbox y texto "Recordarme" */
+.auth-checkbox-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px 0;
+}
+
+.auth-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #27ae60;
+  cursor: pointer;
+}
+
+.auth-checkbox-label {
+  font-size: 14px;
+  color: #2c3e50;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Enlace "¿Olvidaste tu contraseña?" */
+.forgot-password-link {
+  color: #27ae60;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.forgot-password-link:hover {
+  color: #2ecc71;
+  text-decoration: underline;
+}
+
+/* Botón de Iniciar Sesión */
+.auth-submit {
+  width: 100%;
+  padding: 14px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-sizing: border-box;
+}
+
+.auth-submit:hover {
+  background: #2ecc71;
+  transform: translateY(-1px);
+}
+
+/* Footer del formulario */
+.auth-footer {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ecf0f1;
+  font-size: 14px;
+  color: #7f8d;
+  text-align: center;
+}
+
+.auth-footer a {
+  color: #27ae60;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Botón "Volver al Inicio" */
+.auth-back-button {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: #27ae60;
+  border: 2px solid #27ae60;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.auth-back-button:hover {
+  background: #e6f9f0;
+  transform: translateY(-1px);
+}
+
+/* Estilos para el btn de login/logout */
+.auth-button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.auth-button.login {
+  background: #27ae60;
+  color: white;
+}
+
+.auth-button.login:hover {
+  background: #2ecc71;
+}
+
+.auth-button.logout {
+  background: #e74c3c;
+  color: white;
+}
+
+.auth-button.logout:hover {
+  background: #c0392b;
+}
+
+.auth-logo {
+  margin-bottom: 8px;
+}
