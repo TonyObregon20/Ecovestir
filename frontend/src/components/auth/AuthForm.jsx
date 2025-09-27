@@ -6,15 +6,19 @@ import { Leaf } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 const AuthForm = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
 
-  // Si ya está autenticado, redirigir al inicio
+  // Si ya está autenticado, redirigir según rol
   useEffect(() => {
     if (isAuthenticated) {
-      window.location.href = '/';
+      if (user?.role === 'admin') {
+        window.location.href = '/admin';
+      } else {
+        window.location.href = '/';
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   return (
     <div className="auth-container">

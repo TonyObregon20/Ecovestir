@@ -1,5 +1,5 @@
 // src/api/auth.js
-const API_BASE_URL = 'http://localhost:4000'; // Tu backend
+const API_BASE_URL = 'http://localhost:4000';
 
 export const login = async (email, password) => {
   const response = await fetch(`${API_BASE_URL}/api/auth/login`, {

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { register } from '../../api/auth';
-import '../../login.css';
+import "../../style/login.css";
 import { useAuth } from '../../hooks/useAuth';
 
 const Register = () => {
@@ -37,11 +37,8 @@ const Register = () => {
       const response = await register(name, email, password);
       console.log('Registro exitoso:', response);
       
-      // Usar el hook para guardar la sesión
+      // Usar el hook para guardar la sesión (esto ya redirige según rol)
       loginUser(response.token, response.user);
-
-      // Redirigir al inicio
-      window.location.href = '/';
 
     } catch (err) {
       setError(err.message);

@@ -22,8 +22,13 @@ export const useAuth = () => {
     localStorage.setItem('user', JSON.stringify(userData));
     setIsAuthenticated(true);
     setUser(userData);
-    // Opcional: redirigir aquí también
-    window.location.href = '/';
+
+    // Verificar si el usuario es admin
+    if (userData.role === 'admin') {
+      window.location.href = '/admin'; // Redirigir a admin dashboard
+    } else {
+      window.location.href = '/'; // Redirigir al inicio
+    }
   };
 
   const logout = () => {
@@ -34,5 +39,10 @@ export const useAuth = () => {
     window.location.href = '/'; // Redirigir al inicio
   };
 
-  return { isAuthenticated, user, loading, login, logout };
+  // Función para verificar si el usuario es admin
+  const isAdmin = () => {
+    return user?.role === 'admin';
+  };
+
+  return { isAuthenticated, user, loading, login, logout, isAdmin };
 };
