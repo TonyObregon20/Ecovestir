@@ -10,7 +10,18 @@ import {
   Settings, 
   LogOut, 
   Menu,
-  X
+  X,
+  DollarSign,
+  TrendingUp,
+  ShoppingBag,
+  User as UserIcon,
+  Leaf,
+  Truck,
+  CircleCheck,
+  Clock,
+  ArrowUp,
+  ArrowDown,
+  House
 } from 'lucide-react';
 import "../style/admin.css"; // Importamos los estilos
 
@@ -19,12 +30,41 @@ const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const menuItems = [
-    { icon: Home, label: 'Dashboard', path: '/admin', key: 'dashboard' },
-    { icon: Users, label: 'Usuarios', path: '/admin/users', key: 'users' },
-    { icon: Package, label: 'Productos', path: '/admin/products', key: 'products' },
-    { icon: ShoppingCart, label: 'Pedidos', path: '/admin/orders', key: 'orders' },
-    { icon: BarChart3, label: 'Reportes', path: '/admin/reports', key: 'reports' },
-    { icon: Settings, label: 'Configuración', path: '/admin/settings', key: 'settings' },
+    { icon: Home, label: 'Dashboard', sublabel: '', path: '/admin', key: 'dashboard' },
+    { icon: Users, label: 'Clientes', sublabel: '', path: '/admin/users', key: 'users' },
+    { icon: Package, label: 'Productos', sublabel: '', path: '/admin/products', key: 'products' },
+    { icon: ShoppingCart, label: 'Pedidos', sublabel: '', path: '/admin/orders', key: 'orders' },
+    { icon: BarChart3, label: 'Reportes', sublabel: '', path: '/admin/reports', key: 'reports' },
+    { icon: Settings, label: 'Configuración', sublabel: '', path: '/admin/settings', key: 'settings' },
+  ];
+
+  const metricCards = [
+    { title: 'Ingresos', value: '$45,231.89', change: '+20.1% vs mes anterior', icon: DollarSign, positive: true },
+    { title: 'Pedidos', value: '+12,234', change: '+180.1% vs mes anterior', icon: ShoppingBag, positive: true },
+    { title: 'Productos', value: '+573', change: '+19% vs mes anterior', icon: Package, positive: true },
+    { title: 'Clientes', value: '+2,350', change: '+201% vs mes anterior', icon: UserIcon, positive: true }
+  ];
+
+  const recentOrders = [
+    { id: '#ORD-001', customer: 'Carlos García', date: '2024-01-15', price: '$299.00', status: 'completed' },
+    { id: '#ORD-002', customer: 'María López', date: '2024-01-14', price: '$189.00', status: 'processing' },
+    { id: '#ORD-003', customer: 'Pedro Martínez', date: '2024-01-14', price: '$89.00', status: 'sent' },
+    { id: '#ORD-004', customer: 'Ana Rodríguez', date: '2024-01-13', price: '$349.00', status: 'completed' },
+    { id: '#ORD-005', customer: 'Luis Fernández', date: '2024-01-13', price: '$156.00', status: 'processing' }
+  ];
+
+  const productStats = {
+    total: 1234,
+    inStock: 1169,
+    lowStock: 65,
+    percentage: 95
+  };
+
+  const sustainabilityMetrics = [
+    { value: '98%', label: 'Materiales Reciclados' },
+    { value: '95%', label: 'Energía Renovable' },
+    { value: '100%', label: 'Embalaje Sostenible' },
+    { value: '92%', label: 'Reducción de CO2' }
   ];
 
   return (
@@ -32,26 +72,32 @@ const AdminDashboard = () => {
       {/* Sidebar */}
       <div className={`admin-sidebar ${sidebarOpen ? '' : 'collapsed'}`}>
         <div className="admin-sidebar-header">
-          <h1 className={`admin-sidebar-title ${sidebarOpen ? '' : 'collapsed'}`}>Admin Panel</h1>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="admin-sidebar-toggle"
-          >
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div className="admin-sidebar-logo">
+            <Leaf size={16} />
+          </div>
+          <div>
+            <h1 className="admin-sidebar-title">EcoVestir</h1>
+            <p className="admin-sidebar-subtitle">Panel de Administración</p>
+          </div>
         </div>
+
+        <a href="/" className="admin-sidebar-btn-site">
+          <House className="admin-sidebar-btn-site-icon" size={16} />
+          Ir al Sitio
+        </a>
 
         <nav className="admin-sidebar-nav">
           {menuItems.map((item, index) => (
             <a
               key={index}
               href={item.path}
-              className="admin-sidebar-item"
+              className={`admin-sidebar-item ${window.location.pathname === item.path ? 'active' : ''}`}
             >
               <item.icon className="admin-sidebar-item-icon" size={20} />
-              <span className={`admin-sidebar-item-label ${sidebarOpen ? '' : 'collapsed'}`}>
-                {item.label}
-              </span>
+              <div>
+                <span className="admin-sidebar-item-label">{item.label}</span>
+                <span className="admin-sidebar-item-sublabel">{item.sublabel}</span>
+              </div>
             </a>
           ))}
         </nav>
@@ -62,7 +108,7 @@ const AdminDashboard = () => {
             className="admin-sidebar-logout"
           >
             <LogOut className="admin-sidebar-logout-icon" size={20} />
-            <span className={`admin-sidebar-logout-label ${sidebarOpen ? '' : 'collapsed'}`}>
+            <span className="admin-sidebar-logout-label">
               Cerrar Sesión
             </span>
           </button>
@@ -73,7 +119,7 @@ const AdminDashboard = () => {
       <div className="admin-main">
         {/* Top Bar */}
         <header className="admin-topbar">
-          <h1 className="admin-topbar-title">Panel de Administración</h1>
+          <h1 className="admin-topbar-title">Dashboard</h1>
           <div className="admin-user-info">
             <p className="admin-user-name">Bienvenido, {user?.name}</p>
             <div className="admin-user-avatar">
@@ -84,54 +130,86 @@ const AdminDashboard = () => {
 
         {/* Dashboard Content */}
         <main className="admin-content">
-          <div className="admin-grid">
-            <div className="admin-card">
-              <div className="admin-card-icon users">
-                <Users size={24} />
+          {/* Metric Cards */}
+          <div className="metric-cards">
+            {metricCards.map((card, index) => (
+              <div key={index} className="metric-card">
+                <div className="metric-card-header">
+                  <h3 className="metric-card-title">{card.title}</h3>
+                  <card.icon className="metric-card-icon" size={24} />
+                </div>
+                <p className="metric-card-value">{card.value}</p>
+                <p className={`metric-card-change ${card.positive ? '' : 'negative'}`}>
+                  {card.change}
+                </p>
               </div>
-              <p className="admin-card-title">Usuarios</p>
-              <p className="admin-card-value">1,234</p>
-              <p className="admin-card-footer">Total registrados</p>
+            ))}
+          </div>
+
+          {/* Recent Orders */}
+          <div className="recent-orders">
+            <div className="recent-orders-header">
+              <h2 className="recent-orders-title">Pedidos Recientes</h2>
+              <ShoppingCart className="recent-orders-icon" size={20} />
             </div>
-            
-            <div className="admin-card">
-              <div className="admin-card-icon products">
-                <Package size={24} />
+            {recentOrders.map((order, index) => (
+              <div key={index} className="order-item">
+                <div>
+                  <p className="order-id">{order.id}</p>
+                  <p className="order-customer">{order.customer}</p>
+                </div>
+                <p className="order-date">{order.date}</p>
+                <p className="order-price">{order.price}</p>
+                <span className={`order-status ${order.status}`}>
+                  {order.status === 'completed' && 'Completado'}
+                  {order.status === 'processing' && 'Procesando'}
+                  {order.status === 'sent' && 'Enviado'}
+                </span>
               </div>
-              <p className="admin-card-title">Productos</p>
-              <p className="admin-card-value">567</p>
-              <p className="admin-card-footer">En catálogo</p>
+            ))}
+          </div>
+
+          {/* Product Management */}
+          <div className="product-management">
+            <div className="product-management-header">
+              <Package className="product-management-icon" size={20} />
+              <h2 className="product-management-title">Gestión de Productos</h2>
             </div>
-            
-            <div className="admin-card">
-              <div className="admin-card-icon orders">
-                <ShoppingCart size={24} />
+            <p className="product-management-description">
+              Estás gestionando {productStats.total} productos, con {productStats.inStock} en stock y {productStats.lowStock} con bajo stock.
+            </p>
+            <div className="product-management-stats">
+              <div className="product-management-stat">
+                <span className="product-management-stat-value">{productStats.inStock}</span>
+                <span className="product-management-stat-label">En Stock</span>
               </div>
-              <p className="admin-card-title">Ventas</p>
-              <p className="admin-card-value">$12,345</p>
-              <p className="admin-card-footer">Este mes</p>
+              <div className="product-management-stat">
+                <span className="product-management-stat-value">{productStats.lowStock}</span>
+                <span className="product-management-stat-label">Bajo Stock</span>
+              </div>
+              <div className="product-management-stat">
+                <span className="product-management-stat-value">{productStats.total}</span>
+                <span className="product-management-stat-label">Total</span>
+              </div>
+            </div>
+            <div className="product-management-progress">
+              <div className="product-management-progress-bar" style={{ width: `${productStats.percentage}%` }}></div>
             </div>
           </div>
 
-          <div className="admin-recent-activity">
-            <h2>Actividad Reciente</h2>
-            <div className="admin-activity-item">
-              <div className="admin-activity-icon users">
-                <Users size={20} />
-              </div>
-              <div className="admin-activity-info">
-                <p className="admin-activity-title">Nuevo usuario registrado</p>
-                <p className="admin-activity-time">Hace 5 minutos</p>
-              </div>
+          {/* Sustainability Metrics */}
+          <div className="sustainability-metrics">
+            <div className="sustainability-metrics-header">
+              <Leaf className="sustainability-metrics-icon" size={20} />
+              <h2 className="sustainability-metrics-title">Métricas de Sostenibilidad</h2>
             </div>
-            <div className="admin-activity-item">
-              <div className="admin-activity-icon orders">
-                <ShoppingCart size={20} />
-              </div>
-              <div className="admin-activity-info">
-                <p className="admin-activity-title">Nueva orden recibida</p>
-                <p className="admin-activity-time">Hace 10 minutos</p>
-              </div>
+            <div className="sustainability-metrics-grid">
+              {sustainabilityMetrics.map((metric, index) => (
+                <div key={index} className="sustainability-metric">
+                  <span className="sustainability-metric-value">{metric.value}</span>
+                  <span className="sustainability-metric-label">{metric.label}</span>
+                </div>
+              ))}
             </div>
           </div>
         </main>

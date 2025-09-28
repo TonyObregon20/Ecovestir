@@ -1,16 +1,81 @@
-import { useState } from "react";
+// src/components/ProductCard.jsx
+import React, { useState } from 'react';
+import { Heart, ShoppingCart, Star } from 'lucide-react';
+import '../style/productCard.css';
 
-export default function ProductCard({ producto }) {
+const ProductCard = ({ 
+  producto,
+  onProductClick
+}) => {
   const [hover, setHover] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+
+  // Aseguramos que los valores existan y sean válidos
+  const {
+    _id,
+    nombre = 'Producto sin nombre',
+    descripcion = '',
+    precio = 0,
+    imagen = 'https://via.placeholder.com/400x400?text=No+Image',
+    nuevo = false,
+    organico = false,
+    estrellas = 0
+  } = producto || {};
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    setIsAdding(true);
+    // Simular agregar al carrito
+    setTimeout(() => {
+      setIsAdding(false);
+    }, 1000);
+  };
+
+  const handleProductClick = () => {
+    if (onProductClick) {
+      onProductClick(producto);
+    }
+  };
+
+  // Función segura para renderizar estrellas
+  const renderStars = (rating) => {
+    // Aseguramos que rating sea un número válido entre 0 y 5
+    const safeRating = Math.max(0, Math.min(5, Number(rating) || 0));
+    const fullStars = Math.floor(safeRating);
+    const emptyStars = 5 - fullStars;
+
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
+        {[...Array(fullStars)].map((_, i) => (
+          <Star 
+            key={i} 
+            size={16} 
+            fill="currentColor" 
+            style={{ color: "#f59e0b" }}
+          />
+        ))}
+        {[...Array(emptyStars)].map((_, i) => (
+          <Star 
+            key={i} 
+            size={16} 
+            fill="none" 
+            stroke="currentColor" 
+            style={{ color: "#d1d5db" }}
+          />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      onClick={handleProductClick}
       style={{
         flex: "1 1 250px",
         border: "1px solid var(--gris-claro)",
-        borderRadius: "12px",
+        borderRadius: "8px",
         backgroundColor: "var(--blanco)",
         display: "flex",
         flexDirection: "column",
@@ -21,6 +86,7 @@ export default function ProductCard({ producto }) {
         overflow: "hidden",
         cursor: "pointer",
         transition: "box-shadow 0.3s ease",
+        position: "relative"
       }}
     >
       {/* Imagen con overlay */}
@@ -33,8 +99,8 @@ export default function ProductCard({ producto }) {
         }}
       >
         <img
-          src={producto.imagen}
-          alt={producto.nombre}
+          src={imagen}
+          alt={nombre}
           style={{
             width: "100%",
             height: "100%",
@@ -54,7 +120,7 @@ export default function ProductCard({ producto }) {
             gap: "6px",
           }}
         >
-          {producto.nuevo && (
+          {nuevo && (
             <span
               style={{
                 backgroundColor: "var(--verde-primario)",
@@ -68,10 +134,10 @@ export default function ProductCard({ producto }) {
               Nuevo
             </span>
           )}
-          {producto.organico && (
+          {organico && (
             <span
               style={{
-                backgroundColor: "var(--naranja)",
+                backgroundColor: "var(--verde-claro)",
                 color: "white",
                 padding: "4px 8px",
                 borderRadius: "6px",
@@ -83,6 +149,31 @@ export default function ProductCard({ producto }) {
             </span>
           )}
         </div>
+
+        {/* Botón de favorito */}
+        <button
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            border: "1px solid var(--gris-medio)",
+            borderRadius: "50%",
+            width: "36px",
+            height: "36px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "var(--gris-oscuro)",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+            opacity: hover ? 1 : 0,
+            transform: hover ? "translateY(0)" : "translateY(-10px)",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Heart size={16} />
+        </button>
 
         {/* Overlay oscuro */}
         <div
@@ -101,6 +192,8 @@ export default function ProductCard({ producto }) {
         >
           {hover && (
             <button
+              onClick={handleAddToCart}
+              disabled={isAdding}
               style={{
                 padding: "10px 20px",
                 borderRadius: "8px",
@@ -108,10 +201,14 @@ export default function ProductCard({ producto }) {
                 color: "var(--blanco)",
                 border: "none",
                 fontWeight: "bold",
-                cursor: "pointer",
+                cursor: isAdding ? "not-allowed" : "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
               }}
             >
-              🛒 Agregar al Carrito
+              <ShoppingCart size={16} />
+              {isAdding ? 'Agregando...' : 'Agregar al Carrito'}
             </button>
           )}
         </div>
@@ -119,17 +216,29 @@ export default function ProductCard({ producto }) {
 
       {/* Info del producto */}
       <div style={{ padding: "16px" }}>
-        <h3 style={{ color: "var(--gris-oscuro)", fontSize: "1.1rem" }}>
-          {producto.nombre}
+        <h3 style={{ 
+          color: "var(--gris-oscuro)", 
+          fontSize: "1.1rem", 
+          margin: "0 0 8px 0",
+          fontWeight: "500"
+        }}>
+          {nombre}
         </h3>
-        <p style={{ color: "var(--gris-medio)", fontSize: "0.9rem" }}>
-          {producto.descripcion}
-        </p>
 
         {/* Estrellas */}
-        <div style={{ margin: "8px 0", color: "gold", fontSize: "1rem" }}>
-          {"⭐".repeat(Math.floor(producto.estrellas))}
-          {"☆".repeat(5 - Math.floor(producto.estrellas))}
+        <div style={{ 
+          display: "flex", 
+          alignItems: "center", 
+          gap: "4px", 
+          marginBottom: "8px"
+        }}>
+          {renderStars(estrellas)}
+          <span style={{ 
+            color: "var(--gris-medio)", 
+            fontSize: "0.9rem" 
+          }}>
+            ({Math.floor(Math.random() * 100) + 10})
+          </span>
         </div>
 
         {/* Precio */}
@@ -138,11 +247,46 @@ export default function ProductCard({ producto }) {
             fontWeight: "bold",
             fontSize: "1rem",
             color: "var(--gris-oscuro)",
+            margin: "8px 0 0 0",
           }}
         >
-          ${producto.precio}
+          ${precio}
         </p>
+
+        {/* Botón de ver detalles */}
+        {onProductClick && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleProductClick();
+            }}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              backgroundColor: "transparent",
+              color: "var(--verde-primario)",
+              border: "1px solid var(--verde-primario)",
+              cursor: "pointer",
+              fontWeight: "500",
+              marginTop: "8px",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "var(--verde-primario)";
+              e.target.style.color = "var(--blanco)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "transparent";
+              e.target.style.color = "var(--verde-primario)";
+            }}
+          >
+            Ver Detalles
+          </button>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default ProductCard;
