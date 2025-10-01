@@ -1,93 +1,104 @@
-export default function Footer() {
+// src/components/Footer.jsx
+import React from 'react';
+// import { useAuth } from '../hooks/useAuth';
+import { Leaf, Mail, Phone, MapPin } from 'lucide-react';
+import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import '../style/footer.css'; 
+
+const Footer = () => {
+  // const { user } = useAuth();
+
   return (
-    <footer
-      style={{
-        backgroundColor: "var(--gris-oscuro)",
-        color: "var(--blanco)",
-        padding: "40px 20px",
-        marginTop: "50px",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "30px",
-        }}
-      >
-        {/* Logo y descripción */}
-        <div>
-          <h2 style={{ color: "var(--verde-primario)", marginBottom: "15px" }}>
-            EcoVestir
-          </h2>
-          <p style={{ color: "var(--gris-claro)", fontSize: "0.9rem" }}>
-            Tienda online de productos sostenibles y ecológicos.  
-            Compras responsables para un futuro más verde 🌱.
+    <footer className="footer">
+      <div className="footer-container">
+        {/* Columna 1: Brand */}
+        <div className="footer-column">
+          <div className="footer-logo">
+            <Leaf className="footer-logo-icon" size={32} />
+            <span className="footer-logo-text">EcoVestir</span>
+          </div>
+          <p className="footer-description">
+            Comprometidos con la moda sostenible y responsable. 
+            Cada prenda que creamos respeta el medio ambiente y a las personas.
           </p>
+          <div className="footer-social">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+              <FaFacebook size={20} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+              <FaInstagram size={20} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="footer-social-link">
+              <FaTwitter size={20} />
+            </a>
+          </div>
         </div>
 
-        {/* Enlaces */}
-        <div>
-          <h3 style={{ marginBottom: "10px" }}>Enlaces</h3>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            <li><a href="/" style={linkStyle}>Inicio</a></li>
-            <li><a href="/productos" style={linkStyle}>Productos</a></li>
-            <li><a href="/nosotros" style={linkStyle}>Nosotros</a></li>
-            <li><a href="/contacto" style={linkStyle}>Contacto</a></li>
+        {/* Columna 2: Quick Links */}
+        <div className="footer-column">
+          <h3 className="footer-heading">Enlaces Rápidos</h3>
+          <ul className="footer-links">
+            <li><a href="/" className="footer-link">Inicio</a></li>
+            <li><a href="/productos" className="footer-link">Productos</a></li>
+            <li><a href="/sobre-nosotros" className="footer-link">Sobre Nosotros</a></li>
+            <li><a href="/blog" className="footer-link">Blog</a></li>
+            <li><a href="/contacto" className="footer-link">Contacto</a></li>
           </ul>
         </div>
 
-        {/* Contacto */}
-        <div>
-          <h3 style={{ marginBottom: "10px" }}>Contacto</h3>
-          <p style={{ fontSize: "0.9rem" }}>📍 Lima, Perú</p>
-          <p style={{ fontSize: "0.9rem" }}>📧 contacto@EcoVestir.com</p>
-          <p style={{ fontSize: "0.9rem" }}>📞 +51 987 654 321</p>
+        {/* Columna 3: Customer Service */}
+        <div className="footer-column">
+          <h3 className="footer-heading">Atención al Cliente</h3>
+          <ul className="footer-links">
+            <li><a href="#" className="footer-link">Centro de Ayuda</a></li>
+            <li><a href="#" className="footer-link">Guía de Tallas</a></li>
+            <li><a href="#" className="footer-link">Envíos y Devoluciones</a></li>
+            <li><a href="#" className="footer-link">Términos y Condiciones</a></li>
+            <li><a href="#" className="footer-link">Política de Privacidad</a></li>
+          </ul>
         </div>
 
-        {/* Redes sociales */}
-        <div>
-          <h3 style={{ marginBottom: "10px" }}>Síguenos</h3>
-          <div style={{ display: "flex", gap: "10px" }}>
-            <a href="#" style={iconStyle}>🌐</a>
-            <a href="#" style={iconStyle}>📘</a>
-            <a href="#" style={iconStyle}>📸</a>
-            <a href="#" style={iconStyle}>🐦</a>
+        {/* Columna 4: Newsletter */}
+        <div className="footer-column">
+          <h3 className="footer-heading">Newsletter</h3>
+          <p className="footer-newsletter-description">
+            Suscríbete para recibir noticias sobre nuevos productos y ofertas especiales.
+          </p>
+          <div className="footer-newsletter">
+            <input
+              type="email"
+              placeholder="Tu email"
+              className="footer-newsletter-input"
+            />
+            <button className="footer-newsletter-button">Suscribirse</button>
           </div>
         </div>
       </div>
 
+      {/* Contact Info */}
+      <div className="footer-contact-section">
+        <div className="footer-contact-row">
+          <div className="footer-contact-item">
+            <Mail className="footer-contact-icon" size={16} />
+            <span>contacto@ecovestir.com</span>
+          </div>
+          <div className="footer-contact-item">
+            <Phone className="footer-contact-icon" size={16} />
+            <span>+51 900 123 456</span>
+          </div>
+          <div className="footer-contact-item">
+            <MapPin className="footer-contact-icon" size={16} />
+            <span>Lima, Peru</span>
+          </div>
+        </div>
+</div>
+
       {/* Copyright */}
-      <div
-        style={{
-          borderTop: "1px solid var(--gris-medio)",
-          marginTop: "30px",
-          paddingTop: "15px",
-          textAlign: "center",
-          fontSize: "0.8rem",
-          color: "var(--gris-claro)",
-        }}
-      >
-        © {new Date().getFullYear()} EcoVestir - Todos los derechos reservados.
+      <div className="footer-copyright">
+        <p>&copy; 2025 EcoVestir. Todos los derechos reservados.</p>
       </div>
     </footer>
   );
-}
-
-const linkStyle = {
-  color: "var(--gris-claro)",
-  textDecoration: "none",
-  fontSize: "0.9rem",
-  display: "block",
-  marginBottom: "8px",
-  transition: "color 0.3s",
 };
 
-const iconStyle = {
-  fontSize: "1.5rem",
-  textDecoration: "none",
-  color: "var(--blanco)",
-  transition: "transform 0.3s",
-};
+export default Footer;
