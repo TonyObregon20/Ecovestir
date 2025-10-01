@@ -1,10 +1,21 @@
 import { useState } from "react";
 
-export default function ProductCard({ producto }) {
+export default function ProductCard({
+  id,
+  name,
+  price,
+  image,
+  rating,
+  reviews,
+  isOrganic,
+  isNew,
+  onProductClick
+}) {
   const [hover, setHover] = useState(false);
 
   return (
     <div
+      onClick={onProductClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -33,8 +44,8 @@ export default function ProductCard({ producto }) {
         }}
       >
         <img
-          src={producto.imagen}
-          alt={producto.nombre}
+          src={image}
+          alt={name}
           style={{
             width: "100%",
             height: "100%",
@@ -54,7 +65,7 @@ export default function ProductCard({ producto }) {
             gap: "6px",
           }}
         >
-          {producto.nuevo && (
+          {isNew && (
             <span
               style={{
                 backgroundColor: "var(--verde-primario)",
@@ -68,7 +79,7 @@ export default function ProductCard({ producto }) {
               Nuevo
             </span>
           )}
-          {producto.organico && (
+          {isOrganic && (
             <span
               style={{
                 backgroundColor: "var(--naranja)",
@@ -120,16 +131,16 @@ export default function ProductCard({ producto }) {
       {/* Info del producto */}
       <div style={{ padding: "16px" }}>
         <h3 style={{ color: "var(--gris-oscuro)", fontSize: "1.1rem" }}>
-          {producto.nombre}
+          {name}
         </h3>
         <p style={{ color: "var(--gris-medio)", fontSize: "0.9rem" }}>
-          {producto.descripcion}
+          {reviews} reseñas
         </p>
 
         {/* Estrellas */}
         <div style={{ margin: "8px 0", color: "gold", fontSize: "1rem" }}>
-          {"⭐".repeat(Math.floor(producto.estrellas))}
-          {"☆".repeat(5 - Math.floor(producto.estrellas))}
+          {"⭐".repeat(Math.floor(rating))}
+          {"☆".repeat(5 - Math.floor(rating))}
         </div>
 
         {/* Precio */}
@@ -140,7 +151,7 @@ export default function ProductCard({ producto }) {
             color: "var(--gris-oscuro)",
           }}
         >
-          ${producto.precio}
+          ${price}
         </p>
       </div>
     </div>

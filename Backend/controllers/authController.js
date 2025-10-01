@@ -37,8 +37,21 @@ exports.login = async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Credenciales inválidas' });
 
+    // 👇 Verificación de rol (¡clave para el panel de admin!)
+    if (user.role !== 'admin') {
+      return res.status(403).json({ message: 'Acceso denegado. Solo administradores.' });
+    }
+
     const token = signToken(user);
-    res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+    res.json({ 
+      token, 
+      user: { 
+        id: user._id, 
+        name: user.name, 
+        email: user.email, 
+        role: user.role 
+      } 
+    });
   } catch (err) {
     next(err);
   }

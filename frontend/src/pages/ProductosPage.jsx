@@ -2,10 +2,11 @@
 // - Lista los productos obtenidos desde el backend (/api/products).
 // - Soporta paginación, búsqueda (`q`) y filtro por categoría.
 // - Para cambiar la URL del backend ajusta `frontend/.env` con VITE_API_URL o modifica `frontend/src/api.js`.
+
 import { useEffect, useState } from "react";
 import ProductCard from "../components/Productcard";
 import "../index.css";
-import api from "../api";
+import api from "../api/api";
 
 export default function ProductosPage() {
   const [productos, setProductos] = useState([]);
@@ -21,28 +22,35 @@ export default function ProductosPage() {
     const fetch = async () => {
       try {
         setLoading(true);
-        const q = search ? `&q=${encodeURIComponent(search)}` : '';
-        const cat = category ? `&category=${encodeURIComponent(category)}` : '';
-        const res = await api.get(`/api/products?page=${page}&limit=12${q}${cat}`);
+        const q = search ? `&q=${encodeURIComponent(search)}` : "";
+        const cat = category ? `&category=${encodeURIComponent(category)}` : "";
+        const res = await api.get(
+          `/api/products?page=${page}&limit=12${q}${cat}`
+        );
         const data = res.data && res.data.data ? res.data.data : res.data;
-        const meta = res.data && res.data.meta ? res.data.meta : { total: data.length, page: 1, limit: data.length };
+        const meta =
+          res.data && res.data.meta
+            ? res.data.meta
+            : { total: data.length, page: 1, limit: data.length };
         if (mounted) {
           setProductos(data.map(mapProductToUI));
           setTotalPages(meta.totalPages || 1);
         }
       } catch (err) {
         console.error(err);
-        if (mounted) setError('No se pudieron cargar los productos');
+        if (mounted) setError("No se pudieron cargar los productos");
       } finally {
         if (mounted) setLoading(false);
       }
     };
     fetch();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [search, category, page]);
 
   const handleCategoryChange = (cat) => {
-    setCategory((prev) => (prev === cat ? '' : cat));
+    setCategory((prev) => (prev === cat ? "" : cat));
     setPage(1);
   };
 
@@ -91,27 +99,44 @@ export default function ProductosPage() {
       <section className="productos-listado">
         <header>
           <h2>Nuestra Colección Orgánica</h2>
-          <p>Descubre nuestra gama de ropa sostenible fabricada con materiales 100% orgánicos.</p>
+          <p>
+            Descubre nuestra gama de ropa sostenible fabricada con materiales
+            100% orgánicos.
+          </p>
         </header>
 
         {loading ? (
           <p style={{ padding: 20 }}>Cargando productos...</p>
         ) : error ? (
-          <p style={{ padding: 20, color: 'red' }}>{error}</p>
+          <p style={{ padding: 20, color: "red" }}>{error}</p>
         ) : (
           <div className="grid-productos">
             {productos.length > 0 ? (
-              productos.map((p) => <ProductCard key={p._id} producto={p} />)
+              productos.map((p) => <ProductCard key={p.id} {...p} />)
             ) : (
               <p className="sin-productos">No se encontraron productos.</p>
             )}
           </div>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-          <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>Anterior</button>
-          <span style={{ margin: '0 12px' }}>Página {page} / {totalPages}</span>
-          <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Siguiente</button>
+        <div
+          style={{ display: "flex", justifyContent: "center", marginTop: 20 }}
+        >
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+          >
+            Anterior
+          </button>
+          <span style={{ margin: "0 12px" }}>
+            Página {page} / {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+          >
+            Siguiente
+          </button>
         </div>
       </section>
     </main>
@@ -120,11 +145,16 @@ export default function ProductosPage() {
 
 function mapProductToUI(p) {
   return {
-    _id: p._id,
-    nombre: p.name,
-    descripcion: p.description || '',
-    precio: p.price,
-    imagen: p.images && p.images.length ? p.images[0] : 'https://via.placeholder.com/400x400?text=No+Image',
-    categoria: p.category,
+    id: p._id,
+    name: p.name,
+    price: p.price,
+    image:
+      p.images && p.images.length
+        ? p.images[0]
+        : "https://via.placeholder.com/400x400?text=No+Image",
+    rating: p.rating || 0,
+    reviews: p.reviews || 0,
+    isOrganic: p.isOrganic || false,
+    isNew: p.isNew || false,
   };
 }
