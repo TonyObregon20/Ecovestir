@@ -9,7 +9,6 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <div className="navbar-wrapper"> {/* Nuevo contenedor */}
         <div className="navbar-container">
           {/* IZQUIERDA: Logo + Links */}
           <div className="navbar-left">
@@ -51,9 +50,12 @@ export default function Navbar() {
                 <span className="navbar-cart-badge">{cartItemCount}</span>
               )}
             </Link>
+
+            <Link to="/login" className="navbar-auth-button login">
+                Iniciar Sesión
+            </Link>
           </div>
         </div>
-      </div>
     </header>
   );
 }

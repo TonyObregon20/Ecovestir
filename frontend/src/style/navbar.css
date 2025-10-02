@@ -11,25 +11,6 @@
   width: 100%;
 }
 
-/* Contenedor interno para centrar el contenido */
-.navbar-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 40px; /* ← Igual que el footer (ajustable) */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 4rem;
-}
-
-
-/* Bloque izquierdo: logo + links */
-.navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 2.5rem; /* Espacio entre logo y links */
-}
-
 .navbar-right {
   display: flex;
   align-items: center;
@@ -38,11 +19,31 @@
 }
 
 
-/* === LOGO === */
+/* === CONTENEDOR PRINCIPAL DEL NAVBAR (igual que el footer) === */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+
+/* Para asegurar que el logo esté alineado con el footer */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  /* Alinear el logo con el footer */
+  align-self: stretch;
+  justify-content: flex-start;
+}
+
 .navbar-logo-wrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Alinea el logo a la izquierda */
 }
 
 .navbar-logo-link {
@@ -55,8 +56,12 @@
 .navbar-logo {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
+
+/* El resto de estilos sigue igual... */
+
+/* === LOGO === */
 
 .navbar-logo-icon {
   width: 2rem;
@@ -242,29 +247,3 @@
   }
 }
 
-/* === WRAPPER DEL NAVBAR (para alinear con el footer) === */
-.navbar-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-
-/* Opcional: Si quieres que el fondo blanco no ocupe todo el ancho */
-.navbar {
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid #e5e7eb;
-}
-
-/* Asegura que el contenido del navbar esté dentro del wrapper */
-.navbar-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 4rem;
-}
