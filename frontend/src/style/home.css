@@ -1,0 +1,204 @@
+/* === HOME PAGE STYLES === */
+
+/* Sección: Nuestras Categorías */
+.categorias-section {
+  padding: 50px 20px;
+    background-color: var(--gris-claro);
+
+}
+
+.categorias-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.categorias-title {
+  font-size: 2rem; /* Cambiado de 2.5rem a 2rem */
+  font-weight: 800;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.categorias-subtitle {
+  font-size: 1.1rem;
+  color: #6b7280;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+.categorias-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.categoria-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.categoria-card:hover {
+  transform: translateY(-4px);
+}
+
+.categoria-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.categoria-content {
+  padding: 16px;
+  background-color: white;
+}
+
+.categoria-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.categoria-description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.categoria-products {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.categoria-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background-color: #f3f4f6;
+  color: #111827;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.categoria-btn:hover {
+  background-color: #e5e7eb;
+}
+
+/* Sección: ¿Por Qué Elegir Ropa Orgánica? */
+.porque-organica-section {
+  padding: 50px 20px;
+  background-color: #f0faf4; /* Verde bajito */
+}
+
+.porque-organica-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.porque-organica-title {
+  font-size: 2rem; /* Cambiado de 2.5rem a 2rem */
+  font-weight: 800;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.porque-organica-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 20px;
+}
+
+.porque-item {
+  text-align: center;
+  padding: 24px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.porque-item:hover {
+  transform: translateY(-4px);
+}
+
+.porque-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  color: #059669; /* Verde primario */
+}
+
+.porque-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.porque-description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .categorias-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .porque-organica-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .categorias-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .porque-organica-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .categorias-section {
+    padding: 30px 16px;
+  }
+
+  .categorias-title {
+    font-size: 2rem;
+  }
+
+  .categorias-subtitle {
+    font-size: 1rem;
+  }
+
+  .categorias-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .porque-organica-section {
+    padding: 30px 16px;
+  }
+
+  .porque-organica-title {
+    font-size: 2rem;
+  }
+
+  .porque-organica-grid {
+    grid-template-columns: 1fr;
+  }
+}

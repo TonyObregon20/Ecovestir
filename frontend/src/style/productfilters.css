@@ -1,0 +1,295 @@
+/* === PRODUCT FILTERS STYLES === */
+
+.product-filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.product-filters-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--gris-medio);
+}
+
+.product-filters-sort-label {
+  font-weight: 500;
+}
+
+/* Asegurar ancho completo para el select */
+.product-filters-sort-select {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: var(--blanco);
+  color: var(--gris-oscuro);
+  font-size: 14px;
+  cursor: pointer;
+  /* Corrección: Ancho explícito o flexibilidad */
+  min-width: 180px;
+  max-width: 100%; /* Evita desbordamiento */
+}
+
+.product-filters-mobile-btn {
+  display: none; /* Oculto en escritorio por defecto, mostrado en media query */
+  background-color: var(--blanco);
+  color: var(--verde-primario);
+  border: 1px solid var(--verde-primario);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-filters-mobile-btn:hover {
+  background-color: var(--verde-primario);
+  color: var(--blanco);
+}
+
+.product-filters-sidebar {
+  background-color: var(--blanco);
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.product-filters-sidebar.desktop {
+  display: block; /* Siempre visible en escritorio */
+}
+
+
+/* === CORRECCIONES ESPECÍFICAS === */
+
+/* Búsqueda */
+.product-filters-search {
+  position: relative;
+  width: 100%; /* Asegurar ancho completo dentro del grupo */
+  box-sizing: border-box; /* Incluir padding en el ancho */
+}
+
+.product-filters-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gris-medio);
+  pointer-events: none; /* El icono no debe interferir con el input */
+}
+
+/* Input de búsqueda */
+.product-filters-search-input {
+  width: 100%;
+  padding: 10px 12px 10px 36px; /* Espacio para el icono */
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: var(--blanco);
+  color: var(--gris-oscuro);
+  font-size: 14px;
+  box-sizing: border-box; /* Crucial para el ancho correcto */
+}
+.product-filters-search-input:focus {
+    outline: none;
+    border-color: var(--verde-primario);
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); /* Sombra verde suave al enfocar */
+}
+
+/* Grupo de filtro (para contener elementos) */
+.product-filters-group {
+    margin-bottom: 24px;
+}
+
+/* Título del grupo de filtros */
+.product-filters-group-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gris-oscuro);
+    margin-bottom: 12px;
+}
+
+
+/* Checkbox */
+.product-filters-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.product-filters-checkbox-input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--verde-primario); /* Color del checkbox cuando está marcado */
+    cursor: pointer;
+}
+
+.product-filters-checkbox-label {
+    font-size: 14px;
+    color: var(--gris-medio);
+    cursor: pointer;
+    margin: 0; /* Eliminar márgenes por defecto del label */
+}
+
+
+/* Rango de Precios - Slider Personalizado */
+.product-filters-price-range {
+    padding: 0 5px; /* Pequeño padding para que los sliders no toquen los bordes */
+}
+
+.product-filters-price-slider-container {
+    position: relative;
+    width: 100%;
+    height: 30px; /* Altura suficiente para dos sliders */
+}
+
+/* Estilos compartidos para ambos sliders */
+.product-filters-slider-track {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: #d1d5db;
+    border-radius: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-appearance: none; /* Eliminar estilo nativo */
+    appearance: none;
+    background: transparent; /* Transparente para usar pseudo-elementos */
+    pointer-events: none; /* Los controles hijos manejan los eventos */
+}
+
+/* Estilo del track (barra deslizante) */
+.product-filters-slider-track::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 2px;
+    border: none;
+}
+.product-filters-slider-track::-moz-range-track {
+    width: 100%;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 2px;
+    border: none;
+}
+
+/* Estilo del thumb (control deslizante) */
+.product-filters-slider-track::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--verde-primario);
+    cursor: pointer;
+    pointer-events: auto; /* Permitir interacción con el thumb */
+    border: 2px solid var(--blanco);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin-top: -6px; /* Centrar verticalmente */
+}
+.product-filters-slider-track::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--verde-primario);
+    cursor: pointer;
+    pointer-events: auto;
+    border: 2px solid var(--blanco);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    /* Firefox centra automáticamente el thumb */
+}
+
+/* Superposición para mostrar el rango seleccionado */
+.product-filters-price-slider-container::before {
+    content: '';
+    position: absolute;
+    height: 4px;
+    background-color: var(--verde-primario);
+    border-radius: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* El ancho y la posición izquierda se calcularán dinámicamente si fuera necesario,
+       pero con dos sliders, se puede simular con posicionamiento absoluto.
+       Aquí usamos un truco con z-index y superposición.
+    */
+    z-index: 1;
+    left: calc(((var(--low, 0) / 200) * 100%)); /* Requiere CSS vars en JS */
+    right: calc(100% - ((var(--high, 200) / 200) * 100%));
+    /* Solución más robusta: usar un div adicional en JSX para representar el fill */
+}
+
+/* Valores de precio */
+.product-filters-price-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--gris-medio);
+    margin-top: 25px; /* Espacio debajo de los sliders */
+}
+
+
+/* Botón Limpiar Filtros */
+.product-filters-clear {
+  width: 100%;
+  background-color: var(--blanco);
+  color: var(--verde-primario);
+  border: 1px solid var(--verde-primario);
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 16px;
+  box-sizing: border-box;
+}
+
+.product-filters-clear:hover {
+  background-color: var(--verde-primario);
+  color: var(--blanco);
+}
+
+/* Responsive para mostrar el botón móvil */
+@media (max-width: 1024px) { /* lg breakpoint */
+  .product-filters-mobile-btn {
+    display: flex; /* Mostrar en móvil/tablet */
+  }
+  .product-filters-sidebar.desktop {
+    display: none; /* Ocultar sidebar en móvil */
+  }
+}
+
+/* Estilo del buscador como en el navbar */
+.product-filters-search-navbar-style {
+  display: flex;
+  align-items: center;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.product-filters-search-navbar-style .product-filters-search-icon {
+  color: #6b7280;
+  margin-right: 8px;
+}
+
+.product-filters-search-input-navbar {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  padding: 0;
+}

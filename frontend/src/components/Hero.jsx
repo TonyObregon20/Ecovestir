@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <section style={{padding: "64px 20px", backgroundColor: "var(--gris-claro)"}}>
+    <section style={{padding: "64px 20px", backgroundColor: "#f0faf4"}}>
       <div className="container" style={{display: "flex", flexWrap: "wrap", gap: "40px", alignItems: "center"}}>
         <div style={{flex: "1 1 400px"}}>
           <h1 style={{fontSize: "2.5rem", fontWeight: "800", color: "var(--gris-oscuro)"}}>

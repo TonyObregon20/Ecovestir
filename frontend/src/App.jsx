@@ -1,8 +1,8 @@
 // src/App.jsx
+
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Productos from "./components/Productos";
+import Home from "./pages/Home"; // 👈 Nuevo
 import ProductosPage from "./pages/ProductosPage";
 import Footer from "./components/Footer";
 import "./index.css";
@@ -26,18 +26,18 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas públicas */}
+        {/* Ruta principal */}
         <Route
           path="/"
           element={
             <>
               <Navbar />
-              <Hero />
-              <Productos />
+              <Home />
               <Footer />
             </>
           }
         />
+
         <Route
           path="/productos"
           element={
