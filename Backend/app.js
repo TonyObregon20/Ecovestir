@@ -10,6 +10,7 @@ connectDB();
 
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
+const categoryRoutes = require('./routes/categories');
 // TODO: cartRoutes, orderRoutes
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', creden
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // error handler (último middleware)
 app.use(errorHandler);
