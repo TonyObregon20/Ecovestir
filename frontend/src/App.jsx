@@ -11,9 +11,12 @@ import "./index.css";
 import AdminPage from "./pages/Admin/AdminPage";
 import Dashboard from "./pages/Admin/Dashboard";
 import Products from "./pages/Admin/Products";
-import Login from "./pages/Login"; // 👈 Nuevo
+import UsersPage from "./pages/Admin/UsersPage"; // 👈 Importado
 
-// Componente para proteger rutas
+// Login
+import Login from "./pages/Login";
+
+// Componente para proteger rutas (solo uno es suficiente)
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -26,7 +29,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas públicas */}
+        {/* ===== Rutas públicas ===== */}
         <Route
           path="/"
           element={
@@ -49,10 +52,10 @@ function App() {
           }
         />
 
-        {/* Login */}
+        {/* ===== Login ===== */}
         <Route path="/login" element={<Login />} />
 
-        {/* Rutas protegidas de admin */}
+        {/* ===== Rutas protegidas de Admin ===== */}
         <Route
           path="/admin"
           element={
@@ -63,9 +66,12 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />
+          <Route path="users" element={<UsersPage />} /> {/* 👈 ¡Añadida! */}
+          <Route path="orders" element={<div>Órdenes (próximamente)</div>} />
+          <Route path="reports" element={<div>Reportes (próximamente)</div>} />
         </Route>
 
-        {/* Redirección por defecto */}
+        {/* ===== Redirección por defecto ===== */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
