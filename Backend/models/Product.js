@@ -10,6 +10,8 @@ const productSchema = new mongoose.Schema({
   images: { type: [String], default: [] }, // URLs
   material: { type: String, trim: true },
   ecoFriendly: { type: Boolean, default: true },
+  rating: { type: Number, default: 0, min: 0, max: 5 },
+  reviews: { type: Number, default: 0 },
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });

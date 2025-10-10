@@ -1,0 +1,249 @@
+    /* === NAVBAR STYLES === */
+
+/* Contenedor principal del navbar */
+.navbar {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: rgba(255, 255, 255, 0.95); /* Blanco semitransparente */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque */
+  position: sticky;
+  top: 0;
+  z-index: 50; /* Asegura que esté por encima de otros elementos */
+  width: 100%;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Espacio entre búsqueda y carrito */
+  margin-left: 2rem; /* ↑ Añadimos margen izquierdo para separar del último link */
+}
+
+
+/* === CONTENEDOR PRINCIPAL DEL NAVBAR (igual que el footer) === */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+
+/* Para asegurar que el logo esté alineado con el footer */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  /* Alinear el logo con el footer */
+  align-self: stretch;
+  justify-content: flex-start;
+}
+
+.navbar-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Alinea el logo a la izquierda */
+}
+
+.navbar-logo-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* El resto de estilos sigue igual... */
+
+/* === LOGO === */
+
+.navbar-logo-icon {
+  width: 2rem;
+  height: 2rem;
+  background-color: #059669; /* Verde principal */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+}
+
+.navbar-logo-leaf {
+  width: 1rem;
+  height: 1rem;
+  color: white;
+}
+
+.navbar-logo-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827; /* Gris oscuro */
+}
+
+/* === NAVEGACIÓN === */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: #4b5563; /* Gris medio */
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.navbar-link:hover {
+  color: #059669; /* Verde principal */
+}
+
+/* === BÚSQUEDA === */
+.navbar-search {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-search-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+  color: #111827;
+  font-size: 0.875rem;
+  width: 16rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .navbar-search-input {
+    width: 14rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .navbar-search-input {
+    width: 12rem;
+    font-size: 0.8125rem;
+  }
+}
+
+.navbar-search-input:focus {
+  outline: none;
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+/* === CARRITO === */
+.navbar-cart-button {
+  position: relative;
+  padding: 0.5rem;
+  color: #4b5563;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.navbar-cart-button:hover {
+  color: #059669;
+  background-color: #f3f4f6;
+}
+
+.navbar-cart-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.navbar-cart-badge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: #059669;
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* === AUTENTICACIÓN === */
+.navbar-auth {
+  display: block;
+}
+
+.navbar-auth-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.navbar-auth-button.login {
+  background-color: #dcfce7;
+  color: #059669;
+  border-color: #059669;
+}
+
+.navbar-auth-button.login:hover {
+  background-color: #bbf7d0;
+}
+
+.navbar-auth-button.logout {
+  background-color: #059669;
+  color: white;
+}
+
+.navbar-auth-button.logout:hover {
+  background-color: #047857;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 400px) {
+  .navbar-logo-text {
+    font-size: 1rem;
+  }
+  .navbar-search-input {
+    width: 12rem;
+    font-size: 0.8125rem;
+  }
+  .navbar-links {
+    gap: 1rem;
+  }
+  .navbar-link {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-search-input {
+    width: 14rem;
+  }
+}
+

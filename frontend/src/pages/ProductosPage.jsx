@@ -1,40 +1,43 @@
-// Página de Productos
-// - Lista los productos obtenidos desde el backend (/api/products).
-// - Soporta paginación, búsqueda (`q`) y filtro por categoría.
-// - Para cambiar la URL del backend ajusta `frontend/.env` con VITE_API_URL o modifica `frontend/src/api.js`.
+// src/pages/ProductosPage.jsx
 
-import { useEffect, useState } from "react";
-import ProductCard from "../components/Productcard";
-import "../index.css";
-import api from "../api/api";
+import React, { useState, useEffect, useMemo } from 'react';
+import ProductCard from '../components/Productcard';
+import ProductFilters from '../components/ProductFIlters';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import api from '../api/api';
+import '../style/products.css';
 
-export default function ProductosPage() {
+const PRODUCTS_PER_PAGE = 6;
+
+const ProductosPage = () => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
-  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [priceRange, setPriceRange] = useState([0, 200]);
+  const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [sortBy, setSortBy] = useState('newest');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     let mounted = true;
     const fetch = async () => {
       try {
         setLoading(true);
-        const q = search ? `&q=${encodeURIComponent(search)}` : "";
-        const cat = category ? `&category=${encodeURIComponent(category)}` : "";
-        const res = await api.get(
-          `/api/products?page=${page}&limit=12${q}${cat}`
-        );
+        const q = searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : "";
+        const cat = selectedCategories.length > 0 ? `&category=${encodeURIComponent(selectedCategories.join(','))}` : "";
+        const res = await api.get(`/api/products?page=${currentPage}&limit=${PRODUCTS_PER_PAGE}${q}${cat}`);
         const data = res.data && res.data.data ? res.data.data : res.data;
-        const meta =
-          res.data && res.data.meta
-            ? res.data.meta
-            : { total: data.length, page: 1, limit: data.length };
+        const meta = res.data && res.data.meta ? res.data.meta : { totalPages: 1, total: data.length };
         if (mounted) {
           setProductos(data.map(mapProductToUI));
           setTotalPages(meta.totalPages || 1);
+          setTotalProducts(meta.total || data.length);
         }
       } catch (err) {
         console.error(err);
@@ -44,117 +47,206 @@ export default function ProductosPage() {
       }
     };
     fetch();
-    return () => {
-      mounted = false;
-    };
-  }, [search, category, page]);
+    return () => { mounted = false; };
+  }, [searchQuery, selectedCategories, currentPage]);
 
-  const handleCategoryChange = (cat) => {
-    setCategory((prev) => (prev === cat ? "" : cat));
-    setPage(1);
+  // Filtrado y ordenamiento frontend
+  const filteredAndSortedProducts = useMemo(() => {
+    let filtered = productos.filter(product => {
+      // Search filter
+      if (searchQuery && !product.nombre.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+      // Price filter
+      if (product.precio < priceRange[0] || product.precio > priceRange[1]) {
+        return false;
+      }
+      // Material filter
+      if (selectedMaterials.length > 0 && !selectedMaterials.some(mat => product.nombre.toLowerCase().includes(mat.toLowerCase()))) {
+        return false;
+      }
+      // Size filter
+      if (selectedSizes.length > 0 && !selectedSizes.some(size => product.nombre.includes(size))) {
+        return false;
+      }
+      return true;
+    });
+
+    // Sort products
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low':
+          return a.precio - b.precio;
+        case 'price-high':
+          return b.precio - a.precio;
+        case 'rating':
+          return b.estrellas - a.estrellas;
+        case 'name':
+          return a.nombre.localeCompare(b.nombre);
+        case 'newest':
+        default:
+          return b.nuevo ? 1 : -1;
+      }
+    });
+
+    return filtered;
+  }, [productos, searchQuery, priceRange, selectedMaterials, selectedSizes, sortBy]);
+
+  const handleClearFilters = () => {
+    setSearchQuery('');
+    setSelectedCategories([]);
+    setPriceRange([0, 200]);
+    setSelectedMaterials([]);
+    setSelectedSizes([]);
+    setSortBy('newest');
+    setCurrentPage(1);
   };
 
+  const goToPage = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleProductClick = (product) => {
+    console.log('Producto seleccionado:', product);
+  };
+
+  if (loading) return <p style={{ padding: 20 }}>Cargando productos...</p>;
+  if (error) return <p style={{ padding: 20, color: 'red' }}>{error}</p>;
+
   return (
-    <main className="productos-page">
-      <aside className="filtros-sidebar">
-        <h3>Filtros</h3>
+    <div className="products-page">
+      {/* Page Header */}
+      <div className="products-header" style={{ backgroundColor: '#f5f5f5ff', padding: '20px', borderRadius: '8px' }}>
+        <h1 className="products-title">
+          Nuestra Colección Orgánica
+        </h1>
+        <p className="products-subtitle">
+          Descubre nuestra completa gama de ropa sostenible fabricada con materiales 100% orgánicos. 
+          Cada prenda está cuidadosamente seleccionada para ofrecer calidad, comodidad y respeto por el medio ambiente.
+        </p>
+      </div>
 
-        <div className="filtro-busqueda">
-          <label htmlFor="search">Buscar</label>
-          <input
-            id="search"
-            type="text"
-            placeholder="Buscar productos..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+      <div className="products-main">
+        {/* Sidebar con filtros */}
+        <aside className="product-filters-container">
+          <ProductFilters
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            selectedCategories={selectedCategories}
+            onCategoryChange={setSelectedCategories}
+            priceRange={priceRange}
+            onPriceRangeChange={setPriceRange}
+            selectedMaterials={selectedMaterials}
+            onMaterialChange={setSelectedMaterials}
+            selectedSizes={selectedSizes}
+            onSizeChange={setSelectedSizes}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            onClearFilters={handleClearFilters}
           />
-        </div>
+        </aside>
 
-        <fieldset className="filtro-categorias">
-          <legend>Categorías</legend>
-          {["camisetas", "pantalones", "accesorios", "otros"].map((cat) => (
-            <label key={cat} htmlFor={cat}>
-              <input
-                type="checkbox"
-                id={cat}
-                checked={category === cat}
-                onChange={() => handleCategoryChange(cat)}
-              />
-              {cat}
-            </label>
-          ))}
-        </fieldset>
-
-        <button
-          className="btn-limpiar"
-          onClick={() => {
-            setSearch("");
-            setCategory("");
-          }}
-        >
-          Limpiar filtros
-        </button>
-      </aside>
-
-      <section className="productos-listado">
-        <header>
-          <h2>Nuestra Colección Orgánica</h2>
-          <p>
-            Descubre nuestra gama de ropa sostenible fabricada con materiales
-            100% orgánicos.
-          </p>
-        </header>
-
-        {loading ? (
-          <p style={{ padding: 20 }}>Cargando productos...</p>
-        ) : error ? (
-          <p style={{ padding: 20, color: "red" }}>{error}</p>
-        ) : (
-          <div className="grid-productos">
-            {productos.length > 0 ? (
-              productos.map((p) => <ProductCard key={p.id} {...p} />)
-            ) : (
-              <p className="sin-productos">No se encontraron productos.</p>
-            )}
+        {/* Main content */}
+        <main className="products-content">
+          {/* Results info */}
+          <div className="products-results-info">
+            <div>
+              <p className="products-results-count">
+                Mostrando {filteredAndSortedProducts.length} de {totalProducts} productos
+              </p>
+              {(selectedCategories.length > 0 || selectedMaterials.length > 0 || selectedSizes.length > 0 || searchQuery) && (
+                <div className="products-filters-badges">
+                  {searchQuery && (
+                    <button className="product-filter-badge">
+                      Búsqueda: "{searchQuery}"
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        )}
 
-        <div
-          style={{ display: "flex", justifyContent: "center", marginTop: 20 }}
-        >
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-          >
-            Anterior
-          </button>
-          <span style={{ margin: "0 12px" }}>
-            Página {page} / {totalPages}
-          </span>
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-          >
-            Siguiente
-          </button>
-        </div>
-      </section>
-    </main>
+          {/* Products Grid */}
+          {filteredAndSortedProducts.length > 0 ? (
+            <div className="products-grid">
+              {filteredAndSortedProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.nombre}
+                  price={product.precio}
+                  image={product.imagen}
+                  rating={product.estrellas}
+                  reviews={Math.floor(Math.random() * 100) + 10} // o usa product.reviews si lo tienes
+                  isOrganic={product.organico}
+                  isNew={product.nuevo}
+                  onProductClick={() => handleProductClick(product)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="products-no-results">
+              <p>
+                No se encontraron productos que coincidan con los filtros seleccionados.
+              </p>
+              <button 
+                className="products-no-results-btn"
+                onClick={handleClearFilters}
+              >
+                Limpiar Filtros
+              </button>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                className={`pagination-btn ${currentPage === 1 ? 'disabled' : ''}`}
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft size={16} />
+                Anterior
+              </button>
+              <div className="pagination-numbers">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
+                    onClick={() => goToPage(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+              <button
+                className={`pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`}
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Siguiente
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
   );
-}
+};
 
 function mapProductToUI(p) {
   return {
     id: p._id,
-    name: p.name,
-    price: p.price,
-    image:
-      p.images && p.images.length
-        ? p.images[0]
-        : "https://via.placeholder.com/400x400?text=No+Image",
-    rating: p.rating || 0,
-    reviews: p.reviews || 0,
-    isOrganic: p.isOrganic || false,
-    isNew: p.isNew || false,
+    nombre: p.name,
+    precio: p.price,
+    imagen: p.images && p.images.length ? p.images[0] : 'https://via.placeholder.com/400x400?text=No+Image',
+    estrellas: p.rating || 0,
+    nuevo: p.isNew || false,
+    organico: p.isOrganic || false,
   };
 }
+
+export default ProductosPage;

@@ -1,0 +1,302 @@
+/* === PRODUCTS PAGE STYLES === */
+
+/* Contenedor principal */
+.products-page {
+  background-color: #f9fafb;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+/* Header de la página */
+.products-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f0faf4; /* Verde bajito como pediste */
+}
+
+.products-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.products-subtitle {
+  font-size: 1.1rem;
+  color: #6b7280;
+  max-width: 800px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+/* Contenido principal con sidebar y productos */
+.products-main {
+  display: flex;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Sidebar de filtros */
+.product-filters-container {
+  flex: 0 0 280px;
+}
+
+/* Contenido de productos */
+.products-content {
+  flex: 1;
+}
+
+/* Información de resultados */
+.products-results-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.products-results-count {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.products-filters-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.product-filter-badge {
+  background-color: #e5e7eb;
+  color: #111827;
+  border: none;
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.product-filter-badge:hover {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+/* === GRID DE PRODUCTOS - CORRECCIÓN === */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Asegurar que cada tarjeta tenga un ancho fijo */
+.products-grid > .product-card {
+  max-width: 280px;
+  min-width: 250px;
+}
+
+/* Mensaje cuando no hay resultados */
+.products-no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.products-no-results-btn {
+  background-color: #059669;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 16px;
+}
+
+.products-no-results-btn:hover {
+  background-color: #047857;
+}
+
+/* Paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pagination-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.pagination-btn.active {
+  background-color: #059669;
+  color: white;
+  border-color: #059669;
+}
+
+.pagination-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas medianas */
+  }
+}
+
+@media (max-width: 992px) {
+  .products-main {
+    flex-direction: column;
+  }
+  
+  .product-filters-container {
+    flex: 0 0 auto;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
+  }
+}
+
+@media (max-width: 576px) {
+  .products-page {
+    padding: 20px 16px;
+  }
+  
+  .products-header {
+    margin-bottom: 24px;
+  }
+  
+  .products-title {
+    font-size: 2rem;
+  }
+  
+  .products-subtitle {
+    font-size: 1rem;
+  }
+  
+  .products-grid {
+    grid-template-columns: 1fr; /* 1 columna en móviles */
+    gap: 16px;
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .pagination-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* === ESTILOS PARA PRODUCTOS.JSX (componente de inicio) === */
+.productos-section {
+  padding: 50px 20px;
+  background-color: var(--blanco);
+}
+
+.productos-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.productos-title {
+  color: #111827; /* Negro */
+  font-size: 2rem;
+  font-weight: 800; /* Negrita */
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+
+.productos-description {
+  color: #6b7280; /* Gris medio */
+  font-size: 1rem;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: normal;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+}
+
+.productos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.productos-ver-todos-btn {
+  display: block;
+  margin: 30px auto 0;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #059669; /* Verde primario */
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  width: auto;
+  max-width: 250px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Asegurar la misma fuente que "Agregar al Carrito" */
+  font-family: inherit; /* Hereda la fuente del contenedor */
+  /* Si necesitas forzar una fuente específica, descomenta esto: */
+  /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; */
+}
+
+.productos-ver-todos-btn:hover {
+  background-color: #047857; /* Verde más oscuro */
+}
+
+.productos-loading,
+.productos-error {
+  padding: 20px;
+  text-align: center;
+}
+
+.productos-error {
+  color: red;
+}
