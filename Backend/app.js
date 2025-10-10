@@ -9,6 +9,7 @@ require('dotenv').config();
 connectDB();
 
 const authRoutes = require('./routes/auth');
+const usersRoutes = require('./routes/users');
 const productRoutes = require('./routes/products');
 // TODO: cartRoutes, orderRoutes
 
@@ -17,9 +18,10 @@ app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
-
+app.use('/api/users', usersRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+
 
 // error handler (último middleware)
 app.use(errorHandler);

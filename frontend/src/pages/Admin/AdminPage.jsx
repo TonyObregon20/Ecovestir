@@ -1,5 +1,5 @@
 // src/pages/Admin/AdminPage.jsx
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Package,
@@ -12,11 +12,23 @@ import "../../index.css";
 
 export default function AdminPage() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // 👇 Obtener datos del usuario desde localStorage
+  const userData = localStorage.getItem('user');
+  const user = userData ? JSON.parse(userData) : null;
+
+  // 👇 Función para cerrar sesión
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
   const menuItems = [
     { path: "/admin", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
     { path: "/admin/products", label: "Productos", icon: <Package size={20} /> },
-    { path: "/admin/users", label: "Usuarios", icon: <Users size={20} /> },
+    { path: "/admin/Users", label: "Usuarios", icon: <Users size={20} /> },
     { path: "/admin/orders", label: "Pedidos", icon: <ShoppingCart size={20} /> },
     { path: "/admin/reports", label: "Reportes", icon: <BarChart3 size={20} /> },
   ];
@@ -55,8 +67,15 @@ export default function AdminPage() {
       {/* Contenido principal */}
       <main className="admin-main">
         <header className="admin-header">
-          <h1>Panel de Administración</h1>
-          <button className="btn-logout">Cerrar sesión</button>
+          {/* 👇 Saludo personalizado en lugar de "Panel de Administración" */}
+          {user ? (
+            <h1>Bienvenido, {user.name} 👋</h1>
+          ) : (
+            <h1>Cargando...</h1>
+          )}
+          <button className="btn-logout" onClick={handleLogout}>
+            Cerrar sesión
+          </button>
         </header>
         <section className="admin-content">
           <Outlet />
