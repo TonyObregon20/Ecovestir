@@ -1,23 +1,23 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import React, { useState } from 'react'; // 👈 Añadimos useState
+import React, { useState } from 'react';
 import Navbar from "./components/Navbar";
-import CartDrawer from "./components/CartDrawer"; // 👈 Importamos el carrito
+import CartDrawer from "./components/CartDrawer";
 import Home from "./pages/Home";
 import ProductosPage from "./pages/ProductosPage";
 import Footer from "./components/Footer";
 import "./index.css";
 
-// Admin
+// 👇 Importamos el CartProvider
+import { CartProvider } from "./Context/CartContext";
+
+// Admin y Login (igual que antes)
 import AdminPage from "./pages/Admin/AdminPage";
 import Dashboard from "./pages/Admin/Dashboard";
 import Products from "./pages/Admin/Products";
 import UsersPage from "./pages/Admin/UsersPage";
-
-// Login
 import Login from "./pages/Login";
 
-// Componente para proteger rutas
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -27,62 +27,60 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
-  const [isCartOpen, setIsCartOpen] = useState(false); // 👈 Estado global del carrito
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
-    <BrowserRouter>
-      {/* 👇 El CartDrawer está fuera de las rutas, al nivel superior */}
-      <CartDrawer 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
-      />
-
-      <Routes>
-        {/* ===== Rutas públicas ===== */}
-        <Route
-          path="/"
-          element={
-            <>
-              <Navbar onCartClick={() => setIsCartOpen(true)} />
-              <Home />
-              <Footer />
-            </>
-          }
+    <CartProvider> {/* 👈 Envuelve toda la app */}
+      <BrowserRouter>
+        <CartDrawer 
+          isOpen={isCartOpen} 
+          onClose={() => setIsCartOpen(false)} 
         />
 
-        <Route
-          path="/productos"
-          element={
-            <>
-              <Navbar onCartClick={() => setIsCartOpen(true)} />
-              <ProductosPage />
-              <Footer />
-            </>
-          }
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Home />
+                <Footer />
+              </>
+            }
+          />
 
-        {/* ===== Login ===== */}
-        <Route path="/login" element={<Login />} />
+          <Route
+            path="/productos"
+            element={
+              <>
+                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <ProductosPage />
+                <Footer />
+              </>
+            }
+          />
 
-        {/* ===== Rutas protegidas de Admin ===== */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminPage />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="products" element={<Products />} />
-          <Route path="users" element={<UsersPage />} />
-          <Route path="orders" element={<div>Órdenes (próximamente)</div>} />
-          <Route path="reports" element={<div>Reportes (próximamente)</div>} />
-        </Route>
+          <Route path="/login" element={<Login />} />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminPage />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="products" element={<Products />} />
+            <Route path="users" element={<UsersPage />} />
+            <Route path="orders" element={<div>Órdenes (próximamente)</div>} />
+            <Route path="reports" element={<div>Reportes (próximamente)</div>} />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </CartProvider>
   );
 }
 

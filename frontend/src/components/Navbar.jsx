@@ -3,9 +3,11 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { ShoppingCart, Leaf } from 'lucide-react';
 import '../style/navbar.css';
+import { useCart } from '../Context/CartContext'; // 👈 Importamos el hook
 
-export default function Navbar({ onCartClick }) { // 👈 Recibe la función desde App.jsx
-  const cartItemCount = 3;
+export default function Navbar({ onCartClick }) {
+  const { getCartTotal } = useCart(); // 👈 Obtenemos la cantidad total
+  const cartItemCount = getCartTotal(); // 👈 Dinámico
 
   return (
     <header className="navbar">
@@ -44,10 +46,9 @@ export default function Navbar({ onCartClick }) { // 👈 Recibe la función des
             </div>
           </div>
 
-          {/* 👇 Cambiamos el Link por un botón que llama a onCartClick */}
           <button 
             className="navbar-cart-button" 
-            onClick={onCartClick} // 👈 Llama a la función pasada desde App.jsx
+            onClick={onCartClick}
             aria-label="Ver carrito"
           >
             <ShoppingCart className="navbar-cart-icon" />
