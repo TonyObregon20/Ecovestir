@@ -1,0 +1,141 @@
+/* src/components/CartDrawer.css */
+
+.cart-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.cart-drawer {
+  background: white;
+  width: 400px;
+  max-width: 90vw;
+  min-height: 100vh;
+  overflow-y: auto;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1001;
+}
+
+/* Animaciones solo para el drawer */
+.cart-drawer-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.cart-drawer-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 300ms ease-out;
+}
+
+.cart-drawer-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.cart-drawer-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 300ms ease-out;
+}
+
+/* Resto de estilos (igual que antes) */
+.cart-drawer-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f8f8;
+}
+
+.cart-drawer-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cart-drawer-icon {
+  font-size: 20px;
+}
+
+.cart-drawer-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.cart-drawer-close:hover {
+  color: #333;
+}
+
+.cart-drawer-content {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.cart-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.cart-empty-icon {
+  font-size: 64px;
+  color: #ccc;
+}
+
+.cart-empty-state h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.cart-empty-state p {
+  color: #666;
+  margin: 8px 0 24px 0;
+  max-width: 280px;
+}
+
+.cart-continue-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-width: 200px;
+}
+
+.cart-continue-button:hover {
+  background: #45a049;
+}
