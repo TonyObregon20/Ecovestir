@@ -12,6 +12,7 @@ import AdminPage from "./pages/Admin/AdminPage";
 import Dashboard from "./pages/Admin/Dashboard";
 import Products from "./pages/Admin/Products";
 import Login from "./pages/Login"; // 👈 Nuevo
+import CategoryPage from "./pages/categories/CategoryPage"; // Página de categorías
 
 // Componente para proteger rutas
 const ProtectedRoute = ({ children }) => {
@@ -44,6 +45,17 @@ function App() {
             <>
               <Navbar />
               <ProductosPage />
+              <Footer />
+            </>
+          }
+        />
+        {/* Categorías */}
+        <Route
+          path="/categorias"
+          element={
+            <>
+              <Navbar />
+              <CategoryPage />
               <Footer />
             </>
           }
