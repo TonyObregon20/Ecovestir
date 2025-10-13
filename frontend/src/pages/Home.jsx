@@ -3,6 +3,7 @@
 import React from 'react';
 import Hero from '../components/Hero';
 import Productos from '../components/Productos';
+import Categories from '../components/Categories';
 import '../style/home.css';
 
 export default function Home() {
@@ -10,61 +11,7 @@ export default function Home() {
     <>
       <Hero />
       <Productos />
-
-      {/* Sección 2: Nuestras Categorías */}
-      <section className="categorias-section">
-        <div className="categorias-container">
-          <h2 className="categorias-title">Nuestras Categorías</h2>
-          <p className="categorias-subtitle">
-            Explora nuestra amplia gama de categorías de ropa orgánica. Desde casual hasta formal, tenemos todo lo que necesitas.
-          </p>
-
-          <div className="categorias-grid">
-            {[
-              {
-                name: 'Camisetas',
-                description: 'Cómodas y transpirables',
-                products: 45,
-                image: 'https://images.unsplash.com/photo-1675239514439-1c128b0cffcd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwY290dG9uJTIwY2xvdGhpbmclMjBzdXN0YWluYWJsZSUyMGZhc2hpb258ZW58MXx8fHwxNzU3NTUwMzA0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-                link: '/productos?categoria=camisetas'
-              },
-              {
-                name: 'Vestidos',
-                description: 'Elegancia sostenible',
-                products: 32,
-                image: 'https://images.unsplash.com/photo-1643185720431-9c050eebbc9a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlY28lMjBmcmllbmRseSUyMGJhbWJvbyUyMGNsb3RoaW5nfGVufDF8fHx8MTc1NzU1MDMwNXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-                link: '/productos?categoria=vestidos'
-              },
-              {
-                name: 'Pantalones',
-                description: 'Comodidad natural',
-                products: 28,
-                image: 'https://images.unsplash.com/photo-1543121032-68865adeff3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGhlbXAlMjBjbG90aGluZ3xlbnwxfHx8fDE3NTc1NTAzMDR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-                link: '/productos?categoria=pantalones'
-              },
-              {
-                name: 'Camisas',
-                description: 'Estilo profesional',
-                products: 21,
-                image: 'https://images.unsplash.com/photo-1643286131725-5e0ad3b3ca02?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwbGluZW4lMjBzaGlydCUyMG5hdHVyYWwlMjBmYWJyaWN8ZW58MXx8fHwxNzU3NTUwMzA0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-                link: '/productos?categoria=camisas'
-              }
-            ].map((cat, index) => (
-              <div key={index} className="categoria-card">
-                <img src={cat.image} alt={cat.name} className="categoria-image" />
-                <div className="categoria-content">
-                  <h3 className="categoria-name">{cat.name}</h3>
-                  <p className="categoria-description">{cat.description}</p>
-                  <p className="categoria-products">{cat.products} productos</p>
-                  <a href={cat.link} className="categoria-btn">
-                    Ver Categoría →
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Categories />
 
       {/* Sección 3: ¿Por Qué Elegir Ropa Orgánica? */}
       <section className="porque-organica-section">

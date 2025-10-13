@@ -1,6 +1,6 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
 import Home from "./pages/Home";
@@ -16,7 +16,8 @@ import AdminPage from "./pages/Admin/AdminPage";
 import Dashboard from "./pages/Admin/Dashboard";
 import Products from "./pages/Admin/Products";
 import UsersPage from "./pages/Admin/UsersPage";
-import Login from "./pages/Login";
+import Login from "./pages/Login"; // 👈 Nuevo
+import CategoryPage from "./pages/categories/CategoryPage"; // Página de categorías
 
 // ✅ ProtectedRoute mejorado: verifica token Y rol
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -40,12 +41,10 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
-    <CartProvider> {/* 👈 Envuelve toda la app */}
+    <CartProvider>
+      {/* 👈 Envuelve toda la app */}
       <BrowserRouter>
-        <CartDrawer 
-          isOpen={isCartOpen} 
-          onClose={() => setIsCartOpen(false)} 
-        />
+        <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
         <Routes>
           <Route
@@ -70,13 +69,25 @@ function App() {
             }
           />
 
+          {/* ✅ Nueva ruta de Categorías */}
+          <Route
+            path="/categorias"
+            element={
+              <>
+                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <CategoryPage />
+                <Footer />
+              </>
+            }
+          />
+
           <Route path="/login" element={<Login />} />
 
           {/* ✅ Ruta protegida por rol: solo admin */}
           <Route
             path="/admin"
             element={
-              <ProtectedRoute allowedRoles={['admin']}>
+              <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminPage />
               </ProtectedRoute>
             }

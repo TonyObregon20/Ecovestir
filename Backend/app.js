@@ -11,6 +11,7 @@ connectDB();
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const productRoutes = require('./routes/products');
+const categoryRoutes = require('./routes/categories');
 const adminRoutes = require('./routes/admin');
 const cartRoutes = require('./routes/cart');
 // TODO: cartRoutes, orderRoutes
@@ -25,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes); 
 app.use('/api/cart', cartRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
 
 
 // error handler (último middleware)

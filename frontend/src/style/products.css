@@ -20,7 +20,7 @@
   font-size: 2.5rem;
   font-weight: 800;
   color: #111827;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .products-subtitle {
@@ -267,28 +267,21 @@
   margin: 30px auto 0;
   padding: 10px 20px;
   border-radius: 8px;
-  background-color: #059669; /* Verde primario */
+  background-color: #16a34a; /* Verde primario */
   color: #ffffff;
-  border: none;
+  font-size: 0.9rem; /* tamaño más pequeño */
+  font-weight: 500; /* peso normal, no bold */
+  font-family: inherit;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
   text-decoration: none;
   text-align: center;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
   width: auto;
   max-width: 250px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  /* Asegurar la misma fuente que "Agregar al Carrito" */
-  font-family: inherit; /* Hereda la fuente del contenedor */
-  /* Si necesitas forzar una fuente específica, descomenta esto: */
-  /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; */
 }
 
 .productos-ver-todos-btn:hover {
-  background-color: #047857; /* Verde más oscuro */
+  background-color: #21914a; /* Verde más oscuro */
 }
 
 .productos-loading,

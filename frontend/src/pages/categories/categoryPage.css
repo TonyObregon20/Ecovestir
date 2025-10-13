@@ -1,0 +1,224 @@
+/* ===== CONTENEDOR PRINCIPAL DE CATEGORÍAS ===== */
+.categorias-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* ===== ENCABEZADO CON FONDO DE IMAGEN ===== */
+.hero-categorias {
+  background-color: #f0faf4;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 40px auto;
+  max-width: 1200px;
+  box-sizing: border-box;
+}
+
+.hero-categorias h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.hero-categorias p {
+  font-size: 1.1rem;
+  color: #6b7280;
+  max-width: 800px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+/* ===== BARRA DE BÚSQUEDA DE CATEGORÍAS ===== */
+.search-bar-categories {
+  padding: 2rem 1rem;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+}
+
+/* interno: contenedor relativo para posicionar icono */
+.search-bar-categories .search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+}
+
+ .search-bar-categories .search-input {
+  width: 100%;
+  padding: 12px 20px 12px 45px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+  background-color: #f8f8f8;
+}
+
+.search-bar-categories .search-input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.search-bar-categories .search-input::placeholder {
+  color: #999;
+}
+
+.search-bar-categories .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: #969696; /* Gris neutro */
+  width: 20px;
+  height: 20px;
+  font-size: 0; /* reset font-size for svg */
+  pointer-events: none;
+}
+
+/* ===== SECCIÓN DE TARJETAS DE CATEGORÍAS ===== */
+ .categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 2rem 1rem;
+  background-color: transparent;
+}
+
+.category-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.category-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background-color: #222;
+}
+
+.category-card .card-body {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-card .category-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-card .category-title .count-badge {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.category-card .category-description {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0.5rem 0;
+  line-height: 1.4;
+}
+
+.category-card .materials {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.5rem 0;
+}
+
+.category-card .materials strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.category-card .price-range {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: auto;
+}
+
+.category-card .price-range strong {
+  font-weight: 600;
+  color: #333;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .hero-categorias h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-categorias p {
+    font-size: 1rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    padding: 1rem;
+  }
+
+  .category-card img {
+    height: 150px;
+  }
+
+  .category-card .card-body {
+    padding: 1rem;
+  }
+
+  .category-card .category-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-categorias {
+    height: 300px;
+    padding: 1rem;
+  }
+
+  .hero-categorias h1 {
+    font-size: 2rem;
+  }
+
+  .search-bar-categories .search-input {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+
+  .category-card img {
+    height: 120px;
+  }
+
+  .category-card .category-title {
+    font-size: 1rem;
+  }
+
+  .category-card .category-title .count-badge {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+  }
+}
