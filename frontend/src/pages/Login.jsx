@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
+import { useCart } from '../context/CartContext'; // 👈 ruta corregida: minúscula "context"
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { refetchCart } = useCart(); // 👈 obtenemos la función para recargar el carrito
 
   const handleChange = (e) => {
     setFormData({
@@ -25,7 +27,6 @@ export default function Login() {
     setError("");
 
     try {
-      // Ajusta la URL si tu backend usa otro puerto o ruta
       const response = await fetch("http://localhost:4000/api/auth/login", {
         method: "POST",
         headers: {
@@ -45,12 +46,19 @@ export default function Login() {
         return;
       }
 
-      // Guardar en localStorage
+      // 👇 Guardar token y usuario en localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Redirigir al panel de admin
-      navigate("/admin");
+      // 👇 ¡Recargar el carrito del usuario autenticado!
+      refetchCart();
+
+      // 👇 Redirigir según el rol
+      if (data.user.role === 'admin') {
+        navigate("/admin");
+      } else {
+        navigate("/productos");
+      }
     } catch (err) {
       console.error("Error de red:", err);
       setError("Error de conexión. ¿Está corriendo tu backend?");
@@ -66,7 +74,7 @@ export default function Login() {
           <span className="logo-icon">🍃</span>
           <h2>EcoVestir</h2>
         </div>
-        <h3>Panel de Administración</h3>
+        <h3>{window.location.pathname === '/login' ? 'Iniciar Sesión' : 'Panel de Administración'}</h3>
         
         {error && <div className="login-error">{error}</div>}
         
