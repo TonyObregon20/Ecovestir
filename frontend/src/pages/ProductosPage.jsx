@@ -178,7 +178,7 @@ const ProductosPage = () => {
                   price={product.precio}
                   image={product.imagen}
                   rating={product.estrellas}
-                  reviews={Math.floor(Math.random() * 100) + 10} // o usa product.reviews si lo tienes
+                  reviews={product.reviews}
                   isOrganic={product.organico}
                   isNew={product.nuevo}
                   onProductClick={() => handleProductClick(product)}
@@ -246,6 +246,7 @@ function mapProductToUI(p) {
     estrellas: p.rating || 0,
     nuevo: p.isNew || false,
     organico: p.isOrganic || false,
+    reviews: p.reviews || 0,
   };
 }
 

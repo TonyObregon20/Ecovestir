@@ -51,7 +51,7 @@ export default function Productos() {
               price={p.precio}
               image={p.imagen}
               rating={p.estrellas}
-              reviews={Math.floor(Math.random() * 100) + 10}
+              reviews={p.reviews}
               isOrganic={p.organico}
               isNew={p.nuevo}
               onProductClick={() => console.log('Producto seleccionado:', p)}
@@ -79,6 +79,7 @@ function mapProductToUI(p) {
     imagen: p.images && p.images.length ? p.images[0] : 'https://via.placeholder.com/400x400?text=No+Image',
     nuevo: false,
     organico: p.ecoFriendly || false,
-    estrellas: p.rating || 4,
+    estrellas: p.rating || 0,
+    reviews: p.reviews || 0,
   };
 }
