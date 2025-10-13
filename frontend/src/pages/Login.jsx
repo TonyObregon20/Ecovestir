@@ -25,7 +25,6 @@ export default function Login() {
     setError("");
 
     try {
-      // Ajusta la URL si tu backend usa otro puerto o ruta
       const response = await fetch("http://localhost:4000/api/auth/login", {
         method: "POST",
         headers: {
@@ -45,12 +44,17 @@ export default function Login() {
         return;
       }
 
-      // Guardar en localStorage
+      // 👇 Guardar token y usuario en localStorage
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("user", JSON.stringify(data.user)); // Asegúrate de que el backend envíe `user` con `role` y `name`
 
-      // Redirigir al panel de admin
-      navigate("/admin");
+      // 👇 Redirigir según el rol
+      if (data.user.role === 'admin') {
+        navigate("/admin");
+      } else {
+        // Redirigir a la página principal o productos
+        navigate("/productos"); // o navigate("/");
+      }
     } catch (err) {
       console.error("Error de red:", err);
       setError("Error de conexión. ¿Está corriendo tu backend?");
@@ -66,7 +70,7 @@ export default function Login() {
           <span className="logo-icon">🍃</span>
           <h2>EcoVestir</h2>
         </div>
-        <h3>Panel de Administración</h3>
+        <h3>{window.location.pathname === '/login' ? 'Iniciar Sesión' : 'Panel de Administración'}</h3>
         
         {error && <div className="login-error">{error}</div>}
         

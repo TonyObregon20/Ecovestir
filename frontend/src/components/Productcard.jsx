@@ -1,7 +1,7 @@
-// ProductCard.jsx
-
+// src/components/ProductCard.jsx
 import { useState } from "react";
 import { ShoppingCart } from 'lucide-react';
+import { useCart } from '../Context/CartContext'; // 👈 Importa el hook
 import "../style/productcard.css";
 
 export default function ProductCard({
@@ -14,9 +14,16 @@ export default function ProductCard({
   isOrganic,
   isNew,
   onProductClick,
-  originalPrice, // opcional
+  originalPrice,
 }) {
   const [hover, setHover] = useState(false);
+  const { addToCart } = useCart(); // 👈 Obtén la función
+
+  // 👇 Nueva función para agregar al carrito
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // Evita que se dispare onProductClick
+    addToCart({ id, name, price, image }); // Envía los datos del producto
+  };
 
   return (
     <div
@@ -52,7 +59,10 @@ export default function ProductCard({
 
         {/* Overlay oscuro con botón */}
         <div className={`product-card-overlay ${hover ? "opacity-100" : ""}`}>
-          <button className="product-card-add-button">
+          <button 
+            className="product-card-add-button"
+            onClick={handleAddToCart} // 👈 Asigna la función
+          >
             <ShoppingCart className="h-4 w-4" />
             Agregar al Carrito
           </button>
