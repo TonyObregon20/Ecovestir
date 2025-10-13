@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 import "./index.css";
 
 // 👇 Importamos el CartProvider
-import { CartProvider } from "./Context/CartContext";
+import { CartProvider } from "./context/CartContext";
 
 // Admin y Login
 import AdminPage from "./pages/Admin/AdminPage";
