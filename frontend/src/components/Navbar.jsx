@@ -1,13 +1,24 @@
 // src/components/Navbar.jsx
 import React from 'react';
-import { Link } from "react-router-dom";
-import { ShoppingCart, Leaf } from 'lucide-react';
-import '../style/navbar.css';
-import { useCart } from '../Context/CartContext'; // 👈 Importamos el hook
+import { Link, useNavigate } from "react-router-dom";
+import { ShoppingCart, Leaf, LogOut } from 'lucide-react';
+import { useCart } from '../Context/CartContext';
+import "../style/navbar.css";
+
 
 export default function Navbar({ onCartClick }) {
-  const { getCartTotal } = useCart(); // 👈 Obtenemos la cantidad total
-  const cartItemCount = getCartTotal(); // 👈 Dinámico
+  const { getCartTotal } = useCart();
+  const navigate = useNavigate();
+  const cartItemCount = getCartTotal();
+
+  // 👇 Obtener usuario desde localStorage
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
 
   return (
     <header className="navbar">
@@ -34,7 +45,7 @@ export default function Navbar({ onCartClick }) {
           </nav>
         </div>
 
-        {/* DERECHA: Buscador + Carrito */}
+        {/* DERECHA: Buscador + Carrito + Auth */}
         <div className="navbar-right">
           <div className="navbar-search">
             <div className="navbar-search-wrapper">
@@ -57,9 +68,33 @@ export default function Navbar({ onCartClick }) {
             )}
           </button>
 
-          <Link to="/login" className="navbar-auth-button login">
-            Iniciar Sesión
-          </Link>
+          {user ? (
+            // 👇 Usuario autenticado
+            <div className="navbar-user-info">
+              {user.role === 'admin' ? (
+                <Link to="/admin" className="navbar-auth-button admin">
+                  Panel de Admin
+                </Link>
+              ) : (
+                // 👇 Vista para customer
+                <span className="navbar-user-greeting">
+                  Hola, <strong>{user.name}</strong>
+                </span>
+              )}
+              <button 
+                className="navbar-logout-btn"
+                onClick={handleLogout}
+                title="Cerrar sesión"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
+          ) : (
+            // 👇 No autenticado
+            <Link to="/login" className="navbar-auth-button login">
+              Iniciar Sesión
+            </Link>
+          )}
         </div>
       </div>
     </header>

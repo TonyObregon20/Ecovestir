@@ -11,6 +11,7 @@ connectDB();
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const productRoutes = require('./routes/products');
+const adminRoutes = require('./routes/admin');
 // TODO: cartRoutes, orderRoutes
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
 app.use('/api/users', usersRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes); 
 app.use('/api/products', productRoutes);
 
 

@@ -11,18 +11,28 @@ import "./index.css";
 // 👇 Importamos el CartProvider
 import { CartProvider } from "./Context/CartContext";
 
-// Admin y Login (igual que antes)
+// Admin y Login
 import AdminPage from "./pages/Admin/AdminPage";
 import Dashboard from "./pages/Admin/Dashboard";
 import Products from "./pages/Admin/Products";
 import UsersPage from "./pages/Admin/UsersPage";
 import Login from "./pages/Login";
 
-const ProtectedRoute = ({ children }) => {
+// ✅ ProtectedRoute mejorado: verifica token Y rol
+const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  // Si no hay token, redirigir a login
   if (!token) {
     return <Navigate to="/login" replace />;
   }
+
+  // Si se especifican roles permitidos, verificar que el usuario tenga uno de ellos
+  if (allowedRoles.length > 0 && user && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/" replace />;
+  }
+
   return children;
 };
 
@@ -62,10 +72,11 @@ function App() {
 
           <Route path="/login" element={<Login />} />
 
+          {/* ✅ Ruta protegida por rol: solo admin */}
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['admin']}>
                 <AdminPage />
               </ProtectedRoute>
             }
