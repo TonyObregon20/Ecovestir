@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import { useCart } from '../Context/CartContext'; // 👈 Importamos el contexto
+import { useCart } from '../context/CartContext'; // 👈 Importamos el contexto
 import './CartDrawer.css';
 
 function CartDrawer({ isOpen, onClose }) {

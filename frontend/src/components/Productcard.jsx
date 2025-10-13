@@ -1,7 +1,7 @@
 // src/components/ProductCard.jsx
 import { useState } from "react";
 import { ShoppingCart } from 'lucide-react';
-import { useCart } from '../Context/CartContext'; // 👈 Importa el hook
+import { useCart } from '../context/CartContext'; // 👈 Importa el hook
 import "../style/productcard.css";
 
 export default function ProductCard({

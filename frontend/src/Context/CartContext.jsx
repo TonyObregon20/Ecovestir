@@ -11,55 +11,115 @@ export const useCart = () => {
   return context;
 };
 
-// 👇 Función para obtener el carrito desde localStorage
-const getCartFromStorage = () => {
-  try {
-    const saved = localStorage.getItem('cart');
-    return saved ? JSON.parse(saved) : [];
-  } catch (e) {
-    console.warn('No se pudo leer el carrito de localStorage', e);
-    return [];
-  }
-};
-
-// 👇 Función para guardar en localStorage
-const saveCartToStorage = (cart) => {
-  try {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  } catch (e) {
-    console.warn('No se pudo guardar el carrito en localStorage', e);
-  }
-};
-
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => getCartFromStorage()); // 👈 Inicializa desde localStorage
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // 👇 Guarda en localStorage cada vez que el carrito cambie
-  useEffect(() => {
-    saveCartToStorage(cartItems);
-  }, [cartItems]);
-
-  const addToCart = (product) => {
-    setCartItems((prev) => {
-      const existing = prev.find(item => item.id === product.id);
-      if (existing) {
-        return prev.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...prev, { ...product, quantity: 1 }];
-      }
-    });
+  // Función para obtener el token
+  const getToken = () => {
+    return localStorage.getItem('token');
   };
 
+  // Cargar carrito desde el backend
+  const loadCart = async () => {
+    const token = getToken();
+    if (!token) {
+      setCartItems([]);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:4000/api/cart', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const cartData = await response.json();
+        // Formateamos para que coincida con lo que espera ProductCard
+        const formattedCart = cartData.map((item) => ({
+          id: item.productId._id,
+          name: item.productId.name,
+          price: item.productId.price,
+          image: item.productId.image,
+          quantity: item.quantity,
+        }));
+        setCartItems(formattedCart);
+      } else {
+        setCartItems([]);
+      }
+    } catch (error) {
+      console.error('Error al cargar el carrito:', error);
+      setCartItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Añadir producto al carrito
+  const addToCart = async (product) => {
+    const token = getToken();
+    if (!token) {
+      alert('Debes iniciar sesión para agregar productos al carrito.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:4000/api/cart/items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ productId: product.id, quantity: 1 }),
+      });
+
+      if (response.ok) {
+        // Recargamos el carrito completo para mantener sincronización
+        await loadCart();
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'No se pudo agregar el producto al carrito.');
+      }
+    } catch (error) {
+      console.error('Error en addToCart:', error);
+      alert('Error de conexión. ¿Está corriendo el backend?');
+    }
+  };
+
+  // Obtener total de items (para badge en navbar)
   const getCartTotal = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
+  // Función para recargar el carrito (útil tras login/logout)
+  const refetchCart = () => {
+    loadCart();
+  };
+
+  // 👇 FUNCIÓN PARA LIMPIAR EL CARRITO EN LA UI
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  // Cargar carrito al montar el proveedor
+  useEffect(() => {
+    loadCart();
+  }, []);
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, getCartTotal, setCartItems }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        getCartTotal,
+        loading,
+        refetchCart,
+        clearCart, // 👈 ¡INCLUIDA AQUÍ!
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

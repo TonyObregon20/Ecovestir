@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
+import { useCart } from '../context/CartContext'; // 👈 ruta corregida: minúscula "context"
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { refetchCart } = useCart(); // 👈 obtenemos la función para recargar el carrito
 
   const handleChange = (e) => {
     setFormData({
@@ -46,14 +48,16 @@ export default function Login() {
 
       // 👇 Guardar token y usuario en localStorage
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user)); // Asegúrate de que el backend envíe `user` con `role` y `name`
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // 👇 ¡Recargar el carrito del usuario autenticado!
+      refetchCart();
 
       // 👇 Redirigir según el rol
       if (data.user.role === 'admin') {
         navigate("/admin");
       } else {
-        // Redirigir a la página principal o productos
-        navigate("/productos"); // o navigate("/");
+        navigate("/productos");
       }
     } catch (err) {
       console.error("Error de red:", err);

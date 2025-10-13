@@ -2,12 +2,11 @@
 import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart, Leaf, LogOut } from 'lucide-react';
-import { useCart } from '../Context/CartContext';
+import { useCart } from '../context/CartContext'; // 👈 ruta corregida: minúscula
 import "../style/navbar.css";
 
-
 export default function Navbar({ onCartClick }) {
-  const { getCartTotal } = useCart();
+  const { getCartTotal, clearCart } = useCart(); // 👈 añadido clearCart
   const navigate = useNavigate();
   const cartItemCount = getCartTotal();
 
@@ -15,8 +14,14 @@ export default function Navbar({ onCartClick }) {
   const user = JSON.parse(localStorage.getItem('user'));
 
   const handleLogout = () => {
+    // 1. Limpiar datos de autenticación
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    
+    // 2. 👉 Limpiar el carrito en la UI (¡sin recargar!)
+    clearCart();
+    
+    // 3. Redirigir
     navigate('/');
   };
 
