@@ -2,12 +2,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import { useCart } from '../context/CartContext'; // 👈 Importamos el contexto
+import { useCart } from '../context/CartContext';
 import './CartDrawer.css';
 
 function CartDrawer({ isOpen, onClose }) {
   const navigate = useNavigate();
-  const { cartItems, addToCart, getCartTotal, setCartItems } = useCart(); // 👈 Obtenemos los datos del carrito
+  const { cartItems, setCartItems } = useCart();
 
   const handleContinueShopping = () => {
     onClose();
@@ -31,10 +31,13 @@ function CartDrawer({ isOpen, onClose }) {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const getCartTotal = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  };
+
   const handleProceedToCheckout = () => {
-    // Por ahora solo cerramos y redirigimos a una página de pago (puedes cambiarlo después)
     onClose();
-    navigate('/checkout'); // 👈 Asegúrate de tener esta ruta o cambia por '/productos'
+    navigate('/checkout');
   };
 
   const handleClearCart = () => {
@@ -64,9 +67,8 @@ function CartDrawer({ isOpen, onClose }) {
             </button>
           </div>
 
-          <div className="cart-drawer-content">
-            {cartItems.length === 0 ? (
-              // 👇 Mensaje cuando el carrito está vacío
+          {cartItems.length === 0 ? (
+            <div className="cart-drawer-content">
               <div className="cart-empty-state">
                 <div className="cart-empty-icon">🛒</div>
                 <h3>Tu carrito está vacío</h3>
@@ -78,20 +80,24 @@ function CartDrawer({ isOpen, onClose }) {
                   Continuar Comprando
                 </button>
               </div>
-            ) : (
-              // 👇 Contenido cuando hay productos
-              <>
+            </div>
+          ) : (
+            <>
+              <div className="cart-items-scrollable">
                 <div className="cart-items-header">
                   <p>{getCartTotal()} artículo(s) en tu carrito</p>
                 </div>
-
                 <div className="cart-items-list">
                   {cartItems.map((item) => (
                     <div key={item.id} className="cart-item">
                       <img 
-                        src={item.image} 
+                        src={item.image || '/placeholder.jpg'} 
                         alt={item.name} 
                         className="cart-item-image"
+                        onError={(e) => {
+                          e.target.src = '/placeholder.jpg';
+                          e.target.onerror = null; // 👈 Evita bucle infinito
+                        }}
                       />
                       <div className="cart-item-details">
                         <h4 className="cart-item-name">{item.name}</h4>
@@ -125,37 +131,37 @@ function CartDrawer({ isOpen, onClose }) {
                     </div>
                   ))}
                 </div>
+              </div>
 
-                <div className="cart-summary">
-                  <div className="cart-subtotal">
-                    <span>Subtotal</span>
-                    <span>${getTotalPrice().toFixed(2)}</span>
-                  </div>
-                  <p className="cart-shipping-info">
-                    Envío e impuestos calculados al finalizar compra
-                  </p>
-                  <button 
-                    className="cart-proceed-button"
-                    onClick={handleProceedToCheckout}
-                  >
-                    Proceder al Pago
-                  </button>
-                  <button 
-                    className="cart-continue-button"
-                    onClick={handleContinueShopping}
-                  >
-                    Continuar Comprando
-                  </button>
-                  <button 
-                    className="cart-clear-button"
-                    onClick={handleClearCart}
-                  >
-                    Vaciar Carrito
-                  </button>
+              <div className="cart-footer">
+                <div className="cart-subtotal">
+                  <span>Subtotal</span>
+                  <span>${getTotalPrice().toFixed(2)}</span>
                 </div>
-              </>
-            )}
-          </div>
+                <p className="cart-shipping-info">
+                  Envío e impuestos calculados al finalizar compra
+                </p>
+                <button 
+                  className="cart-proceed-button"
+                  onClick={handleProceedToCheckout}
+                >
+                  Proceder al Pago
+                </button>
+                <button 
+                  className="cart-continue-button"
+                  onClick={handleContinueShopping}
+                >
+                  Continuar Comprando
+                </button>
+                <button 
+                  className="cart-clear-button"
+                  onClick={handleClearCart}
+                >
+                  Vaciar Carrito
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </CSSTransition>
     </>
