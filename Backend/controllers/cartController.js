@@ -7,7 +7,7 @@ exports.getCart = async (req, res) => {
   try {
     const user = await User.findById(req.user._id)
       .select('cart')
-      .populate('cart.productId', 'name price image'); // ajusta los campos que quieras
+      .populate('cart.productId', 'name price images'); // ✅ Cambiado: 'images' en lugar de 'image'
 
     res.json(user.cart || []);
   } catch (error) {
@@ -43,7 +43,7 @@ exports.addItem = async (req, res) => {
     await user.save();
     const updatedUser = await User.findById(req.user._id)
       .select('cart')
-      .populate('cart.productId', 'name price image');
+      .populate('cart.productId', 'name price images'); // ✅ Cambiado: 'images'
 
     res.json(updatedUser.cart);
   } catch (error) {
@@ -65,7 +65,7 @@ exports.removeItem = async (req, res) => {
     await user.save();
     const updatedUser = await User.findById(req.user._id)
       .select('cart')
-      .populate('cart.productId', 'name price image');
+      .populate('cart.productId', 'name price images'); // ✅ Cambiado: 'images'
 
     res.json(updatedUser.cart);
   } catch (error) {

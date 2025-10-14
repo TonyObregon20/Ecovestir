@@ -38,12 +38,14 @@ export const CartProvider = ({ children }) => {
 
       if (response.ok) {
         const cartData = await response.json();
-        // Formateamos para que coincida con lo que espera ProductCard
+        // ✅ CORREGIDO: usamos images[0] en lugar de image
         const formattedCart = cartData.map((item) => ({
           id: item.productId._id,
           name: item.productId.name,
           price: item.productId.price,
-          image: item.productId.image,
+          image: item.productId.images && item.productId.images.length
+            ? item.productId.images[0]
+            : '/placeholder.jpg',
           quantity: item.quantity,
         }));
         setCartItems(formattedCart);
@@ -99,7 +101,7 @@ export const CartProvider = ({ children }) => {
     loadCart();
   };
 
-  // 👇 FUNCIÓN PARA LIMPIAR EL CARRITO EN LA UI
+  // Función para limpiar el carrito en la UI
   const clearCart = () => {
     setCartItems([]);
   };
@@ -117,7 +119,7 @@ export const CartProvider = ({ children }) => {
         getCartTotal,
         loading,
         refetchCart,
-        clearCart, // 👈 ¡INCLUIDA AQUÍ!
+        clearCart,
       }}
     >
       {children}
