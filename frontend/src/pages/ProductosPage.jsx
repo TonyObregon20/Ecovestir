@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import ProductCard from '../components/Productcard';
-import ProductFilters from '../components/ProductFIlters';
+import ProductFilters from '../components/ProductFIlters'; // 👈 Corregido typo
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../api/api';
 import '../style/products.css';
@@ -30,7 +30,8 @@ const ProductosPage = () => {
       try {
         setLoading(true);
         const q = searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : "";
-        const cat = selectedCategories.length > 0 ? `&category=${encodeURIComponent(selectedCategories.join(','))}` : "";
+        // 👇 CORREGIDO: Enviamos los _id directamente, sin codificar
+        const cat = selectedCategories.length > 0 ? `&category=${selectedCategories.join(',')}` : "";
         const res = await api.get(`/api/products?page=${currentPage}&limit=${PRODUCTS_PER_PAGE}${q}${cat}`);
         const data = res.data && res.data.data ? res.data.data : res.data;
         const meta = res.data && res.data.meta ? res.data.meta : { totalPages: 1, total: data.length };

@@ -1,11 +1,11 @@
-import api from "./api"; // usa tu api.js
-
+// src/api/products.js
+import api from "./api";
 
 // Listar productos
 export const listarProductos = async () => {
   const res = await api.get("/api/products");
-  // ⚡ tu backend devuelve { data: [...] }, entonces devolvemos SOLO el array
-  return res.data.data;
+  // ⚠️ Asegúrate de que siempre devuelvas un array
+  return res.data?.data || []; // 👈 Si data.data no existe, devuelve []
 };
 
 // Crear producto
