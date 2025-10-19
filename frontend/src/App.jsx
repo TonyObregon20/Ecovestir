@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
 import Home from "./pages/Home";
 import ProductosPage from "./pages/ProductosPage";
+import About from "./pages/About"; // 👈 Ya importado
+import Contacto from "./pages/Contacto";
 import Footer from "./components/Footer";
 import "./index.css";
 
@@ -16,8 +18,8 @@ import AdminPage from "./pages/Admin/AdminPage";
 import Dashboard from "./pages/Admin/Dashboard";
 import Products from "./pages/Admin/Products";
 import UsersPage from "./pages/Admin/UsersPage";
-import Login from "./pages/Login"; // 👈 Nuevo
-import CategoryPage from "./pages/categories/CategoryPage"; // Página de categorías
+import Login from "./pages/Login";
+import CategoryPage from "./pages/categories/CategoryPage";
 
 // ✅ ProtectedRoute mejorado: verifica token Y rol
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -42,7 +44,6 @@ function App() {
 
   return (
     <CartProvider>
-      {/* 👈 Envuelve toda la app */}
       <BrowserRouter>
         <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
@@ -69,7 +70,28 @@ function App() {
             }
           />
 
-          {/* ✅ Nueva ruta de Categorías */}
+          {/* Ruta About agregada */}
+          <Route
+            path="/sobre-nosotros"
+            element={
+              <>
+                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <About />
+                <Footer />
+              </>
+            }
+          />
+          {/* Ruta contacto agregada */}
+          <Route
+            path="/contacto"
+            element={
+              <>
+                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Contacto />
+                <Footer />
+              </>
+            }
+          />
           <Route
             path="/categorias"
             element={
