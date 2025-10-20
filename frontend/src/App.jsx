@@ -18,6 +18,7 @@ import Products from "./pages/Admin/Products";
 import UsersPage from "./pages/Admin/UsersPage";
 import Login from "./pages/Login"; // 👈 Nuevo
 import CategoryPage from "./pages/categories/CategoryPage"; // Página de categorías
+import ProductDetail from "./pages/ProductDetail"; // Detalle de producto
 
 // ✅ ProtectedRoute mejorado: verifica token Y rol
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -77,6 +78,15 @@ function App() {
                 <Navbar onCartClick={() => setIsCartOpen(true)} />
                 <CategoryPage />
                 <Footer />
+              </>
+            }
+          />
+          {/* Producto detalle */}
+          <Route
+            path="/producto/:id"
+            element={
+              <>
+                <ProductDetail />
               </>
             }
           />
