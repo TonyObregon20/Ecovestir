@@ -1,23 +1,39 @@
 // src/components/FormularioProducto.jsx
 import { useState, useEffect } from "react";
+import { getCategories } from '../api/categories';
 
 export default function FormularioProducto({ producto, onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
-    category: "otros", // 👈 Valor por defecto válido
+    category: "", // Will hold category ID
     ecoFriendly: false,
     stock: "",
     isActive: true,
     images: [""],
   });
+  const [categoriesList, setCategoriesList] = useState([]);
 
+  // Fetch categories on mount
+  useEffect(() => {
+    const fetchCats = async () => {
+      try {
+        const cats = await getCategories();
+        setCategoriesList(cats);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCats();
+  }, []);
+
+  // When editing, load producto data
   useEffect(() => {
     if (producto) {
       setFormData({
         name: producto.name || "",
         price: producto.price || "",
-        category: producto.category || "otros",
+        category: producto.category || "",
         ecoFriendly: producto.ecoFriendly || false,
         stock: producto.stock || "",
         isActive: producto.isActive !== undefined ? producto.isActive : true,
@@ -25,6 +41,13 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
       });
     }
   }, [producto]);
+
+  // Set default category when categories load and not editing
+  useEffect(() => {
+    if (!producto && categoriesList.length) {
+      setFormData(fd => ({ ...fd, category: categoriesList[0]._id }));
+    }
+  }, [categoriesList, producto]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -59,10 +82,9 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
       return;
     }
 
-    // Validar que la categoría sea válida (aunque el select ya lo garantiza)
-    const categoriasValidas = ["camisetas", "pantalones", "accesorios", "otros"];
-    if (!categoriasValidas.includes(formData.category)) {
-      alert("Categoría inválida. Selecciona una opción válida.");
+    // Asegurarse de que exista categoría seleccionada
+    if (!formData.category) {
+      alert("Selecciona una categoría válida.");
       return;
     }
 
@@ -75,14 +97,6 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
 
     onSubmit(productoParaEnviar);
   };
-
-  // Opciones de categoría
-  const categorias = [
-    { value: "camisetas", label: "Camisetas" },
-    { value: "pantalones", label: "Pantalones" },
-    { value: "accesorios", label: "Accesorios" },
-    { value: "otros", label: "Otros" }
-  ];
 
   return (
     <div className="formulario-producto">
@@ -120,9 +134,9 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
             onChange={handleChange}
             required
           >
-            {categorias.map(cat => (
-              <option key={cat.value} value={cat.value}>
-                {cat.label}
+            {categoriesList.map(cat => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
               </option>
             ))}
           </select>

@@ -1,6 +1,7 @@
 // src/pages/ProductosPage.jsx
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/Productcard';
 import ProductFilters from '../components/ProductFIlters';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -17,6 +18,7 @@ const ProductosPage = () => {
   const [totalProducts, setTotalProducts] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 200]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
@@ -107,9 +109,6 @@ const ProductosPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleProductClick = (product) => {
-    console.log('Producto seleccionado:', product);
-  };
 
   if (loading) return <p style={{ padding: 20 }}>Cargando productos...</p>;
   if (error) return <p style={{ padding: 20, color: 'red' }}>{error}</p>;
@@ -181,7 +180,7 @@ const ProductosPage = () => {
                   reviews={product.reviews}
                   isOrganic={product.organico}
                   isNew={product.nuevo}
-                  onProductClick={() => handleProductClick(product)}
+                  onProductClick={() => navigate(`/producto/${product.id}`)}
                 />
               ))}
             </div>
