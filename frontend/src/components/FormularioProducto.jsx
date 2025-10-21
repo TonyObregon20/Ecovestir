@@ -1,43 +1,39 @@
 // src/components/FormularioProducto.jsx
 import { useState, useEffect } from "react";
-import api from "../api/api";
+import { getCategories } from '../api/categories';
 
 export default function FormularioProducto({ producto, onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
-    category: "", // 👈 Vacío, se llenará con _id
+    category: "", // Will hold category ID
     ecoFriendly: false,
     stock: "",
     isActive: true,
     images: [""],
   });
+  const [categoriesList, setCategoriesList] = useState([]);
 
-  const [categorias, setCategorias] = useState([]);
-
-  // 👇 Cargar categorías desde el backend
+  // Fetch categories on mount
   useEffect(() => {
-    const fetchCategorias = async () => {
+    const fetchCats = async () => {
       try {
-        const res = await api.get('/api/categories');
-        // 👇 Accede a res.data.data porque tu backend devuelve { data: [...], meta: {...} }
-        setCategorias(res.data.data || []);
-      } catch (error) {
-        console.error('Error al cargar categorías:', error);
-        alert('No se pudieron cargar las categorías. Verifica la conexión.');
+        const cats = await getCategories();
+        setCategoriesList(cats);
+      } catch (err) {
+        console.error(err);
       }
     };
-    fetchCategorias();
+    fetchCats();
   }, []);
 
-  // 👇 Llenar el formulario cuando hay un producto
+  // When editing, load producto data
   useEffect(() => {
     if (producto) {
       setFormData({
         name: producto.name || "",
         price: producto.price || "",
-        // 👇 Si category es un objeto (con _id), usa _id; si es string, déjalo (para compatibilidad)
-        category: producto.category?._id || producto.category || "",
+        category: producto.category || "",
         ecoFriendly: producto.ecoFriendly || false,
         stock: producto.stock || "",
         isActive: producto.isActive !== undefined ? producto.isActive : true,
@@ -45,6 +41,13 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
       });
     }
   }, [producto]);
+
+  // Set default category when categories load and not editing
+  useEffect(() => {
+    if (!producto && categoriesList.length) {
+      setFormData(fd => ({ ...fd, category: categoriesList[0]._id }));
+    }
+  }, [categoriesList, producto]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -74,8 +77,14 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.price || !formData.category) {
-      alert("Por favor completa los campos obligatorios: Nombre, Precio y Categoría.");
+    if (!formData.name || !formData.price) {
+      alert("Por favor completa los campos obligatorios: Nombre y Precio.");
+      return;
+    }
+
+    // Asegurarse de que exista categoría seleccionada
+    if (!formData.category) {
+      alert("Selecciona una categoría válida.");
       return;
     }
 
@@ -125,10 +134,9 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
             onChange={handleChange}
             required
           >
-            <option value="">Selecciona una categoría</option>
-            {categorias.map(cat => (
-              <option key={cat._id} value={cat._id}> {/* 👈 value = _id */}
-                {cat.name} {/* 👈 texto = nombre */}
+            {categoriesList.map(cat => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
               </option>
             ))}
           </select>

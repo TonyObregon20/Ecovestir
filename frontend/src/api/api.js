@@ -18,6 +18,7 @@ function buildUrl(path) {
   return `${baseURL}${path.startsWith('/') ? '' : '/'}${path}`;
 }
 
+
 async function handleResponse(res) {
   // Lee el body según el content-type
   const contentType = res.headers.get('content-type') || '';
@@ -27,6 +28,7 @@ async function handleResponse(res) {
 
   // Si el estatus HTTP no es OK lanzamos un error con información útil
   if (!res.ok) {
+    console.error('Error desde el backend:', data);
     const err = new Error(data && data.message ? data.message : `HTTP ${res.status}`);
     err.status = res.status;
     err.data = data;
@@ -36,6 +38,9 @@ async function handleResponse(res) {
   // Devolvemos un objeto compatible con lo que esperan los componentes: { data, status }
   return { data, status: res.status };
 }
+
+
+
 
 const api = {
   get: async (path, options = {}) => {
