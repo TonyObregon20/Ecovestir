@@ -1,7 +1,7 @@
 // src/pages/ProductDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProduct } from '../api/products';
+import { listarProductos } from '../api/products';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../style/productDetail.css';
@@ -21,7 +21,7 @@ export default function ProductDetail() {
     (async () => {
       try {
         setLoading(true);
-        const data = await getProduct(id);
+        const data = await listarProductos(id);
         setProduct(data);
         if (data.sizes && data.sizes.length > 0) {
           setSelectedSize(data.sizes[0]); // Selecciona la primera talla por defecto
