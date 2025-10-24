@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
 import Home from "./pages/Home";
 import ProductosPage from "./pages/ProductosPage";
+import About from "./pages/About"; // 👈 Ya importado
+import Contacto from "./pages/Contacto";
 import Footer from "./components/Footer";
 import "./index.css";
 
@@ -43,7 +45,6 @@ function App() {
 
   return (
     <CartProvider>
-      {/* 👈 Envuelve toda la app */}
       <BrowserRouter>
         <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
@@ -70,7 +71,28 @@ function App() {
             }
           />
 
-          {/* ✅ Nueva ruta de Categorías */}
+          {/* Ruta About agregada */}
+          <Route
+            path="/sobre-nosotros"
+            element={
+              <>
+                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <About />
+                <Footer />
+              </>
+            }
+          />
+          {/* Ruta contacto agregada */}
+          <Route
+            path="/contacto"
+            element={
+              <>
+                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Contacto />
+                <Footer />
+              </>
+            }
+          />
           <Route
             path="/categorias"
             element={
