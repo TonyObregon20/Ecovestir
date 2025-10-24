@@ -82,7 +82,7 @@ export default function About() {
               </div>
               <div className="history-text">
                 <p>
-                  EcoVestir nació en 2016 cuando nuestra fundadora, María González, se dio cuenta 
+                  EcoVestir nació en 2018 cuando nuestra fundadora, María González, se dio cuenta 
                   de los efectos nocivos de la moda rápida en su propia piel y en el medio ambiente. 
                   Después de desarrollar alergias por el uso de ropa con químicos sintéticos, decidió 
                   crear una alternativa.
@@ -273,21 +273,7 @@ export default function About() {
       </section>
 
       {/* CTA Final */}
-      <section className="cta-section">
-        <div className="container">
-          <div className="cta-content">
-            <h2>Únete al Cambio</h2>
-            <p>
-              Cada compra consciente es un voto por el futuro que queremos ver. 
-              Juntos podemos transformar la industria de la moda.
-            </p>
-            <div className="cta-buttons">
-              <button className="btn btn-primary">Descubrir Colección</button>
-              <button className="btn btn-secondary">Conocer Más</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      
     </div>
   );
 }
