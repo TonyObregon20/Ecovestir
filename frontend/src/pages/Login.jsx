@@ -2,17 +2,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
-import { useCart } from '../context/CartContext'; // 👈 ruta corregida: minúscula "context"
+import { useCart } from '../context/CartContext';
 
 export default function Login() {
+  const [mode, setMode] = useState('login'); // 'login' o 'register'
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    name: "", // solo usado en registro
+    confirmPassword: "" // solo usado en registro
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { refetchCart } = useCart(); // 👈 obtenemos la función para recargar el carrito
+  const { refetchCart } = useCart();
 
   const handleChange = (e) => {
     setFormData({
@@ -21,7 +24,8 @@ export default function Login() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  // ✅ Manejo de login
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -32,7 +36,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
 
       const data = await response.json();
@@ -46,14 +50,10 @@ export default function Login() {
         return;
       }
 
-      // 👇 Guardar token y usuario en localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
-      // 👇 ¡Recargar el carrito del usuario autenticado!
       refetchCart();
 
-      // 👇 Redirigir según el rol
       if (data.user.role === 'admin') {
         navigate("/admin");
       } else {
@@ -67,6 +67,56 @@ export default function Login() {
     }
   };
 
+  // ✅ Manejo de registro
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    // Validaciones locales
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      setError("Todos los campos son obligatorios");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:4000/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          role: "customer" // 👈 siempre cliente en registro
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error al crear la cuenta");
+      }
+
+      // ✅ Registro exitoso: mostrar mensaje y cambiar a login
+      alert("¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.");
+      setMode('login');
+      setFormData({ email: formData.email, password: "", name: "", confirmPassword: "" });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -74,11 +124,70 @@ export default function Login() {
           <span className="logo-icon">🍃</span>
           <h2>EcoVestir</h2>
         </div>
-        <h3>{window.location.pathname === '/login' ? 'Iniciar Sesión' : 'Panel de Administración'}</h3>
-        
+
+        {/* 👇 Pestañas */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '24px',
+          marginBottom: '24px',
+          borderBottom: '1px solid #e5e7eb',
+          paddingBottom: '12px'
+        }}>
+          <button
+            type="button"
+            onClick={() => setMode('login')}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '6px 12px',
+              color: mode === 'login' ? '#059669' : '#6b7280',
+              fontWeight: mode === 'login' ? 'bold' : 'normal',
+              cursor: 'pointer',
+              borderBottom: mode === 'login' ? '2px solid #059669' : 'none'
+            }}
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode('register')}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '6px 12px',
+              color: mode === 'register' ? '#059669' : '#6b7280',
+              fontWeight: mode === 'register' ? 'bold' : 'normal',
+              cursor: 'pointer',
+              borderBottom: mode === 'register' ? '2px solid #059669' : 'none'
+            }}
+          >
+            Registrarse
+          </button>
+        </div>
+
+        <h3>{mode === 'login' ? 'Iniciar Sesión' : 'Crear una Cuenta'}</h3>
+
         {error && <div className="login-error">{error}</div>}
-        
-        <form onSubmit={handleSubmit}>
+
+        <form onSubmit={mode === 'login' ? handleLogin : handleRegister}>
+          {/* 👇 Campo de nombre (solo en registro) */}
+          {mode === 'register' && (
+            <div className="form-group">
+              <label htmlFor="name">Nombre completo</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required={mode === 'register'}
+                disabled={loading}
+                placeholder="Tu nombre"
+              />
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -89,9 +198,10 @@ export default function Login() {
               onChange={handleChange}
               required
               disabled={loading}
+              placeholder="tu@email.com"
             />
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
             <input
@@ -102,17 +212,66 @@ export default function Login() {
               onChange={handleChange}
               required
               disabled={loading}
+              placeholder="••••••••"
             />
           </div>
-          
+
+          {/* 👇 Confirmar contraseña (solo en registro) */}
+          {mode === 'register' && (
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirmar contraseña</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required={mode === 'register'}
+                disabled={loading}
+                placeholder="••••••••"
+              />
+            </div>
+          )}
+
           <button 
             type="submit" 
             className="login-btn"
             disabled={loading}
           >
-            {loading ? "Iniciando..." : "Iniciar Sesión"}
+            {loading 
+              ? "Procesando..." 
+              : mode === 'login' 
+                ? "Iniciar Sesión" 
+                : "Crear Cuenta"}
           </button>
         </form>
+
+        {/* 👇 Enlace alternativo */}
+        <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px' }}>
+          {mode === 'login' ? (
+            <>
+              ¿No tienes cuenta?{' '}
+              <button
+                type="button"
+                onClick={() => setMode('register')}
+                style={{ color: '#059669', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                Regístrate aquí
+              </button>
+            </>
+          ) : (
+            <>
+              ¿Ya tienes cuenta?{' '}
+              <button
+                type="button"
+                onClick={() => setMode('login')}
+                style={{ color: '#059669', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                Inicia sesión
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
