@@ -12,6 +12,7 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
     isActive: true,
     images: [""],
   });
+  const [categoriesList, setCategoriesList] = useState([]);
 
   const [categorias, setCategorias] = useState([]);
 
@@ -45,6 +46,13 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
       });
     }
   }, [producto]);
+
+  // Set default category when categories load and not editing
+  useEffect(() => {
+    if (!producto && categoriesList.length) {
+      setFormData(fd => ({ ...fd, category: categoriesList[0]._id }));
+    }
+  }, [categoriesList, producto]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
