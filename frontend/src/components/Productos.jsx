@@ -3,9 +3,11 @@
 import ProductCard from "../components/Productcard";
 import { useEffect, useState } from "react";
 import api from "../api/api";
+import { useNavigate } from 'react-router-dom';
 import "../style/products.css";
 
 export default function Productos() {
+  const navigate = useNavigate();
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,7 +56,7 @@ export default function Productos() {
               reviews={p.reviews}
               isOrganic={p.organico}
               isNew={p.nuevo}
-              onProductClick={() => console.log('Producto seleccionado:', p)}
+              onProductClick={() => navigate(`/producto/${p._id}`)}
             />
           ))}
         </div>

@@ -1,7 +1,8 @@
 // src/components/ProductFilters.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Filter, Search, SlidersHorizontal, X } from 'lucide-react';
+import api from '../api/api';
 import '../style/productFilters.css';
 
 const Checkbox = ({ id, checked, onChange, children }) => (
@@ -87,6 +88,34 @@ const ProductFilters = ({
   onClearFilters
 }) => {
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  // 👇 NUEVO: Estado para categorías del backend
+  const [categorias, setCategorias] = useState([]);
+
+  // 👇 NUEVO: Cargar categorías desde el backend
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const res = await api.get('/api/categories');
+        setCategorias(res.data.data || []);
+      } catch (error) {
+        console.error('Error al cargar categorías:', error);
+        // Fallback si falla la API
+        setCategorias([
+          { _id: 'camisetas', name: 'Camisetas' },
+          { _id: 'pantalones', name: 'Pantalones' },
+          { _id: 'vestidos', name: 'Vestidos' },
+          { _id: 'camisas', name: 'Camisas' },
+          { _id: 'sudaderas', name: 'Sudaderas' },
+          { _id: 'chaquetas', name: 'Chaquetas' },
+          { _id: 'sueteres', name: 'Suéteres' },
+          { _id: 'shorts', name: 'Shorts' },
+          { _id: 'blusas', name: 'Blusas' },
+          { _id: 'jeans', name: 'Jeans' }
+        ]);
+      }
+    };
+    fetchCategorias();
+  }, []);
 
   const sortOptions = [
     { value: 'newest', label: 'Más Nuevos' },
@@ -96,18 +125,7 @@ const ProductFilters = ({
     { value: 'name', label: 'Nombre A-Z' }
   ];
 
-  const categories = [
-    'Camisetas',
-    'Vestidos',
-    'Pantalones',
-    'Camisas',
-    'Sudaderas',
-    'Chaquetas',
-    'Suéteres',
-    'Shorts',
-    'Blusas',
-    'Jeans'
-  ];
+  // 👇 Eliminamos el array hardcodeado de categorías
 
   const materials = [
     'Algodón Orgánico',
@@ -121,11 +139,11 @@ const ProductFilters = ({
 
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-  const handleCategoryToggle = (category) => {
-    if (selectedCategories.includes(category)) {
-      onCategoryChange(selectedCategories.filter(c => c !== category));
+  const handleCategoryToggle = (categoryId) => {
+    if (selectedCategories.includes(categoryId)) {
+      onCategoryChange(selectedCategories.filter(c => c !== categoryId));
     } else {
-      onCategoryChange([...selectedCategories, category]);
+      onCategoryChange([...selectedCategories, categoryId]);
     }
   };
 
@@ -166,14 +184,14 @@ const ProductFilters = ({
       <div className="product-filters-group">
         <h4 className="product-filters-group-title">Categorías</h4>
         <div className="product-filters-category">
-          {categories.map((category) => (
+          {categorias.map((category) => (
             <Checkbox
-              key={category}
-              id={`category-${category}`}
-              checked={selectedCategories.includes(category)}
-              onChange={() => handleCategoryToggle(category)}
+              key={category._id}
+              id={`category-${category._id}`}
+              checked={selectedCategories.includes(category._id)}
+              onChange={() => handleCategoryToggle(category._id)}
             >
-              {category}
+              {category.name}
             </Checkbox>
           ))}
         </div>

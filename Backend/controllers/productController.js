@@ -31,7 +31,15 @@ exports.getProducts = async (req, res, next) => {
         { description: { $regex: q, $options: 'i' } }
       ];
     }
-    if (category) filter.category = category;
+    
+    // 👇 CORREGIDO: Convierte el string a ObjectId para la categoría
+    if (category) {
+      try {
+        filter.category = new mongoose.Types.ObjectId(category);
+      } catch (err) {
+        return res.status(400).json({ message: 'ID de categoría inválido' });
+      }
+    }
 
     const total = await Product.countDocuments(filter);
     const products = await Product.find(filter)

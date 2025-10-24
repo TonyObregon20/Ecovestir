@@ -1,5 +1,6 @@
 const Category = require('../models/Category');
 const mongoose = require('mongoose');
+const Product = require('../models/Product');
 
 // Crear categoría
 exports.createCategory = async (req, res, next) => {
@@ -33,16 +34,24 @@ exports.getCategories = async (req, res, next) => {
 		}
 		if (typeof isActive !== 'undefined') filter.isActive = isActive === 'true' || isActive === '1';
 
-		const total = await Category.countDocuments(filter);
-		const categories = await Category.find(filter)
-			.sort(sort)
-			.skip((page - 1) * limit)
-			.limit(limit);
-
-		return res.json({
-			data: categories,
-			meta: { total, page, limit, totalPages: Math.ceil(total / limit) }
-		});
+				 const total = await Category.countDocuments(filter);
+				 const categoriesRaw = await Category.find(filter)
+						 .sort(sort)
+						 .skip((page - 1) * limit)
+						 .limit(limit);
+				 // Count products per category
+				 const categories = await Promise.all(
+					 categoriesRaw.map(async (cat) => {
+						 const productsCount = await Product.countDocuments({ category: cat._id });
+						 const obj = cat.toObject();
+						 obj.productsCount = productsCount;
+						 return obj;
+					 })
+				 );
+				 return res.json({
+						 data: categories,
+						 meta: { total, page, limit, totalPages: Math.ceil(total / limit) }
+				 });
 	} catch (err) {
 		return next(err);
 	}
