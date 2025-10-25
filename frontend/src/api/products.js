@@ -1,11 +1,19 @@
 // src/api/products.js
 import api from "./api";
 
-// Listar productos
-export const listarProductos = async () => {
+// Listar productos o obtener producto por id
+// Si se pasa un id, hace GET /api/products/:id y devuelve el objeto
+// Si no se pasa id, hace GET /api/products y devuelve el array de productos
+export const listarProductos = async (id) => {
+  if (id) {
+    const res = await api.get(`/api/products/${id}`);
+    // El backend devuelve el objeto del producto
+    return res.data;
+  }
+
   const res = await api.get("/api/products");
-  // ⚠️ Asegúrate de que siempre devuelvas un array
-  return res.data?.data || []; // 👈 Si data.data no existe, devuelve []
+  // Asegúrate de devolver siempre un array
+  return res.data?.data || [];
 };
 
 // Crear producto

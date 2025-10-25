@@ -231,6 +231,26 @@
   border-color: var(--verde-primario);
 }
 
+/* También soportar la clase usada en ProductFilters: product-filters-size-btn */
+.product-filters-size-btn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #f0fdf4; /* fondo suave verde para visibilidad */
+  color: #065f46;
+  min-width: 44px;
+}
+
+.product-filters-size-btn.selected {
+  background-color: var(--verde-primario);
+  color: white;
+  border-color: var(--verde-primario);
+  box-shadow: 0 2px 6px rgba(22,163,74,0.12);
+}
+
 .filter-clear-btn {
   width: 100%;
   padding: 10px;

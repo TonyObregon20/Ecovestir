@@ -93,6 +93,8 @@ const ProductFilters = ({
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
+  const [materials, setMaterials] = useState([]);
+  const [loadingMaterials, setLoadingMaterials] = useState(true);
 
   // Cargar categorías del backend
   useEffect(() => {
@@ -111,6 +113,37 @@ const ProductFilters = ({
     fetchCategories();
   }, []);
 
+  // Cargar materiales dinámicamente a partir de los productos
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        setLoadingMaterials(true);
+        // traemos más productos para asegurar variedad; backend tiene paginación por defecto
+        const res = await api.get('/api/products?limit=1000');
+        const data = res.data && res.data.data ? res.data.data : res.data;
+        // Extraer materiales únicos (normalizados)
+        const materialsSet = new Map();
+        (data || []).forEach((p) => {
+          if (!p) return;
+          const raw = p.material || p.materials || p.materialo || '';
+          if (!raw) return;
+          const key = String(raw).toLowerCase().trim();
+          if (!materialsSet.has(key)) {
+            materialsSet.set(key, String(raw).trim());
+          }
+        });
+        const list = Array.from(materialsSet.values());
+        setMaterials(list);
+      } catch (err) {
+        console.error('Error loading materials:', err);
+        setMaterials([]);
+      } finally {
+        setLoadingMaterials(false);
+      }
+    };
+    fetchMaterials();
+  }, []);
+
   const sortOptions = [
     { value: 'newest', label: 'Más Nuevos' },
     { value: 'price-low', label: 'Precio: Menor a Mayor' },
@@ -121,16 +154,7 @@ const ProductFilters = ({
 
   // 👇 Eliminamos el array hardcodeado de categorías
 
-  const materials = [
-    'Algodón Orgánico',
-    'Lino Natural',
-    'Bambú',
-    'Cáñamo',
-    'Lana Orgánica',
-    'Modal',
-    'Tencel',
-    'Poliéster Reciclado'
-  ];
+  // materials is now loaded from state (unique values found in DB)
 
   // Tallas según el modelo Product (enum en el backend: S, M, L, XL)
   const sizes = ['S', 'M', 'L', 'XL'];
@@ -217,16 +241,22 @@ const ProductFilters = ({
       <div className="product-filters-group">
         <h4 className="product-filters-group-title">Materiales</h4>
         <div className="product-filters-material">
-          {materials.map((material) => (
-            <Checkbox
-              key={material}
-              id={`material-${material}`}
-              checked={selectedMaterials.includes(material)}
-              onChange={() => handleMaterialToggle(material)}
-            >
-              {material}
-            </Checkbox>
-          ))}
+          {loadingMaterials ? (
+            <p style={{ fontSize: '14px', color: '#666' }}>Cargando materiales...</p>
+          ) : materials.length > 0 ? (
+            materials.map((material) => (
+              <Checkbox
+                key={material}
+                id={`material-${material.replace(/\s+/g, '-').toLowerCase()}`}
+                checked={selectedMaterials.includes(material)}
+                onChange={() => handleMaterialToggle(material)}
+              >
+                {material}
+              </Checkbox>
+            ))
+          ) : (
+            <p style={{ fontSize: '14px', color: '#666' }}>No hay materiales disponibles</p>
+          )}
         </div>
       </div>
 
@@ -257,7 +287,7 @@ const ProductFilters = ({
           onChange={(e) => onEcoFriendlyChange(e.target.checked)}
         >
           <span style={{ fontWeight: '500', color: '#2d6a4f' }}>
-            🌿 Solo productos eco-friendly
+            Solo productos eco-friendly
           </span>
         </Checkbox>
       </div>
