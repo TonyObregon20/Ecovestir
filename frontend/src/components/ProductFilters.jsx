@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Filter, Search, SlidersHorizontal, X } from 'lucide-react';
+import api from '../api/api';
 import { getCategories } from '../api/categories';
 import '../style/productFilters.css';
 
@@ -118,7 +119,8 @@ const ProductFilters = ({
     { value: 'name', label: 'Nombre A-Z' }
   ];
 
-  // Materiales disponibles según el modelo Product
+  // 👇 Eliminamos el array hardcodeado de categorías
+
   const materials = [
     'Algodón Orgánico',
     'Lino Natural',
