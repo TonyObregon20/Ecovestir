@@ -236,7 +236,8 @@ const ProductFilters = ({
           />
         </div>
       </div>
-
+      
+      {/* Modifique para que llame a los materiales que se tiene en los productos */}
       {/* Materiales */}
       <div className="product-filters-group">
         <h4 className="product-filters-group-title">Materiales</h4>
