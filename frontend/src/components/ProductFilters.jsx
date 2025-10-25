@@ -1,7 +1,8 @@
 // src/components/ProductFilters.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Filter, Search, SlidersHorizontal, X } from 'lucide-react';
+import { getCategories } from '../api/categories';
 import '../style/productFilters.css';
 
 const Checkbox = ({ id, checked, onChange, children }) => (
@@ -82,11 +83,32 @@ const ProductFilters = ({
   onMaterialChange,
   selectedSizes,
   onSizeChange,
+  ecoFriendlyOnly,
+  onEcoFriendlyChange,
   sortBy,
   onSortChange,
   onClearFilters
 }) => {
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+
+  // Cargar categorías del backend
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoadingCategories(true);
+        const cats = await getCategories();
+        setCategories(cats || []);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+        setCategories([]);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const sortOptions = [
     { value: 'newest', label: 'Más Nuevos' },
@@ -96,19 +118,7 @@ const ProductFilters = ({
     { value: 'name', label: 'Nombre A-Z' }
   ];
 
-  const categories = [
-    'Camisetas',
-    'Vestidos',
-    'Pantalones',
-    'Camisas',
-    'Sudaderas',
-    'Chaquetas',
-    'Suéteres',
-    'Shorts',
-    'Blusas',
-    'Jeans'
-  ];
-
+  // Materiales disponibles según el modelo Product
   const materials = [
     'Algodón Orgánico',
     'Lino Natural',
@@ -116,16 +126,18 @@ const ProductFilters = ({
     'Cáñamo',
     'Lana Orgánica',
     'Modal',
-    'Tencel'
+    'Tencel',
+    'Poliéster Reciclado'
   ];
 
-  const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  // Tallas según el modelo Product (enum en el backend: S, M, L, XL)
+  const sizes = ['S', 'M', 'L', 'XL'];
 
-  const handleCategoryToggle = (category) => {
-    if (selectedCategories.includes(category)) {
-      onCategoryChange(selectedCategories.filter(c => c !== category));
+  const handleCategoryToggle = (categoryId) => {
+    if (selectedCategories.includes(categoryId)) {
+      onCategoryChange(selectedCategories.filter(c => c !== categoryId));
     } else {
-      onCategoryChange([...selectedCategories, category]);
+      onCategoryChange([...selectedCategories, categoryId]);
     }
   };
 
@@ -166,16 +178,22 @@ const ProductFilters = ({
       <div className="product-filters-group">
         <h4 className="product-filters-group-title">Categorías</h4>
         <div className="product-filters-category">
-          {categories.map((category) => (
-            <Checkbox
-              key={category}
-              id={`category-${category}`}
-              checked={selectedCategories.includes(category)}
-              onChange={() => handleCategoryToggle(category)}
-            >
-              {category}
-            </Checkbox>
-          ))}
+          {loadingCategories ? (
+            <p style={{ fontSize: '14px', color: '#666' }}>Cargando...</p>
+          ) : categories.length > 0 ? (
+            categories.map((category) => (
+              <Checkbox
+                key={category._id}
+                id={`category-${category._id}`}
+                checked={selectedCategories.includes(category._id) || selectedCategories.includes(category.name)}
+                onChange={() => handleCategoryToggle(category._id)}
+              >
+                {category.name}
+              </Checkbox>
+            ))
+          ) : (
+            <p style={{ fontSize: '14px', color: '#666' }}>No hay categorías disponibles</p>
+          )}
         </div>
       </div>
 
@@ -227,6 +245,19 @@ const ProductFilters = ({
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Filtro Eco-Friendly */}
+      <div className="product-filters-group">
+        <Checkbox
+          id="eco-friendly"
+          checked={ecoFriendlyOnly}
+          onChange={(e) => onEcoFriendlyChange(e.target.checked)}
+        >
+          <span style={{ fontWeight: '500', color: '#2d6a4f' }}>
+            🌿 Solo productos eco-friendly
+          </span>
+        </Checkbox>
       </div>
 
       {/* Limpiar Filtros */}

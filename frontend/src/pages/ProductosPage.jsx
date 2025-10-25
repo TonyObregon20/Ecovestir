@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/Productcard';
-import ProductFilters from '../components/ProductFIlters';
+import ProductFilters from '../components/ProductFilters';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '../api/api';
 import '../style/products.css';
@@ -18,6 +18,7 @@ const ProductosPage = () => {
   const [totalProducts, setTotalProducts] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 200]);
@@ -25,21 +26,34 @@ const ProductosPage = () => {
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [sortBy, setSortBy] = useState('newest');
   const [currentPage, setCurrentPage] = useState(1);
+  const [ecoFriendlyOnly, setEcoFriendlyOnly] = useState(false);
+
+  // Debounce para el buscador - evita lag al escribir
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 300); // Espera 300ms después de que el usuario deje de escribir
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
     let mounted = true;
     const fetch = async () => {
       try {
         setLoading(true);
-        const q = searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : "";
-        const cat = selectedCategories.length > 0 ? `&category=${encodeURIComponent(selectedCategories.join(','))}` : "";
-        const res = await api.get(`/api/products?page=${currentPage}&limit=${PRODUCTS_PER_PAGE}${q}${cat}`);
+        const res = await api.get(`/api/products?page=${currentPage}&limit=${PRODUCTS_PER_PAGE}`);
         const data = res.data && res.data.data ? res.data.data : res.data;
         const meta = res.data && res.data.meta ? res.data.meta : { totalPages: 1, total: data.length };
         if (mounted) {
-          setProductos(data.map(mapProductToUI));
+          setProductos(data);
           setTotalPages(meta.totalPages || 1);
           setTotalProducts(meta.total || data.length);
+          
+          // Debug: Ver qué materiales hay en los productos
+          console.log('📦 Productos cargados:', data.length);
+          const materialesEncontrados = [...new Set(data.map(p => p.material).filter(Boolean))];
+          console.log('🧵 Materiales en DB:', materialesEncontrados);
         }
       } catch (err) {
         console.error(err);
@@ -50,27 +64,70 @@ const ProductosPage = () => {
     };
     fetch();
     return () => { mounted = false; };
-  }, [searchQuery, selectedCategories, currentPage]);
+  }, [currentPage]);
 
   // Filtrado y ordenamiento frontend
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = productos.filter(product => {
-      // Search filter
-      if (searchQuery && !product.nombre.toLowerCase().includes(searchQuery.toLowerCase())) {
+      // Search filter - busca en nombre y descripción (usando debounced search)
+      if (debouncedSearch) {
+        const query = debouncedSearch.toLowerCase();
+        const matchesName = product.name?.toLowerCase().includes(query);
+        const matchesDescription = product.description?.toLowerCase().includes(query);
+        if (!matchesName && !matchesDescription) return false;
+      }
+      
+      // Price filter - Asegurar que el producto tenga precio válido
+      const productPrice = product.price || 0;
+      if (productPrice < priceRange[0] || productPrice > priceRange[1]) {
         return false;
       }
-      // Price filter
-      if (product.precio < priceRange[0] || product.precio > priceRange[1]) {
-        return false;
+      
+      // Category filter
+      if (selectedCategories.length > 0) {
+        const productCategoryId = typeof product.category === 'object' 
+          ? product.category._id 
+          : product.category;
+        const productCategoryName = typeof product.category === 'object'
+          ? product.category.name
+          : null;
+        
+        const matchesCategory = selectedCategories.some(cat => 
+          cat === productCategoryId || cat === productCategoryName
+        );
+        
+        if (!matchesCategory) return false;
       }
-      // Material filter
-      if (selectedMaterials.length > 0 && !selectedMaterials.some(mat => product.nombre.toLowerCase().includes(mat.toLowerCase()))) {
-        return false;
+      
+      // Material filter - Comparación más flexible
+      if (selectedMaterials.length > 0) {
+        // Si el producto no tiene material, no lo mostramos
+        if (!product.material) return false;
+        
+        const productMaterial = product.material.toLowerCase().trim();
+        const matchesMaterial = selectedMaterials.some(mat => {
+          const filterMaterial = mat.toLowerCase().trim();
+          // Busca coincidencias parciales en ambas direcciones
+          return productMaterial.includes(filterMaterial) || filterMaterial.includes(productMaterial);
+        });
+        
+        if (!matchesMaterial) return false;
       }
+      
       // Size filter
-      if (selectedSizes.length > 0 && !selectedSizes.some(size => product.nombre.includes(size))) {
+      if (selectedSizes.length > 0) {
+        if (!product.sizes || product.sizes.length === 0) return false;
+        const matchesSize = selectedSizes.some(size => 
+          product.sizes.includes(size)
+        );
+        if (!matchesSize) return false;
+      }
+
+      // Eco-friendly filter
+      if (ecoFriendlyOnly && !product.ecoFriendly) {
         return false;
       }
+      
       return true;
     });
 
@@ -78,21 +135,21 @@ const ProductosPage = () => {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'price-low':
-          return a.precio - b.precio;
+          return (a.price || 0) - (b.price || 0);
         case 'price-high':
-          return b.precio - a.precio;
+          return (b.price || 0) - (a.price || 0);
         case 'rating':
-          return b.estrellas - a.estrellas;
+          return (b.rating || 0) - (a.rating || 0);
         case 'name':
-          return a.nombre.localeCompare(b.nombre);
+          return (a.name || '').localeCompare(b.name || '');
         case 'newest':
         default:
-          return b.nuevo ? 1 : -1;
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
       }
     });
 
     return filtered;
-  }, [productos, searchQuery, priceRange, selectedMaterials, selectedSizes, sortBy]);
+  }, [productos, debouncedSearch, priceRange, selectedCategories, selectedMaterials, selectedSizes, ecoFriendlyOnly, sortBy]);
 
   const handleClearFilters = () => {
     setSearchQuery('');
@@ -100,6 +157,7 @@ const ProductosPage = () => {
     setPriceRange([0, 200]);
     setSelectedMaterials([]);
     setSelectedSizes([]);
+    setEcoFriendlyOnly(false);
     setSortBy('newest');
     setCurrentPage(1);
   };
@@ -140,6 +198,8 @@ const ProductosPage = () => {
             onMaterialChange={setSelectedMaterials}
             selectedSizes={selectedSizes}
             onSizeChange={setSelectedSizes}
+            ecoFriendlyOnly={ecoFriendlyOnly}
+            onEcoFriendlyChange={setEcoFriendlyOnly}
             sortBy={sortBy}
             onSortChange={setSortBy}
             onClearFilters={handleClearFilters}
@@ -154,13 +214,38 @@ const ProductosPage = () => {
               <p className="products-results-count">
                 Mostrando {filteredAndSortedProducts.length} de {totalProducts} productos
               </p>
-              {(selectedCategories.length > 0 || selectedMaterials.length > 0 || selectedSizes.length > 0 || searchQuery) && (
+              {(selectedCategories.length > 0 || selectedMaterials.length > 0 || selectedSizes.length > 0 || debouncedSearch || ecoFriendlyOnly) && (
                 <div className="products-filters-badges">
-                  {searchQuery && (
+                  {debouncedSearch && (
                     <button className="product-filter-badge">
-                      Búsqueda: "{searchQuery}"
+                      Búsqueda: "{debouncedSearch}"
                     </button>
                   )}
+                  {ecoFriendlyOnly && (
+                    <button className="product-filter-badge">
+                      Solo Eco-Friendly
+                    </button>
+                  )}
+                  {selectedCategories.length > 0 && (
+                    <button className="product-filter-badge">
+                      {selectedCategories.length} categoría(s)
+                    </button>
+                  )}
+                  {selectedMaterials.length > 0 && (
+                    <button className="product-filter-badge">
+                      Materiales: {selectedMaterials.join(', ')}
+                    </button>
+                  )}
+                  {selectedSizes.length > 0 && (
+                    <button className="product-filter-badge">
+                      Tallas: {selectedSizes.join(', ')}
+                    </button>
+                  )}
+                  {priceRange[0] > 0 || priceRange[1] < 200 ? (
+                    <button className="product-filter-badge">
+                      Precio: ${priceRange[0]} - ${priceRange[1]}
+                    </button>
+                  ) : null}
                 </div>
               )}
             </div>
@@ -171,16 +256,16 @@ const ProductosPage = () => {
             <div className="products-grid">
               {filteredAndSortedProducts.map((product) => (
                 <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.nombre}
-                  price={product.precio}
-                  image={product.imagen}
-                  rating={product.estrellas}
-                  reviews={product.reviews}
-                  isOrganic={product.organico}
-                  isNew={product.nuevo}
-                  onProductClick={() => navigate(`/producto/${product.id}`)}
+                  key={product._id}
+                  id={product._id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.images && product.images.length ? product.images[0] : 'https://via.placeholder.com/400x400?text=No+Image'}
+                  rating={product.rating || 0}
+                  reviews={product.reviews || 0}
+                  isOrganic={product.ecoFriendly || false}
+                  isNew={product.createdAt && (new Date() - new Date(product.createdAt)) < 30*24*60*60*1000}
+                  onProductClick={() => navigate(`/producto/${product._id}`)}
                 />
               ))}
             </div>
@@ -235,18 +320,5 @@ const ProductosPage = () => {
     </div>
   );
 };
-
-function mapProductToUI(p) {
-  return {
-    id: p._id,
-    nombre: p.name,
-    precio: p.price,
-    imagen: p.images && p.images.length ? p.images[0] : 'https://via.placeholder.com/400x400?text=No+Image',
-    estrellas: p.rating || 0,
-    nuevo: p.isNew || false,
-    organico: p.isOrganic || false,
-    reviews: p.reviews || 0,
-  };
-}
 
 export default ProductosPage;
