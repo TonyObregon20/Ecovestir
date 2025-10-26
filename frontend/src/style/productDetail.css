@@ -157,25 +157,29 @@
   padding: 8px 14px;
   border: 1px solid #d1d5db; /* gris claro */
   border-radius: 6px;
-  background: white;
-  font-weight: 500;
+  /* Hacer los botones de tallas más visibles sin hover: fondo suave verde y texto oscuro */
+  background: #f0fdf4; /* verde muy claro */
+  color: #065f46; /* verde oscuro para contraste */
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  min-width: 40px;
+  transition: all 0.15s ease;
+  font-size: 0.95rem;
+  min-width: 44px;
+  padding: 10px 16px;
   text-align: center;
 }
 
 .size-btn:hover {
   border-color: #16a34a;
-  background-color: #f0fdf4;
-  color: #000000;
+  background-color: #dcf8e6;
+  color: #044e31;
 }
 
 .size-btn.selected {
   border-color: #16a34a;
   background-color: #16a34a;
   color: white;
+  box-shadow: 0 2px 6px rgba(22,163,74,0.15);
 }
 
 .size-btn:disabled {

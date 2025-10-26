@@ -67,6 +67,16 @@
 .product-filters-sidebar.desktop {
   display: block; /* Siempre visible en escritorio */
 }
+  
+.product-filters-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #000000 !important;
+  margin-bottom: 20px;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
 
 
 /* === CORRECCIONES ESPECÍFICAS === */
@@ -150,83 +160,81 @@
 .product-filters-price-slider-container {
     position: relative;
     width: 100%;
-    height: 30px; /* Altura suficiente para dos sliders */
+    height: 40px;
+    margin-bottom: 10px;
 }
 
-/* Estilos compartidos para ambos sliders */
-.product-filters-slider-track {
+/* Background track (gray) */
+.product-filters-slider-track-bg {
     position: absolute;
     width: 100%;
-    height: 4px;
-    background-color: #d1d5db;
-    border-radius: 2px;
-    top: 50%;
-    transform: translateY(-50%);
-    -webkit-appearance: none; /* Eliminar estilo nativo */
-    appearance: none;
-    background: transparent; /* Transparente para usar pseudo-elementos */
-    pointer-events: none; /* Los controles hijos manejan los eventos */
+    height: 6px;
+    background-color: #e5e7eb;
+    border-radius: 3px;
+    top: 15px;
+    z-index: 1;
 }
 
-/* Estilo del track (barra deslizante) */
-.product-filters-slider-track::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 4px;
-    background: #d1d5db;
-    border-radius: 2px;
-    border: none;
-}
-.product-filters-slider-track::-moz-range-track {
-    width: 100%;
-    height: 4px;
-    background: #d1d5db;
-    border-radius: 2px;
-    border: none;
+/* Fill track (green - selected range) */
+.product-filters-slider-track-fill {
+    position: absolute;
+    height: 6px;
+    background-color: var(--verde-primario);
+    border-radius: 3px;
+    top: 15px;
+    z-index: 2;
 }
 
-/* Estilo del thumb (control deslizante) */
-.product-filters-slider-track::-webkit-slider-thumb {
+/* Range inputs */
+.product-filters-slider-input {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    top: 15px;
     -webkit-appearance: none;
     appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: var(--verde-primario);
-    cursor: pointer;
-    pointer-events: auto; /* Permitir interacción con el thumb */
-    border: 2px solid var(--blanco);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    margin-top: -6px; /* Centrar verticalmente */
+    background: transparent;
+    pointer-events: none;
+    z-index: 3;
 }
-.product-filters-slider-track::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
+
+/* Webkit (Chrome, Safari, Edge) thumb */
+.product-filters-slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background-color: var(--verde-primario);
     cursor: pointer;
     pointer-events: auto;
-    border: 2px solid var(--blanco);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    /* Firefox centra automáticamente el thumb */
+    border: 3px solid var(--blanco);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 4;
 }
 
-/* Superposición para mostrar el rango seleccionado */
-.product-filters-price-slider-container::before {
-    content: '';
-    position: absolute;
-    height: 4px;
+/* Firefox thumb */
+.product-filters-slider-input::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
     background-color: var(--verde-primario);
-    border-radius: 2px;
-    top: 50%;
-    transform: translateY(-50%);
-    /* El ancho y la posición izquierda se calcularán dinámicamente si fuera necesario,
-       pero con dos sliders, se puede simular con posicionamiento absoluto.
-       Aquí usamos un truco con z-index y superposición.
-    */
-    z-index: 1;
-    left: calc(((var(--low, 0) / 200) * 100%)); /* Requiere CSS vars en JS */
-    right: calc(100% - ((var(--high, 200) / 200) * 100%));
-    /* Solución más robusta: usar un div adicional en JSX para representar el fill */
+    cursor: pointer;
+    pointer-events: auto;
+    border: 3px solid var(--blanco);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Remove default track styling */
+.product-filters-slider-input::-webkit-slider-runnable-track {
+    background: transparent;
+    border: none;
+}
+
+.product-filters-slider-input::-moz-range-track {
+    background: transparent;
+    border: none;
 }
 
 /* Valores de precio */
@@ -235,9 +243,8 @@
     justify-content: space-between;
     font-size: 12px;
     color: var(--gris-medio);
-    margin-top: 25px; /* Espacio debajo de los sliders */
+    margin-top: 8px;
 }
-
 
 /* Botón Limpiar Filtros */
 .product-filters-clear {

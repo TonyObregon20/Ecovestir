@@ -7,11 +7,13 @@ import {
   eliminarProducto,
 } from "../../api/products";
 import FormularioProducto from "../../components/FormularioProducto";
+import { getCategories } from "../../api/categories";
 
 export default function GestionarProductos() {
   const [productos, setProductos] = useState([]);
   const [modoEdicion, setModoEdicion] = useState(null);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [categoriesMap, setCategoriesMap] = useState({});
 
   useEffect(() => {
     cargarProductos();
@@ -25,6 +27,26 @@ export default function GestionarProductos() {
       console.error("Error al listar productos:", error);
     }
   };
+
+  // Cargar categorias para mostrar nombre en la tabla (evitamos mostrar ObjectId)
+  useEffect(() => {
+    let mounted = true;
+    const loadCats = async () => {
+      try {
+        const cats = await getCategories();
+        if (!mounted) return;
+        const map = {};
+        (cats || []).forEach((c) => {
+          if (c && c._id) map[c._id] = c.name || c.title || c._id;
+        });
+        setCategoriesMap(map);
+      } catch (err) {
+        console.error('Error cargando categorías:', err);
+      }
+    };
+    loadCats();
+    return () => { mounted = false; };
+  }, []);
 
   const handleCrear = async (producto) => {
     try {
@@ -163,10 +185,17 @@ export default function GestionarProductos() {
                     ⭐ {p.rating || 0} ({p.reviews || 0} reseñas)
                   </div>
                 </td>
-                <td>{p.category || "–"}</td>
+                <td>
+                  {(() => {
+                    // Mostrar el nombre de la categoría cuando sea posible
+                    if (!p.category) return "–";
+                    if (typeof p.category === 'object') return p.category.name || p.category._id;
+                    return categoriesMap[p.category] || p.category;
+                  })()}
+                </td>
                 <td>
                   <span className="material-tag">
-                    {p.ecoFriendly ? "Algodón Orgánico" : "Convencional"}
+                    {p.material ? p.material : (p.ecoFriendly ? "Algodón Orgánico" : "Convencional")}
                   </span>
                 </td>
                 <td>

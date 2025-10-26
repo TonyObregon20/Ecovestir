@@ -231,6 +231,39 @@
   border-color: var(--verde-primario);
 }
 
+/* Grid de tallas con 4 columnas */
+.product-filters-sizes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* También soportar la clase usada en ProductFilters: product-filters-size-btn */
+.product-filters-size-btn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.813rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  color: #6b7280;
+  font-weight: 400;
+  text-align: center;
+  min-width: 40px;
+}
+
+.product-filters-size-btn.selected {
+  background-color: var(--verde-primario);
+  color: white;
+  border-color: var(--verde-primario);
+}
+
+.product-filters-size-btn:hover {
+  border-color: #9ca3af;
+}
+
 .filter-clear-btn {
   width: 100%;
   padding: 10px;

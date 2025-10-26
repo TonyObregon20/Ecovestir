@@ -22,9 +22,24 @@ export default function ProductDetail() {
       try {
         setLoading(true);
         const data = await listarProductos(id);
-        setProduct(data);
-        if (data.sizes && data.sizes.length > 0) {
-          setSelectedSize(data.sizes[0]); // Selecciona la primera talla por defecto
+        // Normalizar tallas: aceptar array o string separado por comas
+        const normalizeSizes = (raw) => {
+          if (!raw) return [];
+          if (Array.isArray(raw)) return raw.map(s => String(s).trim()).filter(Boolean);
+          if (typeof raw === 'string') return raw.split(',').map(s => s.trim()).filter(Boolean);
+          // Fallback: intentar convertir a string
+          return String(raw).split(',').map(s => s.trim()).filter(Boolean);
+        };
+
+        const normalizedSizes = normalizeSizes(data.sizes);
+
+        // Guardar el producto y reemplazar sizes por la versión normalizada
+        setProduct({ ...data, sizes: normalizedSizes });
+
+        if (normalizedSizes.length > 0) {
+          setSelectedSize(normalizedSizes[0]); // Selecciona la primera talla disponible
+        } else {
+          setSelectedSize('');
         }
       } catch (err) {
         console.error(err);
@@ -40,7 +55,8 @@ export default function ProductDetail() {
 
   // Datos para mostrar
   const material = product.material || 'Algodón Orgánico';
-  const sizes = product.sizes || [];
+  // Asegurarse de trabajar con la versión normalizada de tallas
+  const sizes = Array.isArray(product.sizes) ? product.sizes : (product.sizes ? [product.sizes] : []);
   const stock = product.stock !== undefined ? product.stock : 0;
   const ecoFriendly = product.ecoFriendly !== undefined ? product.ecoFriendly : true;
 
