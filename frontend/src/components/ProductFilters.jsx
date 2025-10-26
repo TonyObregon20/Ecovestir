@@ -31,8 +31,17 @@ const Slider = ({ value, onValueChange, min, max, step }) => {
     onValueChange(newValue);
   };
 
+  // Calculate the percentage for the green range indicator
+  const leftPercent = ((value[0] - min) / (max - min)) * 100;
+  const rightPercent = ((value[1] - min) / (max - min)) * 100;
+
   return (
     <div className="product-filters-price-slider-container">
+      <div className="product-filters-slider-track-bg"></div>
+      <div 
+        className="product-filters-slider-track-fill"
+        style={{ left: `${leftPercent}%`, width: `${rightPercent - leftPercent}%` }}
+      ></div>
       <input
         type="range"
         min={min}
@@ -41,7 +50,7 @@ const Slider = ({ value, onValueChange, min, max, step }) => {
         value={value[0]}
         data-index="0"
         onChange={handleChange}
-        className="product-filters-slider-track"
+        className="product-filters-slider-input"
       />
       <input
         type="range"
@@ -51,7 +60,7 @@ const Slider = ({ value, onValueChange, min, max, step }) => {
         value={value[1]}
         data-index="1"
         onChange={handleChange}
-        className="product-filters-slider-track"
+        className="product-filters-slider-input"
       />
       <div className="product-filters-price-values">
         <span>${value[0]}</span>
@@ -262,19 +271,21 @@ const ProductFilters = ({
       {/* Tallas */}
       <div className="product-filters-group">
         <h4 className="product-filters-group-title">Tallas</h4>
-        <div className="product-filters-sizes">
-          <div className="product-filters-sizes-grid">
-            {sizes.map((size) => (
-              <button
-                key={size}
-                className={`product-filters-size-btn ${selectedSizes.includes(size) ? 'selected' : ''}`}
-                onClick={() => handleSizeToggle(size)}
-                style={{ marginRight: '8px', marginBottom: '8px' }}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+          {sizes.map((size) => (
+            <button
+              key={size}
+              onClick={() => handleSizeToggle(size)}
+              className={`product-filters-size-btn ${selectedSizes.includes(size) ? 'selected' : ''}`}
+              style={{
+                backgroundColor: selectedSizes.includes(size) ? '#059669' : 'white',
+                color: selectedSizes.includes(size) ? 'white' : '#6b7280',
+                border: selectedSizes.includes(size) ? '1px solid #059669' : '1px solid #d1d5db',
+              }}
+            >
+              {size}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -333,9 +344,9 @@ const ProductFilters = ({
 
       {/* Filtros de escritorio */}
       <div className="product-filters-sidebar desktop">
-        <h3 className="product-filters-title">
-          <Filter size={18} />
-          Filtros
+        <h3 className="product-filters-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#000 !important' }}>
+          <Filter size={18} style={{ color: '#000' }} />
+          <span style={{ color: '#000' }}>Filtros</span>
         </h3>
         {FilterContent}
       </div>
