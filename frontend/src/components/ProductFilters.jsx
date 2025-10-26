@@ -152,47 +152,45 @@ const ProductFilters = ({
     { value: 'name', label: 'Nombre A-Z' }
   ];
 
-  // 👇 Eliminamos el array hardcodeado de categorías
 
-  // materials is now loaded from state (unique values found in DB)
 
   // Tallas según el modelo Product (enum en el backend: S, M, L, XL)
-  const sizes = ['S', 'M', 'L', 'XL'];
+  const sizes = React.useMemo(() => ['S', 'M', 'L', 'XL'], []);
 
-  const handleCategoryToggle = (categoryId) => {
+  const handleCategoryToggle = React.useCallback((categoryId) => {
     if (selectedCategories.includes(categoryId)) {
       onCategoryChange(selectedCategories.filter(c => c !== categoryId));
     } else {
       onCategoryChange([...selectedCategories, categoryId]);
     }
-  };
+  }, [selectedCategories, onCategoryChange]);
 
-  const handleMaterialToggle = (material) => {
+  const handleMaterialToggle = React.useCallback((material) => {
     if (selectedMaterials.includes(material)) {
       onMaterialChange(selectedMaterials.filter(m => m !== material));
     } else {
       onMaterialChange([...selectedMaterials, material]);
     }
-  };
+  }, [selectedMaterials, onMaterialChange]);
 
-  const handleSizeToggle = (size) => {
+  const handleSizeToggle = React.useCallback((size) => {
     if (selectedSizes.includes(size)) {
       onSizeChange(selectedSizes.filter(s => s !== size));
     } else {
       onSizeChange([...selectedSizes, size]);
     }
-  };
+  }, [selectedSizes, onSizeChange]);
 
-  const FilterContent = () => (
+  const FilterContent = React.useMemo(() => (
     <div className="product-filters-content">
       {/* Búsqueda - Estilo como en el navbar */}
       <div className="product-filters-group">
         <label className="product-filters-group-title">Buscar Productos</label>
         <div className="product-filters-search-navbar-style">
-          <Search className="product-filters-search-icon" size={16} />
+          {/* <Search className="product-filters-search-icon" size={16} /> */}
           <input
             type="text"
-            placeholder="Buscar por nombre..."
+            placeholder="Ej. camiseta de algodón"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="product-filters-search-input-navbar"
@@ -301,7 +299,12 @@ const ProductFilters = ({
         Limpiar Filtros
       </button>
     </div>
-  );
+  ), [
+    searchQuery, onSearchChange, loadingCategories, categories, selectedCategories,
+    handleCategoryToggle, priceRange, onPriceRangeChange, loadingMaterials, 
+    materials, selectedMaterials, handleMaterialToggle, sizes, selectedSizes,
+    handleSizeToggle, ecoFriendlyOnly, onEcoFriendlyChange, onClearFilters
+  ]);
 
   return (
     <>
@@ -319,13 +322,13 @@ const ProductFilters = ({
         </div>
 
         {/* Botón de filtros para móvil */}
-        <button
+        {/* <button
           className="product-filters-mobile-btn lg:hidden"
           onClick={() => setIsMobileFiltersOpen(true)}
         >
           <SlidersHorizontal size={16} />
           Filtros
-        </button>
+        </button> */}
       </div>
 
       {/* Filtros de escritorio */}
@@ -334,7 +337,7 @@ const ProductFilters = ({
           <Filter size={18} />
           Filtros
         </h3>
-        <FilterContent />
+        {FilterContent}
       </div>
 
       {/* Filtros móviles */}
@@ -349,7 +352,7 @@ const ProductFilters = ({
               </button>
             </div>
             <div className="p-4">
-              <FilterContent />
+              {FilterContent}
             </div>
           </div>
         </div>
