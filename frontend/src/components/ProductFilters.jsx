@@ -99,7 +99,7 @@ const ProductFilters = ({
   onSortChange,
   onClearFilters
 }) => {
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  // const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [materials, setMaterials] = useState([]);
@@ -199,7 +199,7 @@ const ProductFilters = ({
           {/* <Search className="product-filters-search-icon" size={16} /> */}
           <input
             type="text"
-            placeholder="Ej. camiseta de algodón"
+            placeholder="Buscar por nombre"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="product-filters-search-input-navbar"
@@ -352,7 +352,7 @@ const ProductFilters = ({
       </div>
 
       {/* Filtros móviles */}
-      {isMobileFiltersOpen && (
+      {/* {isMobileFiltersOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileFiltersOpen(false)}></div>
           <div className="fixed left-0 top-0 h-full w-80 bg-white shadow-lg overflow-y-auto">
@@ -367,7 +367,7 @@ const ProductFilters = ({
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };

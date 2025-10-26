@@ -37,7 +37,7 @@ export default function Categories() {
             <div key={cat._id || index} className="categoria-card">
               <img src={cat.image} alt={cat.name} className="categoria-image" />
               <div className="categoria-content">
-                <h3 className="categoria-name">{cat.name}</h3>
+                <h3 className="categoria-name" style={{ textTransform: 'capitalize' }}>{cat.name}</h3>
                 <p className="categoria-description">{cat.description}</p>
                 <p className="categoria-products">{cat.productsCount} productos</p>
                 <Link to="/categorias" className="categoria-btn">
@@ -45,7 +45,7 @@ export default function Categories() {
                 </Link>
               </div>
             </div>
-          ))}
+          ))} 
         </div>
       </div>
     </section>

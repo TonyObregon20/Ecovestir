@@ -3,10 +3,13 @@ import './categoryPage.css'; // Asegúrate de que esta ruta sea correcta
 import { getCategories } from '../../api/categories'; // Ajusta la ruta según la ubicación de tu archivo categories.js
 import '../../style/products.css'; // Header styles from products page
 import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
   
   useEffect(() => {
     const fetchCategories = async () => {
@@ -22,6 +25,12 @@ const CategoryPage = () => {
     };
     fetchCategories();
   }, []);
+
+  // Filtrar categorías por búsqueda
+  const filteredCategories = categories.filter(cat =>
+    cat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    cat.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) return <p style={{ padding: 20, textAlign: 'center' }}>Cargando categorías...</p>;
 
@@ -43,17 +52,24 @@ const CategoryPage = () => {
             type="text"
             className="search-input"
             placeholder="Buscar categorías..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
       {/* Categories Grid */}
       <div className="categories-grid">
-        {categories.map((cat) => (
-          <div key={cat._id} className="category-card">
+        {filteredCategories.map((cat) => (
+          <div 
+            key={cat._id} 
+            className="category-card"
+            onClick={() => navigate(`/productos?category=${cat._id}`)}
+            style={{ cursor: 'pointer' }}
+          >
             <img src={cat.image} alt={cat.name} />
             <div className="card-body">
-              <div className="category-title">
+              <div className="category-title" style={{ textTransform: 'capitalize' }}>
                 {cat.name} <span className="count-badge">{cat.productsCount}</span>
               </div>
               <p className="category-description">{cat.description}</p>
