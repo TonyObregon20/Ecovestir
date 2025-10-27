@@ -2,11 +2,11 @@
 import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart, Leaf, LogOut } from 'lucide-react';
-import { useCart } from '../context/CartContext'; // 👈 ruta corregida: minúscula
+import { useCart } from '../context/CartContext'; 
 import "../style/navbar.css";
 
 export default function Navbar({ onCartClick }) {
-  const { getCartTotal, clearCart } = useCart(); // 👈 añadido clearCart
+  const { getCartTotal, clearCart } = useCart(); // añadido clearCart
   const navigate = useNavigate();
   const cartItemCount = getCartTotal();
 
@@ -18,7 +18,7 @@ export default function Navbar({ onCartClick }) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     
-    // 2. 👉 Limpiar el carrito en la UI (¡sin recargar!)
+    // 2. Limpiar el carrito en la UI (¡sin recargar!)
     clearCart();
     
     // 3. Redirigir
@@ -32,12 +32,10 @@ export default function Navbar({ onCartClick }) {
         <div className="navbar-left">
           <div className="navbar-logo-wrapper">
             <Link to="/" className="navbar-logo-link">
-              <div className="navbar-logo">
-                <div className="navbar-logo-icon">
-                  <Leaf className="navbar-logo-leaf" />
-                </div>
-                <span className="navbar-logo-text">EcoVestir</span>
-              </div>
+              <img src="/logo.png" alt="EcoVestir Logo" className="navbar-logo-img" />
+            </Link>
+            <Link to="/" className="navbar-logo-text-link">
+              <span className="navbar-logo-text">EcoVestir</span>
             </Link>
           </div>
 
@@ -74,14 +72,14 @@ export default function Navbar({ onCartClick }) {
           </button>
 
           {user ? (
-            // 👇 Usuario autenticado
+            // Usuario autenticado
             <div className="navbar-user-info">
               {user.role === 'admin' ? (
                 <Link to="/admin" className="navbar-auth-button admin">
                   Panel de Admin
                 </Link>
               ) : (
-                // 👇 Vista para customer
+                // Vista para customer
                 <span className="navbar-user-greeting">
                   Hola, <strong>{user.name}</strong>
                 </span>
@@ -95,7 +93,7 @@ export default function Navbar({ onCartClick }) {
               </button>
             </div>
           ) : (
-            // 👇 No autenticado
+            // No autenticado
             <Link to="/login" className="navbar-auth-button login">
               Iniciar Sesión
             </Link>

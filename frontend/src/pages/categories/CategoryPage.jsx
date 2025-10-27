@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './categoryPage.css'; // Asegúrate de que esta ruta sea correcta
 import { getCategories } from '../../api/categories'; // Ajusta la ruta según la ubicación de tu archivo categories.js
 import '../../style/products.css'; // Header styles from products page
-import { Search } from 'lucide-react';
+import { Search, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const CategoryPage = () => {
@@ -65,16 +65,19 @@ const CategoryPage = () => {
             key={cat._id} 
             className="category-card"
             onClick={() => navigate(`/productos?category=${cat._id}`)}
-            style={{ cursor: 'pointer' }}
           >
             <img src={cat.image} alt={cat.name} />
             <div className="card-body">
-              <div className="category-title" style={{ textTransform: 'capitalize' }}>
-                {cat.name} <span className="count-badge">{cat.productsCount}</span>
+              <div>
+                <h3 className="category-title" style={{ textTransform: 'capitalize' }}>
+                  {cat.name}
+                </h3>
+                <p className="count-badge">{cat.productsCount} productos</p>
+                <p className="category-description">{cat.description}</p>
               </div>
-              <p className="category-description">{cat.description}</p>
-              <p className="materials"><strong>Materiales:</strong> {cat.materials || 'N/A'}</p>
-              <p className="price-range"><strong>Rango de precio:</strong> {cat.priceRange || 'N/A'}</p>
+              <button className="category-btn">
+                Ver Categoría <ArrowRight size={18} />
+              </button>
             </div>
           </div>
         ))}

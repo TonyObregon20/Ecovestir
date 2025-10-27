@@ -93,6 +93,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.product-card-add-button:hover {
+  background-color: #1d8f47; /* verde más oscuro */
 }
 
 .product-card-content {
@@ -101,8 +106,8 @@
 
 .product-card-title {
   color: #374151; /* --gris-oscuro */
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 700;
   margin: 0 0 8px 0;
 }
 
@@ -115,10 +120,20 @@
   font-size: 1rem;
 }
 
+.product-card-rating .star-filled,
+.product-card-rating .star-empty {
+  transition: transform 0.2s ease;
+}
+
+.product-card-rating .star-filled:hover,
+.product-card-rating .star-empty:hover {
+  transform: scale(1.2);
+}
+
 .product-card-reviews {
   color: #6b7280; /* --gris-medio */
   font-size: 0.9rem;
-  margin: 0 0 8px 0;
+  margin-left: 4px;
 }
 
 .product-card-price {

@@ -65,7 +65,7 @@ export default function Productos() {
           className="productos-ver-todos-btn"
           onClick={() => window.location.href = '/productos'}
         >
-          Ver Todos los Productos
+          Ver todos los productos
         </button>
       </div>
     </section>
