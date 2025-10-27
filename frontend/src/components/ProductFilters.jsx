@@ -213,7 +213,7 @@ const ProductFilters = ({
         <div className="product-filters-category">
           {loadingCategories ? (
             <p style={{ fontSize: '14px', color: '#666' }}>Cargando...</p>
-          ) : categories.length > 0 ? (
+          ) : categories.length > 0 ? ( 
             categories.map((category) => (
               <Checkbox
                 key={category._id}

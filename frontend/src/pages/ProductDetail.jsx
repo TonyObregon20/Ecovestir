@@ -5,7 +5,7 @@ import { listarProductos } from '../api/products';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../style/productDetail.css';
-import { ShoppingCart, Star, StarHalf, ArrowLeft, Truck, Shield, RefreshCw } from 'lucide-react';
+import { ShoppingCart, Star, StarHalf, ArrowLeft, Truck, Shield, RefreshCw, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 export default function ProductDetail() {
@@ -16,6 +16,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -156,10 +157,11 @@ export default function ProductDetail() {
 
             {/* Material */}
             <div className="material-section">
-              <strong>Material:</strong> {material}
+              <strong>Material:</strong>
+              <p>{material}</p>
             </div>
 
-            {/* Botón de acción */}
+            {/* Botones de acción */}
             <div className="action-buttons">
               <button
                 className="add-cart-btn"
@@ -175,6 +177,14 @@ export default function ProductDetail() {
               >
                 <ShoppingCart size={18} /> Agregar al Carrito
               </button>
+              <button 
+                className={`add-favorites-btn ${isFavorite ? 'favorite-active' : ''}`}
+                onClick={() => setIsFavorite(!isFavorite)}
+                disabled={stock <= 0}
+              >
+                <Heart size={18} fill={isFavorite ? "#dc2626" : "none"} color={isFavorite ? "#dc2626" : "currentColor"} />
+                {isFavorite ? 'Quitar de Favoritos' : 'Agregar a Favoritos'}
+              </button>
             </div>
 
             {/* Descripción */}
@@ -185,7 +195,7 @@ export default function ProductDetail() {
             <h2>Características:</h2>
             <ul className="features-list">
               {features.map((feature, index) => (
-                <li key={index}>• {feature}</li>
+                <li key={index}>{feature}</li>
               ))}
             </ul>
 
@@ -193,7 +203,7 @@ export default function ProductDetail() {
             <h2>Cuidado de la prenda:</h2>
             <ul className="care-list">
               {careInstructions.map((instruction, index) => (
-                <li key={index}>• {instruction}</li>
+                <li key={index}>{instruction}</li>
               ))}
             </ul>
           </div>
@@ -202,26 +212,23 @@ export default function ProductDetail() {
         {/* Banner inferior con iconos de lucide-react */}
         <div className="product-footer">
           <div className="footer-item">
-            <Truck className="icon" size={24} color="#4CAF50" />
+            <Truck className="icon" size={32} color="#16a34a" />
             <div className="text">
               <strong>Envío Gratis</strong>
-              <br />
               En compras +$100
             </div>
           </div>
           <div className="footer-item">
-            <Shield className="icon" size={24} color="#4CAF50" />
+            <Shield className="icon" size={32} color="#16a34a" />
             <div className="text">
               <strong>Garantía</strong>
-              <br />
               30 días
             </div>
           </div>
           <div className="footer-item">
-            <RefreshCw className="icon" size={24} color="#4CAF50" />
+            <RefreshCw className="icon" size={32} color="#16a34a" />
             <div className="text">
               <strong>Cambios</strong>
-              <br />
               Sin costo
             </div>
           </div>
