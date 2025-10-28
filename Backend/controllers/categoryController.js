@@ -39,12 +39,25 @@ exports.getCategories = async (req, res, next) => {
 						 .sort(sort)
 						 .skip((page - 1) * limit)
 						 .limit(limit);
-				 // Count products per category
+				 // Count products per category and calculate materials/price range
 				 const categories = await Promise.all(
 					 categoriesRaw.map(async (cat) => {
 						 const productsCount = await Product.countDocuments({ category: cat._id });
+						 const products = await Product.find({ category: cat._id }).select('material price');
+						 
+						 // Get unique materials
+						 const materials = [...new Set(products.map(p => p.material).filter(Boolean))].join(', ');
+						 
+						 // Calculate price range
+						 const prices = products.map(p => p.price).filter(Boolean);
+						 const priceRange = prices.length > 0 
+							 ? `$${Math.min(...prices)} - $${Math.max(...prices)}`
+							 : 'N/A';
+						 
 						 const obj = cat.toObject();
 						 obj.productsCount = productsCount;
+						 obj.materials = cat.materials || materials || 'N/A';
+						 obj.priceRange = cat.priceRange || priceRange;
 						 return obj;
 					 })
 				 );

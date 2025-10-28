@@ -1,7 +1,7 @@
 // src/pages/ProductosPage.jsx
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/Productcard';
 import ProductFilters from '../components/ProductFilters';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -20,6 +20,7 @@ const ProductosPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 200]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
@@ -27,6 +28,14 @@ const ProductosPage = () => {
   const [sortBy, setSortBy] = useState('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const [ecoFriendlyOnly, setEcoFriendlyOnly] = useState(false);
+
+  // Leer parámetros de URL al cargar (para categoría desde CategoryPage)
+  useEffect(() => {
+    const categoryId = searchParams.get('category');
+    if (categoryId) {
+      setSelectedCategories([categoryId]);
+    }
+  }, [searchParams]);
 
   // Debounce para el buscador - evita lag al escribir
   useEffect(() => {

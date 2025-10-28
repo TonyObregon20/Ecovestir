@@ -1,12 +1,15 @@
 // src/components/Categories.jsx
 import React, { useState, useEffect } from 'react';
 import { getCategories } from '../api/categories';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
+import '../pages/categories/categoryPage.css';
 import '../style/home.css';
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -32,20 +35,28 @@ export default function Categories() {
         <p className="categorias-subtitle">
           Explora nuestra amplia gama de categorías de ropa orgánica. Desde casual hasta formal, tenemos todo lo que necesitas.
         </p>
-        <div className="categorias-grid">
+        <div className="categories-grid">
           {categories.map((cat, index) => (
-            <div key={cat._id || index} className="categoria-card">
-              <img src={cat.image} alt={cat.name} className="categoria-image" />
-              <div className="categoria-content">
-                <h3 className="categoria-name">{cat.name}</h3>
-                <p className="categoria-description">{cat.description}</p>
-                <p className="categoria-products">{cat.productsCount} productos</p>
-                <Link to="/categorias" className="categoria-btn">
-                  Ver Categoría →
-                </Link>
+            <div 
+              key={cat._id || index} 
+              className="category-card"
+              onClick={() => navigate(`/productos?category=${cat._id}`)}
+            >
+              <img src={cat.image} alt={cat.name} />
+              <div className="card-body">
+                <div>
+                  <h3 className="category-title" style={{ textTransform: 'capitalize' }}>
+                    {cat.name}
+                  </h3>
+                  <p className="count-badge">{cat.productsCount} productos</p>
+                  <p className="category-description">{cat.description}</p>
+                </div>
+                <button className="category-btn">
+                  Ver Categoría <ArrowRight size={18} />
+                </button>
               </div>
             </div>
-          ))}
+          ))} 
         </div>
       </div>
     </section>

@@ -265,25 +265,22 @@
 .productos-ver-todos-btn {
   display: block;
   margin: 30px auto 0;
-  padding: 10px 20px;
+  padding: 14px 26px;
   border-radius: 8px;
-  background-color: #16a34a; /* Verde primario */
+  border: none;
+  background-color: #169143; 
   color: #ffffff;
-  font-size: 0.9rem; /* tamaño más pequeño */
-  font-weight: 500; /* peso normal, no bold */
-  font-family: inherit;
+  font-weight: bold;
   cursor: pointer;
-  text-decoration: none;
   text-align: center;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease;
   width: auto;
-  max-width: 250px;
 }
 
 .productos-ver-todos-btn:hover {
-  background-color: #21914a; /* Verde más oscuro */
+  background-color: #269e52; 
 }
-
+  
 .productos-loading,
 .productos-error {
   padding: 20px;

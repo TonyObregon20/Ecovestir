@@ -5,6 +5,8 @@ const categorySchema = new mongoose.Schema({
   description: { type: String, trim: true, default: "" },
   image: { type: String, default: "https://via.placeholder.com/400x400?text=Sin+Imagen"},
   productsCount: { type: Number, default: 0 },
+  materials: { type: String, trim: true, default: "" }, //  nuevo campo
+  priceRange: { type: String, trim: true, default: "" }, //  nuevo campo
   isActive: { type: Boolean, default: true },
   position: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }

@@ -1,6 +1,6 @@
 // src/components/ProductCard.jsx
 import { useState } from "react";
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext'; // 👈 Importa el hook
 import "../style/productcard.css";
 
@@ -75,8 +75,15 @@ export default function ProductCard({
 
         {/* Rating y reseñas */}
         <div className="product-card-rating">
-          {"⭐".repeat(Math.floor(rating))}
-          {"☆".repeat(5 - Math.floor(rating))}
+          {[...Array(5)].map((_, index) => (
+            <Star
+              key={index}
+              size={16}
+              className={index < Math.floor(rating) ? "star-filled" : "star-empty"}
+              fill={index < Math.floor(rating) ? "#fbbf24" : "none"}
+              stroke={index < Math.floor(rating) ? "#fbbf24" : "#d1d5db"}
+            />
+          ))}
           <span className="product-card-reviews">({reviews})</span>
         </div>
 
