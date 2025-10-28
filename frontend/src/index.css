@@ -22,7 +22,7 @@
    Estilos Globales
 ====================================== */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   background-color: var(--blanco);
   color: var(--gris-oscuro);
   margin: 0;
@@ -92,8 +92,8 @@ a:hover {
   border: 1px solid var(--verde-primario);
 }
 
-/* Navbar */
-.navbar {
+/* Navbar - Estilos antiguos comentados (ahora se usa navbar.css) */
+/* .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -158,9 +158,11 @@ a:hover {
 
 .cart-button:hover {
   background-color: var(--verde-oscuro);
-}
+} */
 
-/* Hero Section */
+/* ======================================
+   Hero Section (COMENTADO - Usando hero.css)
+====================================== */
 /* .hero-section {
   background: linear-gradient(to right, var(--gris-claro), var(--blanco));
   padding: 64px 24px;
@@ -259,8 +261,10 @@ a:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 } */
 
-/* Productos públicos */
-.productos-section {
+/* ======================================
+   Productos Públicos (COMENTADO - Usando products.css)
+====================================== */
+/* .productos-section {
   padding: 50px 20px;
   background-color: var(--blanco);
 }
@@ -314,9 +318,11 @@ a:hover {
 .productos-footer {
   text-align: center;
   margin-top: 30px;
-}
+} */
 
-/* Página de productos con filtros */
+/* ======================================
+   Página de Productos con Filtros
+====================================== */
 .productos-page {
   display: flex;
   gap: 20px;
@@ -400,7 +406,9 @@ a:hover {
   color: #777;
 }
 
-/* ===== ADMIN LAYOUT - SIDEBAR COMPACTO CON LUCIDE ===== */
+/* ======================================
+   Admin Layout
+====================================== */
 .admin-container {
   display: flex;
   min-height: 100vh;
@@ -574,7 +582,9 @@ a:hover {
   color: #111827;
 }
 
-/* ===== ADMIN - GESTIÓN DE PRODUCTOS ===== */
+/* ======================================
+   Admin - Gestión de Productos
+====================================== */
 .admin-products-container {
   padding: 20px;
   background-color: #f8f9fa;
@@ -762,31 +772,27 @@ a:hover {
   z-index: 1000;
 }
 
-/* Responsive */
-@media (min-width: 768px) {
-  .home-label {
-    display: inline;
-  }
-}
-/* ===== CONTENEDOR PARA VISTAS DE ADMIN (Products, Dashboard, etc.) ===== */
+/* ======================================
+   Admin - Contenedores y Tablas
+====================================== */
+
 .admin-products-container,
 .admin-dashboard-container {
   padding: 20px;
   background-color: #f8f9fa;
   min-height: 100vh;
-  margin-left: 80px; /* 👈 Clave: evita que el contenido quede detrás del sidebar */
+  margin-left: 80px;
 }
-/* ===== TABLA CON SCROLL PROPIO ===== */
+
 .scrollable-table-container {
-  max-height: 500px; /* Altura máxima antes del scroll */
-  overflow-y: auto;  /* Scroll vertical */
+  max-height: 500px;
+  overflow-y: auto;
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   margin-top: 16px;
 }
 
-/* Mantener el header de la tabla fijo (opcional) */
 .products-table thead th {
   position: sticky;
   top: 0;
@@ -794,7 +800,6 @@ a:hover {
   z-index: 10;
 }
 
-/* Estilos para la barra de scroll (opcional, más bonita) */
 .scrollable-table-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -812,6 +817,10 @@ a:hover {
 .scrollable-table-container::-webkit-scrollbar-thumb:hover {
   background: var(--verde-oscuro);
 }
+
+/* ======================================
+   Formulario de Producto
+====================================== */
 .formulario-producto {
   background: white;
   padding: 24px;
@@ -865,7 +874,10 @@ a:hover {
   background-color: #6b7280;
   color: white;
 }
-/* ===== LOGIN ===== */
+
+/* ======================================
+   Login
+====================================== */
 .login-container {
   display: flex;
   justify-content: center;
@@ -970,7 +982,11 @@ a:hover {
   opacity: 0.7;
   cursor: not-allowed;
 }
-/* === Estilos para la autenticación en navbar === */
+
+/* ======================================
+   Navbar - Autenticación
+====================================== */
+
 .navbar-user-info {
   display: flex;
   align-items: center;
@@ -997,4 +1013,14 @@ a:hover {
 .navbar-logout-btn:hover {
   background: #f0f0f0;
   color: #333;
+}
+
+/* ======================================
+   Responsive
+====================================== */
+
+@media (min-width: 768px) {
+  .home-label {
+    display: inline;
+  }
 }

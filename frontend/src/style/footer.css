@@ -2,16 +2,16 @@
 .footer {
   background-color: #1f2937;
   color: #ffffff;
-  padding: 40px 40px 0 40px; /* Aumentamos el padding lateral a 40px para más aire */
+  padding: 40px 40px 0 40px;
   font-family: 'Arial', sans-serif;
 }
 
 .footer-container {
   max-width: 1200px;
-  margin: 0 auto 48px auto; /* ↑ aumentamos el margen inferior */
+  margin: 0 auto 48px auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 48px; /* ↑ aumentamos el gap entre columnas */
+  gap: 48px;
   padding-bottom: 48px;
   border-bottom: 1px solid #374151;
 }
@@ -44,31 +44,33 @@
   color: #9ca3af;
   line-height: 1.6;
   margin: 0;
+  text-align: justify;
 }
 
 .footer-social {
   display: flex;
-  gap: 12px;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.footer-social-icon {
-  width: 40px;
-  height: 40px;
-  background-color: #374151;
-  border: 1px solid #4b5563;
-  border-radius: 8px;
+.footer-social-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #10b981;
+  color: white;
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
-.footer-social-icon:hover {
-  background-color: #4b5563;
-  color: #10b981;
+.footer-social-link:hover {
+  background-color: #059669;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .footer-heading {
@@ -94,6 +96,7 @@
   text-decoration: none;
   transition: color 0.2s ease;
   padding: 4px 0;
+  text-align: justify;
 }
 
 .footer-link:hover {
@@ -149,7 +152,7 @@
   background-color: #059669;
 }
 
-/* === CONTACTO HORIZONTAL (como en la imagen) === */
+/* === CONTACTO HORIZONTAL === */
 .footer-contact-section {
   padding: 24px 0;
   border-top: 1px solid #374151;
@@ -182,20 +185,6 @@
   color: #9ca3af;
   width: 18px;
   height: 18px;
-}
-
-/* Responsive: en pantallas pequeñas, apilar verticalmente */
-@media (max-width: 768px) {
-  .footer-contact-row {
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    text-align: center;
-  }
-
-  .footer-contact-item {
-    justify-content: center;
-  }
 }
 
 .footer-copyright {
@@ -247,9 +236,11 @@
     padding: 10px;
   }
 
-  .footer-contact-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
+  .footer-contact-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
   }
 
   .footer-contact-item {
@@ -260,59 +251,4 @@
   .footer-copyright {
     font-size: 12px;
   }
-}
-
-.footer-social {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.footer-social-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #10b981; /* Verde del botón "Suscribirse */
-  color: white;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.footer-social-link:hover {
-  background-color: #059669; /* Verde más oscuro */
-  color: white; /* Icono blanco al hacer hover */
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Justificar texto en párrafos */
-.footer-description {
-  font-size: 14px;
-  color: #9ca3af;
-  line-height: 1.6;
-  margin: 0;
-  text-align: justify; /* Justificar texto */
-}
-
-/* Opcional: Justificar también los enlaces si están en párrafos */
-.footer-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.footer-link {
-  display: block;
-  font-size: 14px;
-  color: #9ca3af;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  padding: 4px 0;
-  text-align: justify; /* Opcional: justificar texto de enlaces */
 }

@@ -19,7 +19,7 @@
 .products-title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #111827;
+  color: #000000;
   margin-bottom: 8px;
 }
 
@@ -225,8 +225,8 @@
 
 /* === ESTILOS PARA PRODUCTOS.JSX (componente de inicio) === */
 .productos-section {
-  padding: 50px 20px;
-  background-color: var(--blanco);
+  padding: 60px 20px;
+  background-color: #f9fafb;
 }
 
 .productos-container {
@@ -235,22 +235,24 @@
 }
 
 .productos-title {
-  color: #111827; /* Negro */
+  color: #000000;
   font-size: 2rem;
-  font-weight: 800; /* Negrita */
-  margin-bottom: 8px;
+  font-weight: 700;
+  margin-bottom: 16px;
   text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 
-
 .productos-description {
-  color: #6b7280; /* Gris medio */
+  color: #6b7280;
   font-size: 1rem;
-  margin-bottom: 20px;
+  line-height: 1.6;
+  margin-bottom: 40px;
   text-align: center;
-  font-weight: normal;
+  font-weight: 400;
   max-width: 800px;
-  margin: 0 auto 20px auto;
+  margin: 0 auto 40px auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .productos-grid {
@@ -264,21 +266,23 @@
 
 .productos-ver-todos-btn {
   display: block;
-  margin: 30px auto 0;
+  margin: 40px auto 0;
   padding: 14px 26px;
   border-radius: 8px;
   border: none;
-  background-color: #169143; 
+  background-color: #16a34a;
   color: #ffffff;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
   text-align: center;
   transition: background-color 0.3s ease;
   width: auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  /* font-size: var(--product-card-btn-font-size, 0.875rem); */
 }
 
 .productos-ver-todos-btn:hover {
-  background-color: #269e52; 
+  background-color: #15803d;
 }
   
 .productos-loading,

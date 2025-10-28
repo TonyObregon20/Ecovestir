@@ -1,113 +1,58 @@
-    /* === NAVBAR STYLES === */
+/* === NAVBAR STYLES === */
 
-/* Contenedor principal del navbar */
 .navbar {
   border-bottom: 1px solid #e5e7eb;
-  background-color: rgba(255, 255, 255, 0.95); /* Blanco semitransparente */
-  backdrop-filter: blur(10px); /* Efecto de desenfoque */
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
-  z-index: 50; /* Asegura que esté por encima de otros elementos */
+  z-index: 50;
   width: 100%;
-  padding: 0 40px;
+  padding: 0 2.5rem;
 }
 
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem; /* Espacio entre búsqueda y carrito */
-  margin-left: 2rem; /* ↑ Añadimos margen izquierdo para separar del último link */
-}
-
-
-/* === CONTENEDOR PRINCIPAL DEL NAVBAR (igual que el footer) === */
 .navbar-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
+  gap: 3rem;
   height: 4rem;
-}
-
-/* Para asegurar que el logo esté alineado con el footer */
-.navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 2.5rem;
-  /* Alinear el logo con el footer */
-  align-self: stretch;
-  justify-content: flex-start;
 }
 
 .navbar-logo-wrapper {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Alinea el logo a la izquierda */
-  gap: 0.25rem;
-  margin-left: 0; /* Sin margen adicional */
+  gap: 0.5rem;
+  justify-self: start;
 }
 
-.navbar-logo-link {
-  text-decoration: none;
+.navbar-logo-link,
+.navbar-logo-text-link {
+  text-decoration: none !important;
   color: inherit;
   display: flex;
   align-items: center;
 }
 
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.5rem;
+.navbar-logo-link:hover,
+.navbar-logo-text-link:hover {
+  text-decoration: none !important;
 }
 
-/* El resto de estilos sigue igual... */
-
-/* === LOGO === */
-
 .navbar-logo-img {
-  height: 65px;
+  height: 50px;
   width: auto;
   object-fit: contain;
 }
 
-.navbar-logo-icon {
-  width: 2rem;
-  height: 2rem;
-  background-color: #059669; /* Verde principal */
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.75rem;
-}
-
-.navbar-logo-leaf {
-  width: 1rem;
-  height: 1rem;
-  color: white;
-}
-
 .navbar-logo-text {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #111827; /* Gris oscuro */
-  text-decoration: none;
-}
-
-.navbar-logo-text-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-.navbar-logo-text-link:hover {
-  text-decoration: none;
-}
-
-.navbar-logo-text:hover {
-  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 650;
+  color: #111827;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* === NAVEGACIÓN === */
@@ -115,80 +60,90 @@
   display: flex;
   align-items: center;
   gap: 2rem;
+  justify-self: center;
 }
 
 .navbar-link {
   text-decoration: none;
-  color: #4b5563; /* Gris medio */
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 400;
+  transition: color 0.2s ease, font-weight 0.2s ease;
   white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  position: relative;
 }
 
 .navbar-link:hover {
-  color: #059669; /* Verde principal */
+  color: #16a34a;
+}
+
+.navbar-link.active {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-self: end;
 }
 
 /* === BÚSQUEDA === */
-.navbar-search {
+.navbar-search-wrapper {
+  position: relative;
+  width: 16rem;
   display: flex;
   align-items: center;
 }
 
-.navbar-search-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
+.navbar-search-icon {
+  position: absolute;
+  left: 12px;
+  color: #9ca3af;
+  pointer-events: none;
 }
 
 .navbar-search-input {
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
   border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   background-color: #ffffff;
   color: #111827;
   font-size: 0.875rem;
-  width: 16rem;
+  width: 100%;
   box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 
-@media (max-width: 768px) {
-  .navbar-search-input {
-    width: 14rem;
-  }
-}
-
-@media (max-width: 400px) {
-  .navbar-search-input {
-    width: 12rem;
-    font-size: 0.8125rem;
-  }
+.navbar-search-input::placeholder {
+  color: #9ca3af;
 }
 
 .navbar-search-input:focus {
   outline: none;
-  border-color: #059669;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 /* === CARRITO === */
 .navbar-cart-button {
   position: relative;
   padding: 0.5rem;
-  color: #4b5563;
-  text-decoration: none;
+  color: #111827;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.375rem;
-  transition: color 0.2s ease, background-color 0.2s ease;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+  background: none;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
 }
 
 .navbar-cart-button:hover {
-  color: #059669;
   background-color: #f3f4f6;
 }
 
@@ -199,75 +154,110 @@
 
 .navbar-cart-badge {
   position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
-  background-color: #059669;
-  color: white;
-  font-size: 0.75rem;
+  top: -0.25rem;
+  right: -0.25rem;
+  background-color: #16a34a;
+  color: #ffffff;
+  font-size: 0.7rem;
   border-radius: 50%;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.125rem;
+  height: 1.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
+  border: 2px solid #ffffff;
 }
 
 /* === AUTENTICACIÓN === */
-.navbar-auth {
-  display: block;
+.navbar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navbar-user-greeting {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.navbar-user-greeting strong {
+  color: #111827;
 }
 
 .navbar-auth-button {
   padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  border: 1px solid transparent;
   transition: all 0.2s ease;
   white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .navbar-auth-button.login {
-  background-color: #dcfce7;
-  color: #059669;
-  border-color: #059669;
+  background-color: #ffffff;
+  color: #16a34a;
+  border: 1px solid #16a34a;
 }
 
 .navbar-auth-button.login:hover {
-  background-color: #bbf7d0;
+  background-color: #f0fdf4;
 }
 
-.navbar-auth-button.logout {
-  background-color: #059669;
-  color: white;
+.navbar-logout-btn {
+  background: none;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
-.navbar-auth-button.logout:hover {
-  background-color: #047857;
+.navbar-logout-btn:hover {
+  background-color: #f3f4f6;
+  color: #111827;
 }
 
 /* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .navbar-search-wrapper {
+    width: 12rem;
+  }
+  
+  .navbar-links {
+    gap: 1.25rem;
+  }
+}
+
 @media (max-width: 400px) {
   .navbar-logo-text {
     font-size: 1rem;
   }
+  
+  .navbar-search-wrapper {
+    width: 10rem;
+  }
+  
   .navbar-search-input {
-    width: 12rem;
     font-size: 0.8125rem;
   }
+  
   .navbar-links {
     gap: 1rem;
   }
+  
   .navbar-link {
     font-size: 0.8125rem;
   }
 }
-
-@media (max-width: 768px) {
-  .navbar-search-input {
-    width: 14rem;
-  }
-}
-
