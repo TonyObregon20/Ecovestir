@@ -8,13 +8,13 @@
   top: 0;
   z-index: 50;
   width: 100%;
-  padding: 0 2.5rem;
+  padding: 0;
 }
 
 .navbar-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 40px;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
@@ -64,7 +64,7 @@
 }
 
 .navbar-link {
-  text-decoration: none;
+  text-decoration: none !important;
   color: #6b7280;
   font-size: 1rem;
   font-weight: 400;
@@ -76,11 +76,13 @@
 
 .navbar-link:hover {
   color: #16a34a;
+  text-decoration: none !important;
 }
 
 .navbar-link.active {
   color: #16a34a;
   font-weight: 700;
+  text-decoration: none !important;
 }
 
 .navbar-right {
@@ -124,8 +126,8 @@
 
 .navbar-search-input:focus {
   outline: none;
-  border-color: #16a34a;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+  border-color: #d1d5db;
+  box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.3);
 }
 
 /* === CARRITO === */
