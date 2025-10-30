@@ -21,6 +21,7 @@ import UsersPage from "./pages/Admin/UsersPage";
 import Login from "./pages/Login"; // 👈 Nuevo
 import CategoryPage from "./pages/categories/CategoryPage"; // Página de categorías
 import ProductDetail from "./pages/ProductDetail"; // Detalle de producto
+import Checkout from "./pages/Checkout"; // Checkout / Pasarela de pago
 
 // ✅ ProtectedRoute mejorado: verifica token Y rol
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -110,6 +111,16 @@ function App() {
               <>
                 <ProductDetail />
               </>
+            }
+          />
+
+          {/* Checkout - Pasarela de pago */}
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
             }
           />
 
