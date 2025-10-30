@@ -12,33 +12,33 @@ export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  
+  // ESTADO: Producto cargado desde el backend
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // ESTADO: Talla seleccionada por el usuario
   const [selectedSize, setSelectedSize] = useState('');
   const [isFavorite, setIsFavorite] = useState(false);
 
+  // EFECTO: Cargar producto al montar o cambiar ID
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
         const data = await listarProductos(id);
-        // Normalizar tallas: aceptar array o string separado por comas
-        const normalizeSizes = (raw) => {
-          if (!raw) return [];
-          if (Array.isArray(raw)) return raw.map(s => String(s).trim()).filter(Boolean);
-          if (typeof raw === 'string') return raw.split(',').map(s => s.trim()).filter(Boolean);
-          // Fallback: intentar convertir a string
-          return String(raw).split(',').map(s => s.trim()).filter(Boolean);
-        };
+        
+        // CÁLCULO: Obtener solo tallas con stock disponible
+        const availableSizes = data.sizeStock && data.sizeStock.length > 0
+          ? data.sizeStock.filter(item => item.stock > 0).map(item => item.size)
+          : [];
 
-        const normalizedSizes = normalizeSizes(data.sizes);
+        // ACTUALIZACIÓN: Agregar availableSizes al producto
+        setProduct({ ...data, availableSizes });
 
-        // Guardar el producto y reemplazar sizes por la versión normalizada
-        setProduct({ ...data, sizes: normalizedSizes });
-
-        if (normalizedSizes.length > 0) {
-          setSelectedSize(normalizedSizes[0]); // Selecciona la primera talla disponible
+        // SELECCIÓN: Pre-seleccionar la primera talla disponible
+        if (availableSizes.length > 0) {
+          setSelectedSize(availableSizes[0]);
         } else {
           setSelectedSize('');
         }
@@ -54,12 +54,20 @@ export default function ProductDetail() {
   if (loading) return <p style={{ padding: 20 }}>Cargando producto...</p>;
   if (error) return <p style={{ padding: 20, color: 'red' }}>{error}</p>;
 
-  // Datos para mostrar
+  // PREPARACIÓN: Extraer datos para mostrar
   const material = product.material || 'Algodón Orgánico';
-  // Asegurarse de trabajar con la versión normalizada de tallas
-  const sizes = Array.isArray(product.sizes) ? product.sizes : (product.sizes ? [product.sizes] : []);
-  const stock = product.stock !== undefined ? product.stock : 0;
+  const sizes = product.availableSizes || [];
+  const totalStock = product.totalStock || 0;
   const ecoFriendly = product.ecoFriendly !== undefined ? product.ecoFriendly : true;
+  
+  // FUNCIÓN: Obtener stock disponible para una talla específica
+  const getStockForSize = (size) => {
+    if (product.sizeStock && product.sizeStock.length > 0) {
+      const sizeData = product.sizeStock.find(item => item.size === size);
+      return sizeData ? sizeData.stock : 0;
+    }
+    return 0;
+  };
 
   // Características (puedes personalizarlas según tu producto o traerlas desde la DB)
   const features = [
@@ -142,17 +150,32 @@ export default function ProductDetail() {
             <div className="size-selector">
               <label>Talla:</label>
               <div className="size-buttons">
-                {sizes.map(size => (
-                  <button
-                    key={size}
-                    className={`size-btn ${selectedSize === size ? 'selected' : ''}`}
-                    onClick={() => setSelectedSize(size)}
-                    disabled={stock <= 0}
-                  >
-                    {size}
-                  </button>
-                ))}
+                {/* RENDERIZADO: Botón por cada talla disponible */}
+                {sizes.map(size => {
+                  const sizeStock = getStockForSize(size);
+                  return (
+                    <button
+                      key={size}
+                      className={`size-btn ${selectedSize === size ? 'selected' : ''} ${sizeStock === 0 ? 'out-of-stock' : ''}`}
+                      onClick={() => setSelectedSize(size)}
+                      disabled={sizeStock === 0} // Deshabilitar si no hay stock
+                      title={`Stock disponible: ${sizeStock}`}
+                    >
+                      {size}
+                      {/* INDICADOR: Mostrar "!" si el stock es bajo (≤5) */}
+                      {sizeStock > 0 && sizeStock <= 5 && (
+                        <span className="low-stock-indicator">!</span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
+              {/* INFORMACIÓN: Mostrar stock de la talla seleccionada */}
+              {selectedSize && (
+                <div className="stock-info">
+                  Stock disponible: <strong>{getStockForSize(selectedSize)}</strong> unidades
+                </div>
+              )}
             </div>
 
             {/* Material */}
@@ -173,14 +196,16 @@ export default function ProductDetail() {
                   size: selectedSize,
                   quantity: 1
                 })}
-                disabled={stock <= 0}
+                disabled={!selectedSize || getStockForSize(selectedSize) <= 0}
               >
-                <ShoppingCart size={18} /> Agregar al Carrito
+                <ShoppingCart size={18} /> 
+                {/* TEXTO: Cambiar texto según disponibilidad */}
+                {!selectedSize || getStockForSize(selectedSize) <= 0 ? 'Sin Stock' : 'Agregar al Carrito'}
               </button>
               <button 
                 className={`add-favorites-btn ${isFavorite ? 'favorite-active' : ''}`}
                 onClick={() => setIsFavorite(!isFavorite)}
-                disabled={stock <= 0}
+                disabled={totalStock <= 0}
               >
                 <Heart size={18} fill={isFavorite ? "#dc2626" : "none"} color={isFavorite ? "#dc2626" : "currentColor"} />
                 {isFavorite ? 'Quitar de Favoritos' : 'Agregar a Favoritos'}

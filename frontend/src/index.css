@@ -22,7 +22,7 @@
    Estilos Globales
 ====================================== */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   background-color: var(--blanco);
   color: var(--gris-oscuro);
   margin: 0;
@@ -92,8 +92,8 @@ a:hover {
   border: 1px solid var(--verde-primario);
 }
 
-/* Navbar */
-.navbar {
+/* Navbar - Estilos antiguos comentados (ahora se usa navbar.css) */
+/* .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -158,9 +158,11 @@ a:hover {
 
 .cart-button:hover {
   background-color: var(--verde-oscuro);
-}
+} */
 
-/* Hero Section */
+/* ======================================
+   Hero Section (COMENTADO - Usando hero.css)
+====================================== */
 /* .hero-section {
   background: linear-gradient(to right, var(--gris-claro), var(--blanco));
   padding: 64px 24px;
@@ -259,8 +261,10 @@ a:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 } */
 
-/* Productos públicos */
-.productos-section {
+/* ======================================
+   Productos Públicos (COMENTADO - Usando products.css)
+====================================== */
+/* .productos-section {
   padding: 50px 20px;
   background-color: var(--blanco);
 }
@@ -314,9 +318,11 @@ a:hover {
 .productos-footer {
   text-align: center;
   margin-top: 30px;
-}
+} */
 
-/* Página de productos con filtros */
+/* ======================================
+   Página de Productos con Filtros
+====================================== */
 .productos-page {
   display: flex;
   gap: 20px;
@@ -400,7 +406,9 @@ a:hover {
   color: #777;
 }
 
-/* ===== ADMIN LAYOUT - SIDEBAR COMPACTO CON LUCIDE ===== */
+/* ======================================
+   Admin Layout
+====================================== */
 .admin-container {
   display: flex;
   min-height: 100vh;
@@ -574,7 +582,9 @@ a:hover {
   color: #111827;
 }
 
-/* ===== ADMIN - GESTIÓN DE PRODUCTOS ===== */
+/* ======================================
+   Admin - Gestión de Productos
+====================================== */
 .admin-products-container {
   padding: 20px;
   background-color: #f8f9fa;
@@ -758,35 +768,32 @@ a:hover {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 60px;
+  padding: 20px;
   z-index: 1000;
+  overflow-y: auto; /* Permitir scroll en el overlay */
 }
 
-/* Responsive */
-@media (min-width: 768px) {
-  .home-label {
-    display: inline;
-  }
-}
-/* ===== CONTENEDOR PARA VISTAS DE ADMIN (Products, Dashboard, etc.) ===== */
+/* ======================================
+   Admin - Contenedores y Tablas
+====================================== */
+
 .admin-products-container,
 .admin-dashboard-container {
   padding: 20px;
   background-color: #f8f9fa;
   min-height: 100vh;
-  margin-left: 80px; /* 👈 Clave: evita que el contenido quede detrás del sidebar */
+  margin-left: 80px;
 }
-/* ===== TABLA CON SCROLL PROPIO ===== */
+
 .scrollable-table-container {
-  max-height: 500px; /* Altura máxima antes del scroll */
-  overflow-y: auto;  /* Scroll vertical */
+  max-height: 500px;
+  overflow-y: auto;
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   margin-top: 16px;
 }
 
-/* Mantener el header de la tabla fijo (opcional) */
 .products-table thead th {
   position: sticky;
   top: 0;
@@ -794,7 +801,6 @@ a:hover {
   z-index: 10;
 }
 
-/* Estilos para la barra de scroll (opcional, más bonita) */
 .scrollable-table-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -812,60 +818,443 @@ a:hover {
 .scrollable-table-container::-webkit-scrollbar-thumb:hover {
   background: var(--verde-oscuro);
 }
-.formulario-producto {
+
+/* ======================================
+   FORMULARIO DE PRODUCTO - DISEÑO MODERNO
+====================================== */
+
+/* Overlay del modal */
+.formulario-producto-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Modal del formulario */
+.formulario-producto-modal {
   background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  margin-bottom: 24px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
 }
 
-.formulario-producto h2 {
-  margin-bottom: 20px;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header del formulario */
+.formulario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  border-radius: 16px 16px 0 0;
+}
+
+.formulario-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
   color: var(--gris-oscuro);
+  font-weight: 600;
 }
 
-.formulario-producto label {
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+/* Formulario */
+.formulario-form {
+  padding: 24px 32px 32px;
+}
+
+/* Secciones del formulario */
+.form-section {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--verde-primario);
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Grupos de formulario */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
   display: block;
-  margin: 12px 0 6px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  background: #f9fafb;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--verde-primario);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  padding-right: 40px;
+}
+
+/* Fila de formulario (2 columnas) */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Checkbox group */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.checkbox-label:hover {
+  background: #f3f4f6;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--verde-primario);
+}
+
+.checkbox-label span {
+  font-size: 0.95rem;
+  color: #374151;
   font-weight: 500;
 }
 
-.formulario-producto input[type="text"],
-.formulario-producto input[type="number"],
-.formulario-producto input[type="url"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
+/* Imágenes */
+.image-input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.image-input-row input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #f9fafb;
+}
+
+.remove-image-btn {
+  padding: 10px 16px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
   border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
   font-size: 1rem;
 }
 
+.remove-image-btn:hover {
+  background: #fecaca;
+}
+
+.add-image-btn {
+  padding: 10px 20px;
+  background: #d1fae5;
+  color: var(--verde-primario);
+  border: 2px solid var(--verde-primario);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.add-image-btn:hover {
+  background: var(--verde-primario);
+  color: white;
+}
+
+/* Botones de acción */
 .formulario-botones {
   display: flex;
   gap: 12px;
-  margin-top: 20px;
+  justify-content: flex-end;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
 }
 
-.formulario-botones button {
-  flex: 1;
-  padding: 12px;
+.btn-cancel,
+.btn-submit {
+  padding: 12px 32px;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
-.formulario-botones button[type="submit"] {
-  background-color: var(--verde-primario);
-  color: white;
+.btn-cancel {
+  background: #f3f4f6;
+  color: #6b7280;
 }
 
-.formulario-botones button[type="button"] {
-  background-color: #6b7280;
-  color: white;
+.btn-cancel:hover {
+  background: #e5e7eb;
+  color: #374151;
 }
-/* ===== LOGIN ===== */
+
+.btn-submit {
+  background: var(--verde-primario);
+  color: white;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+.btn-submit:hover {
+  background: var(--verde-oscuro);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Scroll personalizado para el modal */
+.formulario-producto-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.formulario-producto-modal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.formulario-producto-modal::-webkit-scrollbar-thumb {
+  background: var(--verde-primario);
+  border-radius: 4px;
+}
+
+.formulario-producto-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--verde-oscuro);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .formulario-producto-modal {
+    max-width: 95%;
+    margin: 10px;
+  }
+
+  .formulario-header,
+  .formulario-form {
+    padding: 20px;
+  }
+
+  .formulario-botones {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel,
+  .btn-submit {
+    width: 100%;
+  }
+}
+
+/* ======================================
+   SISTEMA DE STOCK POR TALLA
+   Estilos para el formulario de administración
+====================================== */
+
+/* Contenedor principal de la sección de stock por talla */
+.size-stock-section {
+  background: #f0fdf4; /* Verde claro de fondo */
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid var(--verde-primario);
+  margin: 16px 0;
+}
+
+.size-stock-section > label {
+  color: var(--verde-primario);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* Grid de 4 columnas para los inputs de tallas (S, M, L, XL) */
+.size-stock-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
+  gap: 12px; /* Espacio entre inputs */
+  margin-bottom: 12px;
+}
+
+/* Cada item del grid (contiene label + input) */
+.size-stock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1fae5; /* Verde muy claro */
+}
+
+/* Label de la talla (S, M, L, XL) */
+.size-label {
+  font-weight: 700;
+  color: var(--verde-primario);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+/* Input numérico para el stock de cada talla */
+.size-stock-input {
+  width: 100%;
+  text-align: center;
+  padding: 8px;
+  border: 2px solid var(--verde-primario);
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.size-stock-input:focus {
+  outline: none;
+  border-color: var(--verde-oscuro);
+  background: #f0fdf4; /* Fondo verde claro al enfocar */
+}
+
+/* Badge que muestra el stock total calculado */
+.total-stock {
+  text-align: center;
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+  border: 2px solid var(--verde-primario);
+  font-size: 1.1rem;
+  color: var(--verde-primario);
+}
+
+.total-stock strong {
+  color: var(--verde-oscuro); /* Número destacado en verde oscuro */
+}
+
+/* RESPONSIVE: En pantallas pequeñas, usar 2 columnas en vez de 4 */
+@media (max-width: 768px) {
+  .size-stock-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ======================================
+   Login
+====================================== */
 .login-container {
   display: flex;
   justify-content: center;
@@ -970,7 +1359,11 @@ a:hover {
   opacity: 0.7;
   cursor: not-allowed;
 }
-/* === Estilos para la autenticación en navbar === */
+
+/* ======================================
+   Navbar - Autenticación
+====================================== */
+
 .navbar-user-info {
   display: flex;
   align-items: center;
@@ -998,3 +1391,68 @@ a:hover {
   background: #f0f0f0;
   color: #333;
 }
+
+/* ======================================
+   Responsive
+====================================== */
+
+@media (min-width: 768px) {
+  .home-label {
+    display: inline;
+  }
+}
+
+/* ======================================
+   STOCK POR TALLA - TABLA DE ADMINISTRACIÓN
+   Estilos para mostrar stock de cada talla en la tabla de productos
+====================================== */
+
+/* Contenedor vertical para los badges de tallas */
+.stock-by-size {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Espacio entre badges */
+}
+
+/* Badge individual para cada talla (S: 10, M: 5, etc.) */
+.size-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
+
+/* Badge verde: stock OK (> 5 unidades) */
+.size-badge.ok {
+  background: #d1fae5; /* Verde claro */
+  color: #16a34a; /* Verde oscuro */
+  border: 1px solid #16a34a;
+}
+
+.size-badge.low {
+  background: #fef3c7;
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+}
+
+.size-badge.out {
+  background: #fee2e2;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.total-stock-badge {
+  font-weight: 700;
+  color: #16a34a;
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: #f0fdf4;
+  border-radius: 6px;
+  border: 2px solid #16a34a;
+  font-size: 0.85rem;
+}
+
+/* Esta sección duplicada se puede eliminar en una futura limpieza del CSS */

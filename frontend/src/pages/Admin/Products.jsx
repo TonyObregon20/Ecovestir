@@ -10,15 +10,21 @@ import FormularioProducto from "../../components/FormularioProducto";
 import { getCategories } from "../../api/categories";
 
 export default function GestionarProductos() {
+  // ESTADO: Lista de productos del backend
   const [productos, setProductos] = useState([]);
+  // ESTADO: Producto en edición (null = no hay edición)
   const [modoEdicion, setModoEdicion] = useState(null);
+  // ESTADO: Mostrar/ocultar formulario de creación/edición
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  // ESTADO: Mapa de IDs de categorías a nombres (para mostrar en tabla)
   const [categoriesMap, setCategoriesMap] = useState({});
 
+  // EFECTO: Cargar productos al montar el componente
   useEffect(() => {
     cargarProductos();
   }, []);
 
+  // FUNCIÓN: Obtener todos los productos del backend
   const cargarProductos = async () => {
     try {
       const data = await listarProductos();
@@ -28,13 +34,14 @@ export default function GestionarProductos() {
     }
   };
 
-  // Cargar categorias para mostrar nombre en la tabla (evitamos mostrar ObjectId)
+  // EFECTO: Cargar categorías para mostrar nombres en vez de ObjectIds
   useEffect(() => {
     let mounted = true;
     const loadCats = async () => {
       try {
         const cats = await getCategories();
         if (!mounted) return;
+        // CONVERSIÓN: Crear objeto {id: nombre} para lookup rápido
         const map = {};
         (cats || []).forEach((c) => {
           if (c && c._id) map[c._id] = c.name || c.title || c._id;
@@ -48,42 +55,58 @@ export default function GestionarProductos() {
     return () => { mounted = false; };
   }, []);
 
+  // MANEJADOR: Crear nuevo producto
   const handleCrear = async (producto) => {
     try {
       await crearProducto(producto);
       setMostrarFormulario(false);
-      cargarProductos();
+      cargarProductos(); // Recargar lista después de crear
     } catch (error) {
       console.error("Error al crear producto:", error);
     }
   };
 
+  // MANEJADOR: Actualizar producto existente
   const handleEditar = async (id, producto) => {
     try {
       await actualizarProducto(id, producto);
       setModoEdicion(null);
       setMostrarFormulario(false);
-      cargarProductos();
+      cargarProductos(); // Recargar lista después de actualizar
     } catch (error) {
       console.error("Error al actualizar producto:", error);
     }
   };
 
+  // MANEJADOR: Eliminar producto con confirmación
   const handleEliminar = async (id) => {
     if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
     try {
       await eliminarProducto(id);
-      cargarProductos();
+      cargarProductos(); // Recargar lista después de eliminar
     } catch (error) {
       console.error("Error al eliminar producto:", error);
     }
   };
 
-  // 🔹 Métricas para tarjetas de resumen
+  // MÉTRICAS: Calcular estadísticas para las tarjetas de resumen
   const totalProductos = productos.length;
   const productosActivos = productos.filter(p => p.isActive).length;
-  const sinStock = productos.filter(p => p.stock === 0).length;
-  const stockBajo = productos.filter(p => p.stock > 0 && p.stock <= 10).length;
+  
+  // FUNCIÓN: Calcular stock total de un producto sumando todas las tallas
+  const calcularStockTotal = (p) => {
+    if (p.sizeStock && p.sizeStock.length > 0) {
+      return p.sizeStock.reduce((sum, item) => sum + (item.stock || 0), 0);
+    }
+    return 0;
+  };
+  
+  // MÉTRICAS: Productos sin stock y con stock bajo
+  const sinStock = productos.filter(p => calcularStockTotal(p) === 0).length;
+  const stockBajo = productos.filter(p => {
+    const total = calcularStockTotal(p);
+    return total > 0 && total <= 10; // Stock bajo = entre 1 y 10 unidades
+  }).length;
 
   return (
     <div className="admin-products-container">
@@ -138,20 +161,18 @@ export default function GestionarProductos() {
 
       {/* Formulario (modal) */}
       {mostrarFormulario && (
-        <div className="form-overlay">
-          <FormularioProducto
-            producto={modoEdicion}
-            onSubmit={
-              modoEdicion
-                ? (prod) => handleEditar(modoEdicion._id, prod)
-                : handleCrear
-            }
-            onCancel={() => {
-              setMostrarFormulario(false);
-              setModoEdicion(null);
-            }}
-          />
-        </div>
+        <FormularioProducto
+          producto={modoEdicion}
+          onSubmit={
+            modoEdicion
+              ? (prod) => handleEditar(modoEdicion._id, prod)
+              : handleCrear
+          }
+          onCancel={() => {
+            setMostrarFormulario(false);
+            setModoEdicion(null);
+          }}
+        />
       )}
 
       {/* Tabla de productos */}
@@ -207,9 +228,31 @@ export default function GestionarProductos() {
                   )}
                 </td>
                 <td>
-                  <span className={`stock ${p.stock === 0 ? "out" : p.stock <= 10 ? "low" : "ok"}`}>
-                    {p.stock} {p.stock === 1 ? "unidad" : "unidades"}
-                  </span>
+                  {/* COLUMNA STOCK: Mostrar stock por talla */}
+                  {(() => {
+                    const totalStock = calcularStockTotal(p);
+                    const stockItems = p.sizeStock?.filter(item => item.stock > 0) || [];
+                    
+                    return (
+                      <div className="stock-by-size">
+                        {/* BADGES: Una insignia por cada talla con stock */}
+                        {stockItems.map((item, idx) => (
+                          <span 
+                            key={idx} 
+                            className={`size-badge ${item.stock === 0 ? 'out' : item.stock <= 5 ? 'low' : 'ok'}`}
+                          >
+                            {item.size}: {item.stock}
+                          </span>
+                        ))}
+                        {/* SIN STOCK: Mostrar mensaje si no hay stock en ninguna talla */}
+                        {stockItems.length === 0 && <span className="size-badge out">Sin stock</span>}
+                        {/* TOTAL: Badge con el stock total de todas las tallas */}
+                        <div className="total-stock-badge">
+                          Total: {totalStock}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </td>
                 <td>
                   <span className={`status ${p.isActive ? "active" : "inactive"}`}>
