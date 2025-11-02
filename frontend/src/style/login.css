@@ -6,9 +6,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* Fallback sólido y luego OKLCH moderno */
+  background: #f9fafb;
   background: oklch(.982 .018 155.826);
   padding: 32px 16px;
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+}
+
+:root {
+  --brand: #00c853; /* color primario centralizado */
 }
 
 /* Logo fuera del contenedor */
@@ -143,14 +149,17 @@
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%; /* ⭐ Asegura que el contenedor ocupe todo el ancho */
 }
 
 .input-icon {
   position: absolute;
   left: 12px;
+  top: 50%;
+  transform: translateY(-50%); /* Centrar verticalmente respecto al input */
   color: #9ca3af;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   pointer-events: none;
   z-index: 1;
 }
@@ -163,7 +172,8 @@
 
 .form-field input {
   width: 100%;
-  padding: 11px 16px 11px 40px;
+  /* Espacio extra a izquierda/derecha para iconos (placeholder y texto no chocan) */
+  padding: 11px 48px 11px 48px;
   border: 1px solid rgba(16, 185, 129, 0.2);
   border-radius: 8px;
   font-size: 14px;
@@ -171,6 +181,8 @@
   background: #ffffff;
   transition: all 0.2s ease;
   font-family: inherit;
+  box-sizing: border-box; /* ⭐ IMPRESCINDIBLE */
+  outline: none; /* Opcional: evita bordes extraños al enfocar */
 }
 
 .form-field input:hover {
@@ -191,29 +203,33 @@
 /* Password toggle */
 .password-toggle {
   position: absolute;
-  right: 12px;
-  background: none;
+  right: 10px;
+  top: 50%; /* Centrar verticalmente respecto al input */
+  transform: translateY(-50%);
+  background: transparent;
   border: none;
   color: #9ca3af;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px; /* Mejor hit-area para táctil/teclado */
   display: flex;
   align-items: center;
   justify-content: center;
   transition: color 0.2s ease;
-  width: 20px;
-  height: 20px;
-  z-index: 1;
+  width: 32px;
+  height: 32px;
+  z-index: 2;
 }
 
 .password-toggle svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   stroke-width: 2;
 }
 
 .password-toggle:hover {
-  color: #6b7280;
+  /* No visual background or color change on hover; icon state changes only on toggle */
+  color: inherit;
+  background: transparent;
 }
 
 .password-toggle:focus {
@@ -241,8 +257,10 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #10b981;
+  /* Use global brand color for checked state */
+  accent-color: var(--brand);
   border-radius: 4px;
+  border: 1px solid #d1d5db; /* subtle neutral border */
 }
 
 .remember-me label {
@@ -283,8 +301,15 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #10b981;
+  /* Use brand color when checked */
+  accent-color: var(--brand);
   flex-shrink: 0;
+  border: 1px solid #d1d5db;
+}
+
+.form-checkbox input[type="checkbox"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,200,83,0.12);
 }
 
 .form-checkbox label {
@@ -456,9 +481,9 @@
   }
 
   .form-field input {
-    padding: 10px 14px 10px 38px;
-    font-size: 14px;
-  }
+      padding: 10px 40px 10px 40px;
+      font-size: 14px;
+    }
 
   .input-icon {
     left: 11px;
@@ -491,3 +516,34 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: #111827;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+/* Utility classes (emular Tailwind usados en snippet) */
+.space-y-2 > * + * {
+  margin-top: 0.5rem; /* 8px */
+}
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+
+.left-3 { left: 12px; }
+.right-3 { right: 12px; }
+.top-3 { top: 12px; }
+
+.h-4 { height: 16px; }
+.w-4 { width: 16px; }
+
+.text-gray-400 { color: #9ca3af; }
+.text-gray-600 { color: #4b5563; }
+.hover\:text-gray-600:hover { color: #4b5563; }
+
+.pl-10 { padding-left: 40px !important; }
+.pr-10 { padding-right: 40px !important; }
+
+.border-green-200 { border-color: rgba(16, 185, 129, 0.2) !important; }
+.focus\:border-green-600:focus { border-color: var(--brand) !important; box-shadow: 0 0 0 3px rgba(0,200,83,0.08); }
+
+/* Allow focus-visible style if keyboard navigation */
+.focus\:border-green-600:focus-visible { outline: none; }
+
+/* small helpers for absolute svg icons to inherit color */
+.input-icon svg, .text-gray-400 svg, .text-gray-600 svg { width: 100%; height: 100%; display: block; }

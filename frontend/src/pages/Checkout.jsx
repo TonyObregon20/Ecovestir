@@ -199,20 +199,20 @@ export default function Checkout() {
                         name="city"
                         value={shippingData.city}
                         onChange={handleInputChange}
-                        placeholder="Ciudad de México"
+                        placeholder="Lima"
                         required
                       />
                     </div>
 
                     <div className="form-field">
-                      <label htmlFor="state">Estado *</label>
+                      <label htmlFor="state">Distrito *</label>
                       <input
                         type="text"
                         id="state"
                         name="state"
                         value={shippingData.state}
                         onChange={handleInputChange}
-                        placeholder="CDMX"
+                        placeholder="Surco"
                         required
                       />
                     </div>
