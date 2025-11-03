@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../style/productDetail.css';
 import { ShoppingCart, Star, StarHalf, ArrowLeft, Truck, Shield, RefreshCw, Heart } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../Context/useCart';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -159,7 +159,7 @@ export default function ProductDetail() {
                       className={`size-btn ${selectedSize === size ? 'selected' : ''} ${sizeStock === 0 ? 'out-of-stock' : ''}`}
                       onClick={() => setSelectedSize(size)}
                       disabled={sizeStock === 0} // Deshabilitar si no hay stock
-                      title={`Stock disponible: ${sizeStock}`}
+                      title={sizeStock === 0 ? 'Sin stock' : 'Disponible'}
                     >
                       {size}
                       {/* INDICADOR: Mostrar "!" si el stock es bajo (≤5) */}
@@ -170,12 +170,7 @@ export default function ProductDetail() {
                   );
                 })}
               </div>
-              {/* INFORMACIÓN: Mostrar stock de la talla seleccionada */}
-              {selectedSize && (
-                <div className="stock-info">
-                  Stock disponible: <strong>{getStockForSize(selectedSize)}</strong> unidades
-                </div>
-              )}
+              {/* No mostramos la cantidad exacta de stock por talla para reducir ruido; solo indicamos disponibilidad */}
             </div>
 
             {/* Material */}
@@ -188,18 +183,32 @@ export default function ProductDetail() {
             <div className="action-buttons">
               <button
                 className="add-cart-btn"
-                onClick={() => addToCart({
-                  id: product._id,
-                  name: product.name,
-                  price: product.price,
-                  image: product.images[0],
-                  size: selectedSize,
-                  quantity: 1
-                })}
+                onClick={async () => {
+                  if (!selectedSize || getStockForSize(selectedSize) <= 0) return;
+                  // Optimistic: llamar a addToCart y si se confirma, disminuir stock localmente
+                  const success = await addToCart({
+                    id: product._id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.images[0],
+                    size: selectedSize,
+                    quantity: 1
+                  });
+                  if (success) {
+                    // Reducir stock localmente para la talla seleccionada
+                    setProduct((prev) => {
+                      const sizeStock = prev.sizeStock ? [...prev.sizeStock] : [];
+                      const idx = sizeStock.findIndex(s => s.size === selectedSize);
+                      if (idx >= 0) {
+                        sizeStock[idx] = { ...sizeStock[idx], stock: Math.max(0, sizeStock[idx].stock - 1) };
+                      }
+                      return { ...prev, sizeStock };
+                    });
+                  }
+                }}
                 disabled={!selectedSize || getStockForSize(selectedSize) <= 0}
               >
                 <ShoppingCart size={18} /> 
-                {/* TEXTO: Cambiar texto según disponibilidad */}
                 {!selectedSize || getStockForSize(selectedSize) <= 0 ? 'Sin Stock' : 'Agregar al Carrito'}
               </button>
               <button 

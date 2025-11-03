@@ -1,7 +1,7 @@
 // src/pages/Checkout.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../Context/useCart';
 import '../style/checkout.css';
 
 export default function Checkout() {
@@ -62,18 +62,42 @@ export default function Checkout() {
 
   const handlePlaceOrder = async () => {
     setLoading(true);
-    
-    // Simulación de procesamiento de pago
-    setTimeout(() => {
+    try {
+      // Aquí podrías enviar paymentInfo real a tu pasarela, por ahora simulamos y enviamos los datos al backend
+      const token = localStorage.getItem('token');
+      const paymentInfo = { shippingData, shippingMethod, total };
+
+      const res = await fetch('http://localhost:4000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ paymentInfo }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || 'Error al crear la orden');
+      }
+
+      const data = await res.json();
+      // Orden creada correctamente en backend
       setLoading(false);
       setCurrentStep(3);
-      clearCart();
-      
-      // Redirigir después de 3 segundos
+      // Limpiar carrito local y reservas
+  try { await clearCart(); } catch { /* ignore */ }
+
+      // Redirigir a página de detalle de orden o a productos después de mostrar confirmación
       setTimeout(() => {
-        navigate('/productos');
-      }, 3000);
-    }, 2000);
+        if (data && data.order && data.order._id) navigate(`/order/${data.order._id}`);
+        else navigate('/productos');
+      }, 2000);
+    } catch (err) {
+      console.error('Error placing order:', err);
+      setLoading(false);
+      alert(err.message || 'Error procesando el pago');
+    }
   };
 
   return (
@@ -346,8 +370,8 @@ export default function Checkout() {
                   </div>
                   
                   <div className="payment-demo">
-                    <p>🎉 Demo: El pago se procesará automáticamente</p>
-                    <p className="demo-note">En producción, aquí integrarías Stripe, PayPal, MercadoPago, etc.</p>
+                    <p>El pago se procesará automáticamente</p>
+                    <p className="demo-note">Proximamente, integración de una pasarela de pago</p>
                   </div>
 
                   <button 
@@ -390,12 +414,12 @@ export default function Checkout() {
 
               {/* Productos */}
               <div className="cart-items">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="cart-item">
+                {cartItems.map((item, idx) => (
+                  <div key={item.uid ?? item.id ?? `${item.name || 'item'}-${idx}`} className="cart-item">
                     <img src={item.image || '/placeholder.jpg'} alt={item.name} />
                     <div className="item-details">
                       <h3>{item.name}</h3>
-                      <p className="item-size">Talla {item.size || 'M'}</p>
+                      {item.size && <p className="item-size">Talla {item.size}</p>}
                       <p className="item-quantity">Cantidad: {item.quantity}</p>
                     </div>
                     <div className="item-price">${(item.price * item.quantity).toFixed(2)}</div>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, Leaf } from 'lucide-react';
 import "../style/login.css";
-import { useCart } from '../context/CartContext';
+import { useCart } from '../Context/useCart';
 
 export default function Login() {
   const [mode, setMode] = useState('login'); // 'login' o 'register'

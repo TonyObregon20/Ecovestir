@@ -1,19 +1,20 @@
 const mongoose = require('mongoose');
 
-// Order: almacena snapshot de precio por ítem para evitar cambios si el producto se actualiza luego.
-const orderSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  items: [
-    {
-      product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-      quantity: Number,
-      price: Number // precio al momento de la compra
-    }
-  ],
-  total: Number,
-  // status útil para flujo de órdenes (pending -> paid -> shipped -> delivered)
-  status: { type: String, enum: ['pending','paid','shipped','delivered','cancelled'], default: 'pending' },
+const OrderItemSchema = new mongoose.Schema({
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+  name: { type: String },
+  price: { type: Number },
+  quantity: { type: Number, required: true },
+  size: { type: String, default: '' },
+});
+
+const OrderSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  items: [OrderItemSchema],
+  total: { type: Number, required: true },
+  status: { type: String, enum: ['pending', 'paid', 'cancelled'], default: 'pending' },
+  paymentInfo: { type: mongoose.Schema.Types.Mixed, default: {} },
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.model('Order', OrderSchema);

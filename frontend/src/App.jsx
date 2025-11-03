@@ -1,6 +1,6 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
 import Home from "./pages/Home";
@@ -10,8 +10,8 @@ import Contacto from "./pages/Contacto";
 import Footer from "./components/Footer";
 import "./index.css";
 
-// 👇 Importamos el CartProvider
-import { CartProvider } from "./context/CartContext";
+// usamos context desde el provider en main.jsx
+import { useCart } from "./Context/useCart";
 
 // Admin y Login
 import AdminPage from "./pages/Admin/AdminPage";
@@ -42,30 +42,29 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 };
 
 function App() {
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isCartOpen, openCart, closeCart } = useCart();
 
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+    <BrowserRouter>
+      <CartDrawer isOpen={isCartOpen} onClose={() => closeCart()} />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
-                <Home />
-                <Footer />
-              </>
-            }
-          />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Navbar onCartClick={() => openCart()} />
+              <Home />
+              <Footer />
+            </>
+          }
+        />
 
           <Route
             path="/productos"
             element={
               <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Navbar onCartClick={() => openCart()} />
                 <ProductosPage />
                 <Footer />
               </>
@@ -77,7 +76,7 @@ function App() {
             path="/sobre-nosotros"
             element={
               <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Navbar onCartClick={() => openCart()} />
                 <About />
                 <Footer />
               </>
@@ -88,7 +87,7 @@ function App() {
             path="/contacto"
             element={
               <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Navbar onCartClick={() => openCart()} />
                 <Contacto />
                 <Footer />
               </>
@@ -98,7 +97,7 @@ function App() {
             path="/categorias"
             element={
               <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Navbar onCartClick={() => openCart()} />
                 <CategoryPage />
                 <Footer />
               </>
@@ -145,7 +144,6 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-    </CartProvider>
   );
 }
 

@@ -1,4 +1,3 @@
-// src/controllers/authController.js
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -23,23 +22,12 @@ exports.register = async (req, res, next) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      // Asegúrate de que el modelo User tenga un campo `role`
-      // Si no se especifica, podrías asignar 'customer' por defecto
-    });
-
+    const user = await User.create({ name, email, password: hashedPassword });
     const token = signToken(user);
+
     res.status(201).json({
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
     next(err);
@@ -51,28 +39,20 @@ exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Buscar usuario por email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }); // Buscar usuario por email
     if (!user) {
       return res.status(400).json({ message: 'Credenciales inválidas' });
     }
 
-    // Verificar contraseña
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password); // Verificar contraseña
     if (!isMatch) {
       return res.status(400).json({ message: 'Credenciales inválidas' });
     }
 
-    // ✅ Permitir login sin importar el rol
-    const token = signToken(user);
+    const token = signToken(user); // Permitir login sin importar el rol
     res.json({
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
     next(err);

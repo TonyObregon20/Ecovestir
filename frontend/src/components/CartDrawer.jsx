@@ -1,13 +1,13 @@
 // src/components/CartDrawer.jsx
-import React from 'react';
+import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../Context/useCart';
 import './CartDrawer.css';
 
 function CartDrawer({ isOpen, onClose }) {
   const navigate = useNavigate();
-  const { cartItems, setCartItems } = useCart();
+  const { cartItems, removeFromCart, updateCartItemQuantity, clearCart, isUpdating } = useCart();
 
   const handleContinueShopping = () => {
     onClose();
@@ -15,16 +15,13 @@ function CartDrawer({ isOpen, onClose }) {
   };
 
   const handleRemoveItem = (id) => {
-    setCartItems((prev) => prev.filter(item => item.id !== id));
+    // Llamamos al contexto para sincronizar con el backend
+    removeFromCart(id);
   };
 
-  const handleUpdateQuantity = (id, newQty) => {
-    if (newQty < 1) return;
-    setCartItems((prev) =>
-      prev.map(item =>
-        item.id === id ? { ...item, quantity: newQty } : item
-      )
-    );
+  const handleUpdateQuantity = (uid, newQty) => {
+    if (newQty < 0) return;
+    updateCartItemQuantity(uid, newQty);
   };
 
   const getTotalPrice = () => {
@@ -41,8 +38,10 @@ function CartDrawer({ isOpen, onClose }) {
   };
 
   const handleClearCart = () => {
-    setCartItems([]);
+    clearCart();
   };
+
+  const nodeRef = useRef(null);
 
   return (
     <>
@@ -51,12 +50,13 @@ function CartDrawer({ isOpen, onClose }) {
       )}
 
       <CSSTransition
+        nodeRef={nodeRef}
         in={isOpen}
         timeout={300}
         classNames="cart-drawer"
         unmountOnExit
       >
-        <div className="cart-drawer" onClick={(e) => e.stopPropagation()}>
+        <div ref={nodeRef} className="cart-drawer" onClick={(e) => e.stopPropagation()}>
           <div className="cart-drawer-header">
             <h2 className="cart-drawer-title">
               <svg className="cart-drawer-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -98,8 +98,8 @@ function CartDrawer({ isOpen, onClose }) {
                   <p>{getCartTotal()} artículo(s) en tu carrito</p>
                 </div>
                 <div className="cart-items-list">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="cart-item">
+                  {cartItems.map((item, idx) => (
+                    <div key={item.uid ?? item.id ?? `${item.name || 'item'}-${idx}`} className="cart-item">
                       <img 
                         src={item.image || '/placeholder.jpg'} 
                         alt={item.name} 
@@ -109,19 +109,22 @@ function CartDrawer({ isOpen, onClose }) {
                           e.target.onerror = null;
                         }}
                       />
-                      <div className="cart-item-details">
+                        <div className="cart-item-details">
                         <h4 className="cart-item-name">{item.name}</h4>
+                        {/* {item.size && <div className="cart-item-size">Talla: <strong>{item.size}</strong></div>} */}
                         <div className="cart-item-tags">
                           <span className="cart-item-tag">Algodón Orgánico</span>
-                          <span className="cart-item-tag">Talla M</span>
+                          {item.size && <span className="cart-item-tag">Talla {item.size}</span>}
                         </div>
                         <p className="cart-item-price">${item.price}</p>
                       </div>
                       <div className="cart-item-controls">
                         <button 
                           className="cart-item-remove"
-                          onClick={() => handleRemoveItem(item.id)}
+                          onClick={() => handleRemoveItem(item.uid ?? item.id)}
                           title="Eliminar producto"
+                          disabled={isUpdating(item.uid ?? item.id)}
+                          aria-busy={isUpdating(item.uid ?? item.id)}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M3 6h18"></path>
@@ -132,14 +135,16 @@ function CartDrawer({ isOpen, onClose }) {
                         <div className="cart-item-quantity-controls">
                           <button 
                             className="cart-item-btn"
-                            onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => handleUpdateQuantity(item.uid ?? item.id, item.quantity - 1)}
+                            disabled={isUpdating(item.uid ?? item.id)}
                           >
                             –
                           </button>
                           <span className="cart-item-quantity">{item.quantity}</span>
                           <button 
                             className="cart-item-btn"
-                            onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => handleUpdateQuantity(item.uid ?? item.id, item.quantity + 1)}
+                            disabled={isUpdating(item.uid ?? item.id)}
                           >
                             +
                           </button>

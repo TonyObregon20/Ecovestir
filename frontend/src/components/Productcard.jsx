@@ -1,7 +1,7 @@
 // src/components/ProductCard.jsx
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Star } from 'lucide-react';
-import { useCart } from '../context/CartContext'; // 👈 Importa el hook
 import "../style/productcard.css";
 
 export default function ProductCard({
@@ -17,12 +17,14 @@ export default function ProductCard({
   originalPrice,
 }) {
   const [hover, setHover] = useState(false);
-  const { addToCart } = useCart(); // 👈 Obtén la función
+  const navigate = useNavigate();
 
   // 👇 Nueva función para agregar al carrito
   const handleAddToCart = (e) => {
     e.stopPropagation(); // Evita que se dispare onProductClick
-    addToCart({ id, name, price, image }); // Envía los datos del producto
+    // Si el producto requiere talla, redirigimos al detalle para elegir talla.
+    // Para simplicidad y seguridad (evitar agregar sin talla), navegamos al detalle.
+    navigate(`/producto/${id}`);
   };
 
   return (
