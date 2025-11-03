@@ -133,7 +133,7 @@ export default function Login() {
     <div className="auth-page">
       {/* Logo fuera del contenedor */}
       <div className="auth-logo-outside">
-        <img src="/logosf.png" alt="EcoVestir Logo" />
+        <img src="/logo.png" alt="EcoVestir Logo" />
         <h1>EcoVestir</h1>
       </div>
       

@@ -1,7 +1,8 @@
-// src/api.js
-// Base URL del backend.
-// - En desarrollo puedes sobreescribir con una variable de entorno Vite: `VITE_API_URL`.
-// - Por defecto apunta a http://localhost:4000 (tu backend está escuchando en el puerto 4000).
+/*
+  Base URL del backend
+  - Por defecto apunta a http://localhost:4000
+  - En desarrollo puedes sobreescribir con una variable de entorno Vite: `VITE_API_URL`.
+*/
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 // Función para obtener el token desde localStorage
@@ -18,7 +19,6 @@ function buildUrl(path) {
   return `${baseURL}${path.startsWith('/') ? '' : '/'}${path}`;
 }
 
-
 async function handleResponse(res) {
   // Lee el body según el content-type
   const contentType = res.headers.get('content-type') || '';
@@ -34,20 +34,14 @@ async function handleResponse(res) {
     err.data = data;
     throw err;
   }
-
-  // Devolvemos un objeto compatible con lo que esperan los componentes: { data, status }
   return { data, status: res.status };
 }
 
 
-
-
 const api = {
   get: async (path, options = {}) => {
-    // Obtener token
-    const token = getToken();
-    // Construir headers
-    const headers = { 'Content-Type': 'application/json' };
+    const token = getToken();                                 // Obtener token
+    const headers = { 'Content-Type': 'application/json' };   // Construir headers
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
@@ -61,9 +55,7 @@ const api = {
     return handleResponse(res);
   },
   post: async (path, body, options = {}) => {
-    // Obtener token
     const token = getToken();
-    // Construir headers
     const headers = { 'Content-Type': 'application/json' };
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
@@ -79,9 +71,7 @@ const api = {
     return handleResponse(res);
   },
   put: async (path, body, options = {}) => {
-    // Obtener token
     const token = getToken();
-    // Construir headers
     const headers = { 'Content-Type': 'application/json' };
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
@@ -97,9 +87,7 @@ const api = {
     return handleResponse(res);
   },
   delete: async (path, options = {}) => {
-    // Obtener token
     const token = getToken();
-    // Construir headers
     const headers = { 'Content-Type': 'application/json' };
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;

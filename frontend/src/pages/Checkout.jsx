@@ -9,6 +9,7 @@ export default function Checkout() {
   const { cartItems, clearCart } = useCart();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   // Estados del formulario de envío
   const [shippingData, setShippingData] = useState({
@@ -43,17 +44,52 @@ export default function Checkout() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    // clear field-specific error while user types
+    setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
   const handleContinueToPayment = (e) => {
     e.preventDefault();
-    
-    // Validación básica
+
+    // Validación básica y construcción de errores por campo
     const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode'];
-    const isValid = requiredFields.every(field => shippingData[field].trim() !== '');
-    
-    if (!isValid) {
-      alert('Por favor completa todos los campos requeridos');
+    const newErrors = {};
+
+    requiredFields.forEach((field) => {
+      if (!shippingData[field] || shippingData[field].toString().trim() === '') {
+        newErrors[field] = 'Campo requerido';
+      }
+    });
+
+    // Si hay campos vacíos, setear errores y no continuar
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Validaciones específicas
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^9\d{8}$/; // 9 digits starting with 9
+    const zipRegex = /^\d{5}$/; // exactly 5 digits
+  const addressRegex = /^[A-Za-z0-9À-ÖØ-öø-ÿ\s,.-]+$/; // letters, numbers, spaces, commas, dots, hyphen
+
+    if (!nameRegex.test(shippingData.firstName.trim())) newErrors.firstName = 'Sólo letras y espacios';
+    if (!nameRegex.test(shippingData.lastName.trim())) newErrors.lastName = 'Sólo letras y espacios';
+    if (!nameRegex.test(shippingData.city.trim())) newErrors.city = 'Ciudad invalida';
+    if (!nameRegex.test(shippingData.state.trim())) newErrors.state = 'Distrito invalido';
+
+    if (!emailRegex.test(shippingData.email.trim())) newErrors.email = 'Email inválido';
+
+    const phoneDigits = shippingData.phone.replace(/\D/g, '');
+    if (!phoneRegex.test(phoneDigits)) newErrors.phone = 'Teléfono inválido';
+
+  if (!zipRegex.test(shippingData.zipCode.trim())) newErrors.zipCode = 'Código postal inválido';
+
+  if (!addressRegex.test(shippingData.address.trim())) newErrors.address = 'Escribe una dirección válida';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -161,6 +197,7 @@ export default function Checkout() {
                         placeholder="Juan"
                         required
                       />
+                        {errors.firstName && <div className="field-error">{errors.firstName}</div>}
                     </div>
 
                     <div className="form-field">
@@ -174,6 +211,7 @@ export default function Checkout() {
                         placeholder="Pérez"
                         required
                       />
+                      {errors.lastName && <div className="field-error">{errors.lastName}</div>}
                     </div>
 
                     <div className="form-field">
@@ -187,6 +225,7 @@ export default function Checkout() {
                         placeholder="tu@email.com"
                         required
                       />
+                      {errors.email && <div className="field-error">{errors.email}</div>}
                     </div>
 
                     <div className="form-field">
@@ -198,8 +237,11 @@ export default function Checkout() {
                         value={shippingData.phone}
                         onChange={handleInputChange}
                         placeholder="5512345678"
+                        maxLength={9}
+                        inputMode="numeric"
                         required
                       />
+                      {errors.phone && <div className="field-error">{errors.phone}</div>}
                     </div>
 
                     <div className="form-field full-width">
@@ -213,6 +255,7 @@ export default function Checkout() {
                         placeholder="Calle Ejemplo 123, Col. Centro"
                         required
                       />
+                      {errors.address && <div className="field-error">{errors.address}</div>}
                     </div>
 
                     <div className="form-field">
@@ -226,6 +269,7 @@ export default function Checkout() {
                         placeholder="Lima"
                         required
                       />
+                      {errors.city && <div className="field-error">{errors.city}</div>}
                     </div>
 
                     <div className="form-field">
@@ -239,6 +283,7 @@ export default function Checkout() {
                         placeholder="Surco"
                         required
                       />
+                      {errors.state && <div className="field-error">{errors.state}</div>}
                     </div>
 
                     <div className="form-field">
@@ -250,8 +295,11 @@ export default function Checkout() {
                         value={shippingData.zipCode}
                         onChange={handleInputChange}
                         placeholder="01000"
+                        maxLength={5}
+                        inputMode="numeric"
                         required
                       />
+                      {errors.zipCode && <div className="field-error">{errors.zipCode}</div>}
                     </div>
                   </div>
 

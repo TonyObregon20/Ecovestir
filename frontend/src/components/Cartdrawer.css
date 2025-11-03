@@ -146,7 +146,7 @@
 }
 
 .cart-empty-state .cart-continue-button {
-  background: #00c853;
+  background: #00a63e;
   color: white;
   border: none;
   padding: 11px 32px;
@@ -161,7 +161,7 @@
 }
 
 .cart-empty-state .cart-continue-button:hover {
-  background: #00b248;
+  background: #008a33;
   box-shadow: none;
 }
 
@@ -257,7 +257,7 @@
 .cart-item-price {
   font-size: 14px;
   font-weight: 500;
-  color: #00c853;
+  color: #00a63e;
   margin: 4px 0 0 0;
 }
 
@@ -355,7 +355,7 @@
 }
 
 .cart-subtotal span:last-child {
-  color: #00c853;
+  color: #00a63e;
   font-size: 18px;
   font-weight: 600;
 }
@@ -368,7 +368,7 @@
 }
 
 .cart-proceed-button {
-  background: #00c853;
+  background: #00a63e;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -385,7 +385,7 @@
 }
 
 .cart-proceed-button:hover {
-  background: #00b248;
+  background: #008a33;
   box-shadow: none;
 }
 

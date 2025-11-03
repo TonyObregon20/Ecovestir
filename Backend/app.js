@@ -16,7 +16,6 @@ const adminRoutes = require('./routes/admin');
 const cartRoutes = require('./routes/cart');
 const ordersRoutes = require('./routes/orders');
 const reservationRoutes = require('./routes/reservations');
-// TODO: cartRoutes, orderRoutes
 
 const app = express();
 app.use(helmet());

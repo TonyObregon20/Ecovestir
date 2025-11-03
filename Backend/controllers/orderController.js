@@ -14,6 +14,37 @@ exports.createOrder = async (req, res) => {
   const session = await mongoose.startSession();
   try {
     const userId = req.user._id;
+
+    // --- Validación server-side de paymentInfo.shippingData ---
+    const paymentInfo = req.body.paymentInfo || {};
+    const shipping = paymentInfo.shippingData || {};
+
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^9\d{8}$/; // 9 dígitos empezando con 9
+    const zipRegex = /^\d{5}$/; // 5 dígitos
+    const addressRegex = /^[A-Za-z0-9À-ÖØ-öø-ÿ\s,.-]+$/; // letras, números, espacios, comas, puntos, guion
+
+    const validationErrors = {};
+
+    if (!shipping.firstName || !nameRegex.test(String(shipping.firstName).trim())) validationErrors.firstName = 'Sólo letras y espacios';
+    if (!shipping.lastName || !nameRegex.test(String(shipping.lastName).trim())) validationErrors.lastName = 'Sólo letras y espacios';
+    if (!shipping.city || !nameRegex.test(String(shipping.city).trim())) validationErrors.city = 'Sólo letras y espacios';
+    if (!shipping.state || !nameRegex.test(String(shipping.state).trim())) validationErrors.state = 'Sólo letras y espacios';
+
+    if (!shipping.email || !emailRegex.test(String(shipping.email).trim())) validationErrors.email = 'Email inválido';
+
+    const phoneDigits = String(shipping.phone || '').replace(/\D/g, '');
+    if (!phoneRegex.test(phoneDigits)) validationErrors.phone = 'Teléfono inválido (9 dígitos, empieza con 9)';
+
+    if (!zipRegex.test(String(shipping.zipCode || '').trim())) validationErrors.zipCode = 'Código postal inválido (5 números)';
+
+    if (!shipping.address || !addressRegex.test(String(shipping.address).trim())) validationErrors.address = 'Dirección inválida: sólo letras, números, comas, puntos y guion (-)';
+
+    if (Object.keys(validationErrors).length > 0) {
+      return res.status(400).json({ errors: validationErrors });
+    }
+
     session.startTransaction(); 
 
     // Cargar usuario con carrito (populate para detalles del producto como precio/nombre)
