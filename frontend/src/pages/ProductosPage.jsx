@@ -35,6 +35,11 @@ const ProductosPage = () => {
     if (categoryId) {
       setSelectedCategories([categoryId]);
     }
+    const q = searchParams.get('q');
+    if (q) {
+      setSearchQuery(q);
+      setCurrentPage(1);
+    }
   }, [searchParams]);
 
   // Debounce para el buscador - evita lag al escribir

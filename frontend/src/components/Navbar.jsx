@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ShoppingCart, Search, LogOut, User } from 'lucide-react';
+import api from '../api/api';
 import { useCart } from '../Context/useCart'; 
 import "../style/navbar.css";
 
@@ -10,6 +11,42 @@ export default function Navbar({ onCartClick }) {
   const navigate = useNavigate();
   const location = useLocation();
   const cartItemCount = getCartTotal();
+
+  const [searchText, setSearchText] = React.useState('');
+  const [suggestions, setSuggestions] = React.useState([]);
+  // const [suggestionsLoading, setSuggestionsLoading] = React.useState(false);
+  const [searchFocused, setSearchFocused] = React.useState(false);
+  // Keep navbar input in sync with ?q= on productos route
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q') || '';
+    setSearchText(q);
+  }, [location.search]);
+
+  // Debounced suggestions fetch
+  React.useEffect(() => {
+    const q = searchText.trim();
+    if (!q) {
+      setSuggestions([]);
+      return;
+    }
+
+    // setSuggestionsLoading(true);
+    const id = setTimeout(async () => {
+      try {
+        const res = await api.get(`/api/products?q=${encodeURIComponent(q)}&limit=5`);
+        const data = res.data && res.data.data ? res.data.data : res.data;
+        setSuggestions(data || []);
+      } catch (err) {
+        console.error('Error loading suggestions', err);
+        setSuggestions([]);
+      } finally {
+        // setSuggestionsLoading(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(id);
+  }, [searchText]);
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -53,7 +90,35 @@ export default function Navbar({ onCartClick }) {
                 type="text"
                 placeholder="Buscar productos..."
                 className="navbar-search-input"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const q = searchText.trim();
+                    if (q.length > 0) navigate(`/productos?q=${encodeURIComponent(q)}`);
+                    else navigate('/productos');
+                  }
+                }}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setTimeout(() => setSearchFocused(false), 180)}
               />
+              {searchFocused && suggestions && suggestions.length > 0 && (
+                <ul className="navbar-suggestions" onMouseDown={(e) => e.preventDefault()}>
+                  {suggestions.map((p) => (
+                    <li key={p._id} className="navbar-suggestion-item" onClick={() => {
+                      navigate(`/producto/${p._id}`);
+                      setSuggestions([]);
+                      setSearchText('');
+                    }}>
+                      <img src={(p.images && p.images.length) ? p.images[0] : (p.imagen || '/placeholder.jpg')} alt={p.name || p.nombre || ''} />
+                      <div className="navbar-suggestion-body">
+                        <div className="navbar-suggestion-name">{p.name || p.nombre}</div>
+                        <div className="navbar-suggestion-price">${(p.price || p.precio || 0).toFixed ? (p.price || p.precio || 0).toFixed(2) : (p.price || p.precio || 0)}</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
 

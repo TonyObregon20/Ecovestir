@@ -272,15 +272,15 @@ const ProductFilters = ({
       <div className="product-filters-group">
         <h4 className="product-filters-group-title">Tallas</h4>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-          {sizes.map((size) => (
+            {sizes.map((size) => (
             <button
               key={size}
               onClick={() => handleSizeToggle(size)}
               className={`product-filters-size-btn ${selectedSizes.includes(size) ? 'selected' : ''}`}
               style={{
-                backgroundColor: selectedSizes.includes(size) ? '#059669' : 'white',
+                backgroundColor: selectedSizes.includes(size) ? '#00a63e' : 'white',
                 color: selectedSizes.includes(size) ? 'white' : '#6b7280',
-                border: selectedSizes.includes(size) ? '1px solid #059669' : '1px solid #d1d5db',
+                border: selectedSizes.includes(size) ? '1px solid #00a63e' : '1px solid #d1d5db',
               }}
             >
               {size}
@@ -296,7 +296,7 @@ const ProductFilters = ({
           checked={ecoFriendlyOnly}
           onChange={(e) => onEcoFriendlyChange(e.target.checked)}
         >
-          <span style={{ fontWeight: '500', color: '#2d6a4f' }}>
+          <span style={{ fontWeight: '500', color: '#00a63e' }}>
             Solo productos eco-friendly
           </span>
         </Checkbox>

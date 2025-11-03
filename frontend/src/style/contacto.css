@@ -9,8 +9,8 @@
 
 /* Variables de diseño */
 :root {
-  --primary-green: #059669;
-  --primary-dark: #065f46;
+  --primary-green: #00a63e;
+  --primary-dark: #008a33;
   --primary-light: #10b981;
   --accent-teal: #0d9488;
   --text-dark: #1f2937;
@@ -37,7 +37,7 @@
 /* Hero Section Mejorada */
 .contacto-hero {
   background: linear-gradient(135deg, 
-    rgba(5, 150, 105, 0.95) 0%, 
+    rgba(0, 166, 62, 0.95) 0%, 
     rgba(13, 148, 136, 0.9) 50%,
     rgba(16, 185, 129, 0.85) 100%),
     url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
@@ -100,16 +100,16 @@
 /* Main Contact Section */
 .contacto-main {
   padding: 100px 0;
-  background: var(--bg-white);
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-green));
+    color: white;
+    box-shadow: 0 8px 25px rgba(0, 166, 62, 0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 166, 62, 0.4);
+  }
 }
-
-.contacto-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 80px;
-  align-items: start;
-}
-
 /* Form Section Mejorada */
 .form-section {
   background: var(--bg-white);
@@ -223,7 +223,7 @@
 .form-textarea:focus {
   outline: none;
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+  box-shadow: 0 0 0 4px rgba(0, 166, 62, 0.1);
   transform: translateY(-2px);
 }
 
@@ -276,12 +276,12 @@
 .btn-primary {
   background: linear-gradient(135deg, var(--primary-light), var(--primary-green));
   color: white;
-  box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 166, 62, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(5, 150, 105, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 166, 62, 0.4);
 }
 
 .btn-submit {
@@ -642,7 +642,7 @@
 }
 
 .btn-call {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #10b981, #00a63e);
   color: white;
   box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
   padding: 18px 32px;
