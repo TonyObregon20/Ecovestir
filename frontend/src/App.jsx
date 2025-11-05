@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
 import Home from "./pages/Home";
 import ProductosPage from "./pages/ProductosPage";
-import About from "./pages/About"; // 👈 Ya importado
+import AboutPage from "./pages/About" // 👈 Ya importado
 import Contacto from "./pages/Contacto";
 import Footer from "./components/Footer";
 import "./index.css";
@@ -77,7 +77,7 @@ function App() {
             element={
               <>
                 <Navbar onCartClick={() => openCart()} />
-                <About />
+                <AboutPage />
                 <Footer />
               </>
             }

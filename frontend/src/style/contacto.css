@@ -468,9 +468,8 @@
    FAQ SECTION
    ======================================== */
 .faq-section {
-  padding: 80px 20px;
-  background-color: white;
-}
+  padding: 10px 20px;
+} 
 
 .faq-main-title {
   font-size: 2rem;
