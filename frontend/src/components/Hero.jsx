@@ -18,7 +18,7 @@ export default function Hero() {
           </div>
           
           <p className="hero-description">
-            Descubre nuestra colección de ropa fabricada con materiales 100% orgánicos. Cuida tu piel y el planeta con cada prenda que eliges.
+            Descubre nuestra colección de ropa fabricada con materiales 100% orgánicos. Y recuerda nuestro sello siempre sera <i>"Viste bien. Viste mejor"</i>
           </p>
 
           <ul className="hero-features">

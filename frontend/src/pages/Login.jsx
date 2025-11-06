@@ -137,7 +137,7 @@ export default function Login() {
         <h1>EcoVestir</h1>
       </div>
       
-      <p className="auth-subtitle-outside">Moda sostenible para un futuro mejor</p>
+      <p className="auth-subtitle-outside">¡Viste bien. Viste mejor!</p>
 
       <div className="auth-container">
         {/* Header */}

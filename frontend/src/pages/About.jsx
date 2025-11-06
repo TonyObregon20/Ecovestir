@@ -5,19 +5,19 @@ import '../style/about.css'; // Estilos en CSS puro
 export default function AboutPage() {
   const teamMembers = [
     {
-      name: 'María González',
-      role: 'Fundadora & CEO',
+      name: 'Ricardo Huaman',
+      role: 'Fundador & CEO',
       bio: 'Apasionada por la moda sostenible con 15 años de experiencia en la industria textil.',
       image: 'https://images.unsplash.com/photo-1676474509670-f1978e55fa3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGZhc2hpb24lMjB0ZWFtJTIwb2ZmaWNlJTIwZWNvJTIwZnJpZW5kbHl8ZW58MXx8fHwxNzU4NTAxMzM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
     },
     {
-      name: 'Carlos Mendoza',
-      role: 'Director de Diseño',
+      name: 'Anthony Obregon',
+      role: 'CoFundador & CEO',
       bio: 'Diseñador textil especializado en materiales orgánicos y producción ética.',
       image: 'https://images.unsplash.com/photo-1676474509670-f1978e55fa3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGZhc2hpb24lMjB0ZWFtJTIwb2ZmaWNlJTIwZWNvJTIwZnJpZW5kbHl8ZW58MXx8fHwxNzU4NTAxMzM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
     },
     {
-      name: 'Ana Rodríguez',
+      name: 'Andrea Peña',
       role: 'Directora de Sostenibilidad',
       bio: 'Experta en certificaciones orgánicas y cadena de suministro responsable.',
       image: 'https://images.unsplash.com/photo-1676474509670-f1978e55fa3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGZhc2hpb24lMjB0ZWFtJTIwb2ZmaWNlJTIwZWNvJTIwZnJpZW5kbHl8ZW58MXx8fHwxNzU4NTAxMzM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
