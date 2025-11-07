@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { MapPin, Phone, Mail, Clock, MessageCircle, Send, CheckCircle } from "lucide-react";
 import "../style/contacto.css";
+import api from '../api/api';
 
 export default function Contacto() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function Contacto() {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -22,26 +24,36 @@ export default function Contacto() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-        reason: ""
-      });
-    }, 3000);
+    try {
+      // Send to backend
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        reason: formData.reason || 'Otro'
+      };
+
+      const res = await api.post('/api/contact', payload);
+
+      if (res && res.status === 201) {
+        setIsSubmitted(true);
+        // Reset form after short delay
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({ name: '', email: '', phone: '', subject: '', message: '', reason: '' });
+        }, 3000);
+      }
+    } catch (err) {
+      console.error('Contact submit error', err);
+      setErrorMessage(err?.data?.message || err.message || 'Error al enviar el mensaje');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -173,8 +185,10 @@ export default function Contacto() {
                             type="tel"
                             value={formData.phone}
                             onChange={(e) => handleInputChange('phone', e.target.value)}
-                            placeholder="(+51) 999999999"
+                            placeholder="999999999"
                             className="form-input"
+                            required
+                            maxLength={9}
                           />
                         </div>
                         <div className="form-group">
@@ -186,13 +200,13 @@ export default function Contacto() {
                             className="form-select"
                           >
                             <option value="">Selecciona un motivo</option>
-                            <option value="info-producto">Información de Producto</option>
-                            <option value="pedido">Consulta sobre Pedido</option>
-                            <option value="devolucion">Devolución/Cambio</option>
-                            <option value="sostenibilidad">Sostenibilidad</option>
-                            <option value="mayoreo">Ventas al Mayor</option>
-                            <option value="prensa">Prensa/Media</option>
-                            <option value="otro">Otro</option>
+                            <option value="Informacion del producto">Información de Producto</option>
+                            <option value="Consulta sobre pedido">Consulta sobre Pedido</option>
+                            <option value="Devolucion/Cambio">Devolución/Cambio</option>
+                            <option value="Sostenibilidad">Sostenibilidad</option>
+                            <option value="Ventas por mayor">Ventas por mayor</option>
+                            <option value="Prensa/Media">Prensa/Media</option>
+                            <option value="Otro">Otro</option>
                           </select>
                         </div>
                       </div>
@@ -222,6 +236,12 @@ export default function Contacto() {
                           className="form-textarea"
                         />
                       </div>
+
+                      {errorMessage && (
+                        <div className="form-error" style={{ color: 'var(--text-danger, #dc2626)', marginBottom: 12 }}>
+                          {errorMessage}
+                        </div>
+                      )}
 
                       <button 
                         type="submit" 
