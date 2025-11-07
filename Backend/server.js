@@ -1,5 +1,4 @@
-// server.js
-require('dotenv').config(); // ← Carga las variables de .env al inicio
+require('dotenv').config(); // Carga las variables de .env al inicio
 
 // Validación crítica: asegurar que JWT_SECRET esté definido
 if (!process.env.JWT_SECRET) {
@@ -20,11 +19,10 @@ mongoose.connect(process.env.MONGO_URI)
   });
 */
 
-const app = require('./app'); // Tu aplicación Express
-
+const app = require('./app'); // Aplicación de Express
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`🔐 JWT_SECRET cargado: ${process.env.JWT_SECRET ? 'Sí' : 'No'} (¡debe decir "Sí"!)`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`JWT_SECRET cargado: ${process.env.JWT_SECRET ? 'Sí' : 'No'} (¡debe decir "Sí"!)`);
 });

@@ -35,6 +35,11 @@ const ProductosPage = () => {
     if (categoryId) {
       setSelectedCategories([categoryId]);
     }
+    const q = searchParams.get('q');
+    if (q) {
+      setSearchQuery(q);
+      setCurrentPage(1);
+    }
   }, [searchParams]);
 
   // Debounce para el buscador - evita lag al escribir
@@ -59,10 +64,10 @@ const ProductosPage = () => {
           setTotalPages(meta.totalPages || 1);
           setTotalProducts(meta.total || data.length);
           
-          // Debug: Ver qué materiales hay en los productos
-          console.log('📦 Productos cargados:', data.length);
-          const materialesEncontrados = [...new Set(data.map(p => p.material).filter(Boolean))];
-          console.log('🧵 Materiales en DB:', materialesEncontrados);
+          // // Debug: Ver qué materiales hay en los productos
+          // console.log('📦 Productos cargados:', data.length);
+          // const materialesEncontrados = [...new Set(data.map(p => p.material).filter(Boolean))];
+          // console.log('🧵 Materiales en DB:', materialesEncontrados);
         }
       } catch (err) {
         console.error(err);

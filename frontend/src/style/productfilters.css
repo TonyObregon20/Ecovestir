@@ -110,8 +110,8 @@
 }
 .product-filters-search-input:focus {
     outline: none;
-    border-color: var(--verde-primario);
-    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); /* Sombra verde suave al enfocar */
+  border-color: var(--verde-primario);
+  box-shadow: 0 0 0 2px rgba(0, 166, 62, 0.2); /* Sombra verde suave al enfocar (usa #00a63e) */
 }
 
 /* Grupo de filtro (para contener elementos) */
@@ -179,7 +179,7 @@
 .product-filters-slider-track-fill {
     position: absolute;
     height: 6px;
-    background-color: var(--verde-primario);
+  background-color: #00a63e;
     border-radius: 3px;
     top: 15px;
     z-index: 2;
@@ -205,7 +205,7 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background-color: var(--verde-primario);
+  background-color: #00a63e;
     cursor: pointer;
     pointer-events: auto;
     border: 3px solid var(--blanco);
@@ -219,7 +219,7 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background-color: var(--verde-primario);
+  background-color: #00a63e;
     cursor: pointer;
     pointer-events: auto;
     border: 3px solid var(--blanco);
@@ -250,8 +250,8 @@
 .product-filters-clear {
   width: 100%;
   background-color: var(--blanco);
-  color: var(--verde-primario);
-  border: 1px solid var(--verde-primario);
+  color: #00a63e;
+  border: 1px solid #00a63e;
   border-radius: 6px;
   padding: 10px 16px;
   font-size: 14px;
@@ -263,7 +263,7 @@
 }
 
 .product-filters-clear:hover {
-  background-color: var(--verde-primario);
+  background-color: #00a63e;
   color: var(--blanco);
 }
 

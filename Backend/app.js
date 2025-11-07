@@ -14,7 +14,8 @@ const productRoutes = require('./routes/products');
 const categoryRoutes = require('./routes/categories');
 const adminRoutes = require('./routes/admin');
 const cartRoutes = require('./routes/cart');
-// TODO: cartRoutes, orderRoutes
+const ordersRoutes = require('./routes/orders');
+const reservationRoutes = require('./routes/reservations');
 
 const app = express();
 app.use(helmet());
@@ -25,6 +26,8 @@ app.use('/api/users', usersRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes); 
 app.use('/api/cart', cartRoutes);
+app.use('/api/reservations', reservationRoutes);
+app.use('/api/orders', ordersRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 

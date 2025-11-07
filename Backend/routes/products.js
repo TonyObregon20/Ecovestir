@@ -6,11 +6,9 @@ const { protect, admin } = require('../middlewares/authMiddleware');
 // Endpoints públicos para consulta
 router.get('/', productCtrl.getProducts);
 router.get('/:id', productCtrl.getProduct);
+router.get('/:id/stock/:size', productCtrl.verificarStockTalla);  // Verificar stock de una talla (público)
 
-// Verificar stock de una talla (público)
-router.get('/:id/stock/:size', productCtrl.verificarStockTalla);
-
-// Rutas protegidas para admins
+// Endpoints protegidas para admins
 router.post('/', protect, admin, productCtrl.createProduct);
 router.put('/:id', protect, admin, productCtrl.updateProduct);
 router.delete('/:id', protect, admin, productCtrl.deleteProduct);

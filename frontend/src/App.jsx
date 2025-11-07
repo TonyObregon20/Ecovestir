@@ -1,17 +1,17 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
 import Home from "./pages/Home";
 import ProductosPage from "./pages/ProductosPage";
-import About from "./pages/About"; // 👈 Ya importado
+import AboutPage from "./pages/About" // 👈 Ya importado
 import Contacto from "./pages/Contacto";
 import Footer from "./components/Footer";
 import "./index.css";
 
-// 👇 Importamos el CartProvider
-import { CartProvider } from "./context/CartContext";
+// usamos context desde el provider en main.jsx
+import { useCart } from "./Context/useCart";
 
 // Admin y Login
 import AdminPage from "./pages/Admin/AdminPage";
@@ -21,6 +21,7 @@ import UsersPage from "./pages/Admin/UsersPage";
 import Login from "./pages/Login"; // 👈 Nuevo
 import CategoryPage from "./pages/categories/CategoryPage"; // Página de categorías
 import ProductDetail from "./pages/ProductDetail"; // Detalle de producto
+import Checkout from "./pages/Checkout"; // Checkout / Pasarela de pago
 
 // ✅ ProtectedRoute mejorado: verifica token Y rol
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -41,30 +42,29 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 };
 
 function App() {
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isCartOpen, openCart, closeCart } = useCart();
 
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+    <BrowserRouter>
+      <CartDrawer isOpen={isCartOpen} onClose={() => closeCart()} />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
-                <Home />
-                <Footer />
-              </>
-            }
-          />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Navbar onCartClick={() => openCart()} />
+              <Home />
+              <Footer />
+            </>
+          }
+        />
 
           <Route
             path="/productos"
             element={
               <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Navbar onCartClick={() => openCart()} />
                 <ProductosPage />
                 <Footer />
               </>
@@ -76,8 +76,8 @@ function App() {
             path="/sobre-nosotros"
             element={
               <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
-                <About />
+                <Navbar onCartClick={() => openCart()} />
+                <AboutPage />
                 <Footer />
               </>
             }
@@ -87,7 +87,7 @@ function App() {
             path="/contacto"
             element={
               <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Navbar onCartClick={() => openCart()} />
                 <Contacto />
                 <Footer />
               </>
@@ -97,7 +97,7 @@ function App() {
             path="/categorias"
             element={
               <>
-                <Navbar onCartClick={() => setIsCartOpen(true)} />
+                <Navbar onCartClick={() => openCart()} />
                 <CategoryPage />
                 <Footer />
               </>
@@ -110,6 +110,16 @@ function App() {
               <>
                 <ProductDetail />
               </>
+            }
+          />
+
+          {/* Checkout - Pasarela de pago */}
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
             }
           />
 
@@ -134,7 +144,6 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-    </CartProvider>
   );
 }
 

@@ -1,34 +1,57 @@
-// src/pages/About.jsx
-import React from "react";
-import "../style/about.css";
+import React from 'react';
+import { Leaf, Heart, Users, Award, Factory, Recycle } from 'lucide-react';
+import '../style/about.css'; // Estilos en CSS puro
 
-export default function About() {
+export default function AboutPage() {
+  const teamMembers = [
+    {
+      name: 'Ricardo Huaman',
+      role: 'Fundador & CEO',
+      bio: 'Apasionada por la moda sostenible con 15 años de experiencia en la industria textil.',
+      image: 'https://images.unsplash.com/photo-1676474509670-f1978e55fa3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGZhc2hpb24lMjB0ZWFtJTIwb2ZmaWNlJTIwZWNvJTIwZnJpZW5kbHl8ZW58MXx8fHwxNzU4NTAxMzM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    },
+    {
+      name: 'Anthony Obregon',
+      role: 'CoFundador & CEO',
+      bio: 'Diseñador textil especializado en materiales orgánicos y producción ética.',
+      image: 'https://images.unsplash.com/photo-1676474509670-f1978e55fa3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGZhc2hpb24lMjB0ZWFtJTIwb2ZmaWNlJTIwZWNvJTIwZnJpZW5kbHl8ZW58MXx8fHwxNzU4NTAxMzM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    },
+    {
+      name: 'Andrea Peña',
+      role: 'Directora de Sostenibilidad',
+      bio: 'Experta en certificaciones orgánicas y cadena de suministro responsable.',
+      image: 'https://images.unsplash.com/photo-1676474509670-f1978e55fa3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGZhc2hpb24lMjB0ZWFtJTIwb2ZmaWNlJTIwZWNvJTIwZnJpZW5kbHl8ZW58MXx8fHwxNzU4NTAxMzM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    }
+  ];
+
+  // const milestones = [
+  //   { year: '2018', event: 'Fundación de EcoVestir' },
+  //   { year: '2019', event: 'Primera colección 100% orgánica' },
+  //   { year: '2020', event: 'Certificación GOTS obtenida' },
+  //   { year: '2021', event: '10,000 clientes satisfechos' },
+  //   { year: '2022', event: 'Expansión internacional' },
+  //   { year: '2023', event: 'Premio Moda Sostenible del Año' },
+  //   { year: '2024', event: 'Lanzamiento tienda online' }
+  // ];
+
+  const certifications = [
+    { name: 'GOTS', description: 'Global Organic Textile Standard' },
+    { name: 'OEKO-TEX', description: 'Standard 100 Certificación' },
+    { name: 'Fair Trade', description: 'Comercio Justo Certificado' },
+    { name: 'B-Corp', description: 'Empresa B Certificada' }
+  ];
+
   return (
     <div className="about-page">
-      {/* Hero Section Corregido */}
-      <section className="about-hero">
-        <div className="hero-container">
-          <div className="hero-content">
-            <div className="hero-text">
-              <h1 className="hero-title">Sobre EcoVestir</h1>
-              <p className="hero-subtitle">
-                Pioneros en moda sostenible desde 2018, creando ropa orgánica que cuida tu piel y protege nuestro planeta.
-              </p>
-            </div>
-            <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-number">6+</div>
-                <div className="stat-label">Años de Experiencia</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">50,000+</div>
-                <div className="stat-label">Clientes Felices</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">100%</div>
-                <div className="stat-label">Orgánico</div>
-              </div>
-            </div>
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1>Sobre EcoVestir</h1>
+          <p>Pioneros en moda sostenible desde 2018, creando ropa orgánica que cuida tu piel y protege nuestro planeta.</p>
+          <div className="badges">
+            <span className="badge">6+ Años de Experiencia</span>
+            <span className="badge">50,000+ Clientes Felices</span>
+            <span className="badge">100% Orgánico</span>
           </div>
         </div>
       </section>
@@ -36,36 +59,32 @@ export default function About() {
       {/* Misión Section */}
       <section className="mission-section">
         <div className="container">
-          <div className="section-header">
-            <h2>Nuestra Misión</h2>
-            <div className="accent-line"></div>
-          </div>
-          <div className="mission-content">
-            <p className="mission-text">
-              En EcoVestir, creemos que la moda debe ser hermosa, cómoda y responsable. 
-              Nuestra misión es democratizar el acceso a ropa orgánica de alta calidad, 
-              demostrando que es posible vestirse bien mientras cuidamos nuestro planeta 
-              y apoyamos a las comunidades productoras.
-            </p>
+          <h2>Nuestra Misión</h2>
+          <p>En EcoVestir, creemos que la moda debe ser hermosa, cómoda y responsable. Nuestra misión es democratizar el acceso a ropa orgánica de alta calidad, demostrando que es posible vestirse bien mientras cuidamos nuestro planeta y apoyamos a las comunidades productoras.</p>
+          
+          <div className="mission-cards">
+            <div className="mission-card">
+              <div className="icon-circle">
+                <Leaf size={30} />
+              </div>
+              <h3>Sostenibilidad</h3>
+              <p>Materiales 100% orgánicos y procesos de producción que respetan el medio ambiente.</p>
+            </div>
             
-            <div className="mission-pillars">
-              <div className="pillar-card">
-                <div className="pillar-icon">🌱</div>
-                <h3>Sostenibilidad</h3>
-                <p>Materiales 100% orgánicos y procesos de producción que respetan el medio ambiente.</p>
+            <div className="mission-card">
+              <div className="icon-circle">
+                <Heart size={30} />
               </div>
-              
-              <div className="pillar-card">
-                <div className="pillar-icon">💚</div>
-                <h3>Bienestar</h3>
-                <p>Ropa que cuida tu piel y tu salud, libre de químicos nocivos y alérgenos.</p>
+              <h3>Bienestar</h3>
+              <p>Ropa que cuida tu piel y tu salud, libre de químicos nocivos y alérgenos.</p>
+            </div>
+            
+            <div className="mission-card">
+              <div className="icon-circle">
+                <Users size={30} />
               </div>
-              
-              <div className="pillar-card">
-                <div className="pillar-icon">🤝</div>
-                <h3>Comunidad</h3>
-                <p>Apoyo a agricultores y trabajadores textiles con condiciones justas y dignas.</p>
-              </div>
+              <h3>Comunidad</h3>
+              <p>Apoyo a agricultores y trabajadores textiles con condiciones justas y dignas.</p>
             </div>
           </div>
         </div>
@@ -74,217 +93,108 @@ export default function About() {
       {/* Historia Section */}
       <section className="history-section">
         <div className="container">
-          <div className="history-grid">
-            <div className="history-content">
-              <div className="section-header">
-                <h2>Nuestra Historia</h2>
-                <div className="accent-line"></div>
-              </div>
-              <div className="history-text">
-                <p>
-                  EcoVestir nació en 2016 cuando nuestra fundadora, María González, se dio cuenta 
-                  de los efectos nocivos de la moda rápida en su propia piel y en el medio ambiente. 
-                  Después de desarrollar alergias por el uso de ropa con químicos sintéticos, decidió 
-                  crear una alternativa.
-                </p>
-                <p>
-                  Comenzamos con una pequeña colección de camisetas de algodón orgánico, trabajando 
-                  directamente con agricultores certificados. La respuesta fue inmediata: nuestros 
-                  clientes no solo notaron la diferencia en calidad y comodidad, sino que también 
-                  se sintieron bien sabiendo que su compra tenía un impacto positivo.
-                </p>
-                <p>
-                  Hoy, somos una marca reconocida internacionalmente con certificaciones de sostenibilidad, 
-                  pero mantenemos nuestros valores fundamentales: calidad, transparencia y respeto por 
-                  las personas y el planeta.
-                </p>
-              </div>
+          <h2>Nuestra Historia</h2>
+          <div className="history-content">
+            <div className="history-text">
+              <p>EcoVestir nació en 2018 cuando nuestra fundadora, María González, se dio cuenta de los efectos nocivos de la moda rápida en su propia piel y en el medio ambiente. Después de desarrollar alergias por el uso de ropa con químicos sintéticos, decidió crear una alternativa.</p>
+              <p>Comenzamos con una pequeña colección de camisetas de algodón orgánico, trabajando directamente con agricultores certificados. La respuesta fue inmediata: nuestros clientes no solo notaron la diferencia en calidad y comodidad, sino que también se sintieron bien sabiendo que su compra tenía un impacto positivo.</p>
+              <p>Hoy, somos una marca reconocida internacionalmente con certificaciones de sostenibilidad, pero mantenemos nuestros valores fundamentales: calidad, transparencia y respeto por las personas y el planeta.</p>
             </div>
-            
-            <div className="history-visual">
-              <div className="timeline">
-                <h3>Nuestro Camino</h3>
-                <div className="timeline-items">
-                  <div className="timeline-item">
-                    <span className="timeline-year">2018</span>
-                    <span className="timeline-text">Fundación de EcoVestir</span>
-                  </div>
-                  <div className="timeline-item">
-                    <span className="timeline-year">2019</span>
-                    <span className="timeline-text">Primera colección 100% orgánica</span>
-                  </div>
-                  <div className="timeline-item">
-                    <span className="timeline-year">2020</span>
-                    <span className="timeline-text">Certificación GOTS obtenida</span>
-                  </div>
-                  <div className="timeline-item">
-                    <span className="timeline-year">2021</span>
-                    <span className="timeline-text">10.000 clientes satisfechos</span>
-                  </div>
-                  <div className="timeline-item">
-                    <span className="timeline-year">2022</span>
-                    <span className="timeline-text">Expansión Internacional</span>
-                  </div>
-                  <div className="timeline-item">
-                    <span className="timeline-year">2023</span>
-                    <span className="timeline-text">Premio Moda Sostenible del Año</span>
-                  </div>
-                  <div className="timeline-item">
-                    <span className="timeline-year">2024</span>
-                    <span className="timeline-text">Lanzamiento tienda online</span>
-                  </div>
-                </div>
-              </div>
+            <div className="history-image">
+              <img src="https://images.unsplash.com/photo-1706535426949-e90f953f0d6d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwY290dG9uJTIwZmFjdG9yeSUyMHN1c3RhaW5hYmxlJTIwcHJvZHVjdGlvbnxlbnwxfHx8fDE3NTg1MDEzMzR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" alt="Algodón orgánico" />
             </div>
           </div>
         </div>
       </section>
 
+      {/* Timeline Section */}
+      {/* <section className="timeline-section">
+        <div className="container">
+          <h2>Nuestro Camino</h2>
+          <div className="timeline">
+            {milestones.map((milestone, index) => (
+              <div key={milestone.year} className={`timeline-item ${index % 2 === 0 ? 'left' : 'right'}`}>
+                <div className="timeline-year">{milestone.year}</div>
+                <div className="timeline-event">{milestone.event}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section> */}
+
       {/* Equipo Section */}
       <section className="team-section">
         <div className="container">
-          <div className="section-header center">
-            <h2>Nuestro Equipo</h2>
-            <div className="accent-line center"></div>
-          </div>
-          
+          <h2>Nuestro Equipo</h2>
           <div className="team-grid">
-            <div className="team-member">
-              <div className="member-photo">
-                <div className="photo-placeholder">MG</div>
+            {teamMembers.map((member) => (
+              <div key={member.name} className="team-card">
+                <img src={member.image} alt={member.name} />
+                <h3>{member.name}</h3>
+                <p className="role">{member.role}</p>
+                <p className="bio">{member.bio}</p>
               </div>
-              <div className="member-info">
-                <h3>María González</h3>
-                <p className="member-role">Fundadora & CEO</p>
-                <p className="member-bio">
-                  Apasionada por la moda sostenible con 15 años de experiencia en la industria textil.
-                </p>
-              </div>
-            </div>
-            
-            <div className="team-member">
-              <div className="member-photo">
-                <div className="photo-placeholder">CM</div>
-              </div>
-              <div className="member-info">
-                <h3>Carlos Mendoza</h3>
-                <p className="member-role">Director de Diseño</p>
-                <p className="member-bio">
-                  Diseñador textil especializado en materiales orgánicos y producción ética.
-                </p>
-              </div>
-            </div>
-            
-            <div className="team-member">
-              <div className="member-photo">
-                <div className="photo-placeholder">AR</div>
-              </div>
-              <div className="member-info">
-                <h3>Ana Rodríguez</h3>
-                <p className="member-role">Directora de Sostenibilidad</p>
-                <p className="member-bio">
-                  Experta en certificaciones orgánicas y cadena de suministro responsable.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Valores y Certificaciones */}
-      <section className="values-certifications">
+      <section className="values-section">
         <div className="container">
-          <div className="values-grid">
-            <div className="values-content">
-              <div className="section-header">
-                <h2>Nuestros Valores</h2>
-                <div className="accent-line"></div>
+          <h2>Nuestros Valores y Certificaciones</h2>
+          <div className="values-container">
+            <div className="values-column">
+              <h3>Lo Que Nos Define</h3>
+              <div className="value-item">
+                <Factory size={24} />
+                <div>
+                  <h4>Transparencia Total</h4>
+                  <p>Conoce exactamente de dónde viene cada prenda y cómo se fabrica.</p>
+                </div>
               </div>
-              
-              <div className="values-list">
-                <div className="value-item">
-                  <div className="value-icon">🔍</div>
-                  <div className="value-text">
-                    <h3>Transparencia Total</h3>
-                    <p>Conoce exactamente de dónde viene cada prenda y cómo es fabricada.</p>
-                  </div>
+              <div className="value-item">
+                <Recycle size={24} />
+                <div>
+                  <h4>Economía Circular</h4>
+                  <p>Diseños duraderos y programas de reciclaje para extender la vida útil.</p>
                 </div>
-                
-                <div className="value-item">
-                  <div className="value-icon">🔄</div>
-                  <div className="value-text">
-                    <h3>Economía Circular</h3>
-                    <p>Diseños duraderos y programas de reciclaje para extender la vida útil.</p>
-                  </div>
-                </div>
-                
-                <div className="value-item">
-                  <div className="value-icon">⭐</div>
-                  <div className="value-text">
-                    <h3>Calidad Premium</h3>
-                    <p>Materiales de la más alta calidad con acabados artesanales.</p>
-                  </div>
+              </div>
+              <div className="value-item">
+                <Award size={24} />
+                <div>
+                  <h4>Calidad Premium</h4>
+                  <p>Materiales de la más alta calidad con acabados artesanales.</p>
                 </div>
               </div>
             </div>
             
-            <div className="certifications-content">
-              <div className="section-header">
-                <h2>Certificaciones</h2>
-                <div className="accent-line"></div>
-              </div>
-              
+            <div className="certifications-column">
+              <h3>Certificaciones</h3>
               <div className="certifications-grid">
-                <div className="certification-item">
-                  <div className="cert-icon">🌿</div>
-                  <div className="cert-text">
-                    <h4>GOTS</h4>
-                    <p>Global Organic Textile Standard</p>
+                {certifications.map((cert) => (
+                  <div key={cert.name} className="cert-card">
+                    <div className="cert-icon">
+                      <Award size={24} />
+                    </div>
+                    <h4>{cert.name}</h4>
+                    <p>{cert.description}</p>
                   </div>
-                </div>
-                
-                <div className="certification-item">
-                  <div className="cert-icon">🧪</div>
-                  <div className="cert-text">
-                    <h4>OEKO-TEX</h4>
-                    <p>Standard 100 Certification</p>
-                  </div>
-                </div>
-                
-                <div className="certification-item">
-                  <div className="cert-icon">⚖️</div>
-                  <div className="cert-text">
-                    <h4>Fair Trade</h4>
-                    <p>Comercio Justo Certificado</p>
-                  </div>
-                </div>
-                
-                <div className="certification-item">
-                  <div className="cert-icon">🏢</div>
-                  <div className="cert-text">
-                    <h4>B Corp</h4>
-                    <p>Empresa Certificada</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Final */}
+      {/* CTA Section */}
       <section className="cta-section">
         <div className="container">
-          <div className="cta-content">
-            <h2>Únete al Cambio</h2>
-            <p>
-              Cada compra consciente es un voto por el futuro que queremos ver. 
-              Juntos podemos transformar la industria de la moda.
-            </p>
-            <div className="cta-buttons">
-              <button className="btn btn-primary">Descubrir Colección</button>
-              <button className="btn btn-secondary">Conocer Más</button>
-            </div>
+          <h2>Únete a Nuestra Comunidad</h2>
+          <p>Sé parte del movimiento hacia una moda más consciente y sostenible. Juntos podemos crear un futuro mejor para nuestro planeta.</p>
+          <div className="cta-buttons">
+            <button className="btn-primary">Explorar Colección</button>
+            <button className="btn-secondary">Contactar</button>
           </div>
         </div>
       </section>
