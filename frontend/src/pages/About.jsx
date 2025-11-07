@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Leaf, Heart, Users, Award, Factory, Recycle } from 'lucide-react';
 import '../style/about.css'; // Estilos en CSS puro
 
 export default function AboutPage() {
+  const navigate = useNavigate();
   const teamMembers = [
     {
       name: 'Ricardo Huaman',
@@ -193,8 +195,8 @@ export default function AboutPage() {
           <h2>Únete a Nuestra Comunidad</h2>
           <p>Sé parte del movimiento hacia una moda más consciente y sostenible. Juntos podemos crear un futuro mejor para nuestro planeta.</p>
           <div className="cta-buttons">
-            <button className="btn-primary">Explorar Colección</button>
-            <button className="btn-secondary">Contactar</button>
+            <button className="btn-primary" onClick={() => navigate('/productos')}>Explorar Colección</button>
+            <button className="btn-secondary" onClick={() => navigate('/contacto')}>Contactar</button>
           </div>
         </div>
       </section>
