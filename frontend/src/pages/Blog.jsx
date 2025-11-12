@@ -1,76 +1,13 @@
 // src/pages/Blog.jsx
-import React, { useState } from 'react';
-import { Star, Send, MessageCircle } from 'lucide-react';
-import './../style/blog.css'; // Asegúrate de que la ruta sea correcta
-
-// Datos de ejemplo de reseñas
-const initialBlogPosts = [
-  {
-    id: '1',
-    author: 'María García',
-    title: 'La mejor compra que he hecho',
-    content: 'Compré varias camisetas de algodón orgánico y la calidad es excepcional. Son súper suaves y me encanta saber que son sostenibles. El proceso de compra fue muy fácil y el envío llegó antes de lo esperado. ¡Definitivamente volveré a comprar!',
-    rating: 5,
-    date: '28 Oct 2025',
-    productName: 'Camiseta de Algodón Orgánico Premium',
-    productImage: 'https://images.unsplash.com/photo-1675239514439-1c128b0cffcd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwY290dG9uJTIwY2xvdGhpbmclMjBzdXN0YWluYWJsZSUyMGZhc2hpb258ZW58MXx8fHwxNzU3NTUwMzA0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    verified: true,
-  },
-  {
-    id: '2',
-    author: 'Carlos Rodríguez',
-    title: 'Excelente calidad y servicio',
-    content: 'Me impresionó la atención al cliente. Tenía algunas dudas sobre las tallas y me respondieron muy rápido. El vestido de bambú que compré para mi esposa le quedó perfecto y es hermoso. La tela es increíblemente suave.',
-    rating: 5,
-    date: '25 Oct 2025',
-    productName: 'Vestido de Bambú Sostenible',
-    productImage: 'https://images.unsplash.com/photo-1643185720431-9c050eebbc9a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlY28lMjBmcmllbmRseSUyMGJhbWJvbyUyMGNsb3RoaW5nfGVufDF8fHx8MTc1NzU1MDMwNXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    verified: true,
-  },
-  {
-    id: '3',
-    author: 'Ana Martínez',
-    title: 'Ropa cómoda y consciente',
-    content: 'Llevo años buscando ropa sostenible de calidad y finalmente encontré EcoVestir. Los pantalones de cáñamo son perfectos para el día a día. Son cómodos, duraderos y el color se mantiene después de varios lavados.',
-    rating: 4,
-    date: '22 Oct 2025',
-    productName: 'Pantalón de Cáñamo Ecológico',
-    productImage: 'https://images.unsplash.com/photo-1543121032-68865adeff3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXN0YWluYWJsZSUyMGhlbXAlMjBjbG90aGluZ3xlbnwxfHx8fDE3NTc1NTAzMDR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    verified: true,
-  },
-  {
-    id: '4',
-    author: 'Jorge López',
-    title: 'Satisfecho con mi compra',
-    content: 'La camisa de lino es justo lo que necesitaba para el verano. Es fresca, elegante y puedo usarla tanto en la oficina como en eventos casuales. El empaque también era ecológico, un detalle que aprecio mucho.',
-    rating: 5,
-    date: '18 Oct 2025',
-    productName: 'Camisa de Lino Natural Respirable',
-    productImage: 'https://images.unsplash.com/photo-1643286131725-5e0ad3b3ca02?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwbGluZW4lMjBzaGlydCUyMG5hdHVyYWwlMjBmYWJyaWN8ZW58MXx8fHwxNzU3NTUwMzA0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    verified: true,
-  },
-  {
-    id: '5',
-    author: 'Laura Sánchez',
-    title: 'Muy recomendable',
-    content: 'Esta es mi tercera compra en EcoVestir y no me decepciona. La calidad es consistente y me encanta que cada vez agregan nuevos productos. Los materiales realmente hacen la diferencia en comodidad.',
-    rating: 5,
-    date: '15 Oct 2025',
-    verified: true,
-  },
-  {
-    id: '6',
-    author: 'Pedro Hernández',
-    title: 'Buena experiencia en general',
-    content: 'Los productos son buenos, aunque esperaba que el envío fuera un poco más rápido. Sin embargo, la calidad de la ropa compensa totalmente. Son prendas que sé que me durarán años.',
-    rating: 4,
-    date: '10 Oct 2025',
-    verified: false,
-  },
-];
+import { useEffect, useState } from 'react';
+import { Star, Send, MessageCircle, Calendar } from 'lucide-react';
+import { obtenerReseñas, crearReseña } from '../api/reviews';
+import './../style/blog.css';
 
 export default function BlogPage() {
-  const [blogPosts, setBlogPosts] = useState(initialBlogPosts);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [stats, setStats] = useState({ averageRating: 0, totalReviews: 0 });
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     author: '',
     email: '',
@@ -78,8 +15,31 @@ export default function BlogPage() {
     content: '',
     rating: 5,
   });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Cargar reseñas al montar el componente
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const fetchReviews = async () => {
+    try {
+      setLoading(true);
+      const result = await obtenerReseñas({ limit: 50 });
+      
+      if (result.success) {
+        setBlogPosts(result.data);
+        setStats(result.stats);
+      }
+    } catch (error) {
+      console.error('Error al cargar reseñas:', error);
+      alert('No se pudieron cargar las reseñas');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.author || !formData.email || !formData.title || !formData.content) {
@@ -87,37 +47,49 @@ export default function BlogPage() {
       return;
     }
 
-    const newPost = {
-      id: String(Date.now()),
-      author: formData.author,
-      title: formData.title,
-      content: formData.content,
-      rating: formData.rating,
-      date: new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }),
-      verified: false,
-    };
+    setSubmitting(true);
 
-    setBlogPosts([newPost, ...blogPosts]);
+    try {
+      const result = await crearReseña(formData);
 
-    // Reset form
-    setFormData({
-      author: '',
-      email: '',
-      title: '',
-      content: '',
-      rating: 5,
-    });
+      if (result.success) {
+        alert('¡Gracias por compartir tu experiencia! Tu reseña será publicada después de su revisión.');
+        
+        // Reset form
+        setFormData({
+          author: '',
+          email: '',
+          title: '',
+          content: '',
+          rating: 5,
+        });
 
-    alert('¡Gracias por compartir tu experiencia! Tu reseña ha sido publicada exitosamente.');
-
-    // Scroll to top to see the new post
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Opcional: refrescar lista después de un tiempo
+        // setTimeout(() => fetchReviews(), 1000);
+      } else {
+        alert(result.message || 'Error al enviar la reseña');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert(error.message || 'No se pudo enviar la reseña. Inténtalo de nuevo.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const calculateAverageRating = () => {
-    const sum = blogPosts.reduce((acc, post) => acc + post.rating, 0);
-    return (sum / blogPosts.length).toFixed(1);
+    return stats.averageRating.toFixed(1);
   };
+
+  if (loading) {
+    return (
+      <div className="blog-page">
+        <div style={{ textAlign: 'center', padding: '4rem' }}>
+          Cargando reseñas...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="blog-page">
@@ -134,7 +106,7 @@ export default function BlogPage() {
           </p>
           <div className="hero-stats">
             <div className="stat">
-              <div className="stat-number">{blogPosts.length}</div>
+              <div className="stat-number">{stats.totalReviews}</div>
               <div className="stat-label">Reseñas</div>
             </div>
             <div className="stat">
@@ -167,6 +139,7 @@ export default function BlogPage() {
                       onChange={(e) => setFormData({ ...formData, author: e.target.value })}
                       placeholder="Tu nombre"
                       required
+                      disabled={submitting}
                     />
                   </div>
 
@@ -179,6 +152,7 @@ export default function BlogPage() {
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="tu@email.com"
                       required
+                      disabled={submitting}
                     />
                     <p className="form-help">No será publicado</p>
                   </div>
@@ -191,6 +165,7 @@ export default function BlogPage() {
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                       placeholder="Resumen de tu experiencia"
                       required
+                      disabled={submitting}
                     />
                   </div>
 
@@ -203,6 +178,7 @@ export default function BlogPage() {
                       placeholder="Cuéntanos sobre tu experiencia con EcoVestir..."
                       rows={6}
                       required
+                      disabled={submitting}
                     />
                   </div>
 
@@ -215,6 +191,7 @@ export default function BlogPage() {
                           type="button"
                           onClick={() => setFormData({ ...formData, rating: star })}
                           className="rating-star-btn"
+                          disabled={submitting}
                         >
                           <Star 
                             size={32} 
@@ -226,9 +203,9 @@ export default function BlogPage() {
                     </div>
                   </div>
 
-                  <button type="submit" className="submit-button">
+                  <button type="submit" className="submit-button" disabled={submitting}>
                     <Send size={16} className="submit-icon" />
-                    Publicar Reseña
+                    {submitting ? 'Enviando...' : 'Publicar Reseña'}
                   </button>
 
                   <p className="form-terms">
@@ -243,12 +220,12 @@ export default function BlogPage() {
           <div className="blog-posts-column">
             <div className="posts-header">
               <h2>Todas las Reseñas</h2>
-              <p>{blogPosts.length} experiencias compartidas por nuestra comunidad</p>
+              <p>{stats.totalReviews} experiencias compartidas por nuestra comunidad</p>
             </div>
 
             <div className="blog-posts-list">
               {blogPosts.map((post) => (
-                <div key={post.id} className="blog-post-card">
+                <div key={post._id} className="blog-post-card">
                   <div className="post-header">
                     <div className="user-info">
                       <div className="avatar">{post.author.charAt(0)}</div>
@@ -257,7 +234,14 @@ export default function BlogPage() {
                           {post.author}
                           {post.verified && <span className="verified-badge">Verificado</span>}
                         </div>
-                        <div className="post-date">📅 {post.date}</div>
+                        <div className="post-date">
+                          <Calendar size={14} />
+                          {new Date(post.createdAt).toLocaleDateString('es-ES', { 
+                            day: 'numeric', 
+                            month: 'short', 
+                            year: 'numeric' 
+                          })}
+                        </div>
                       </div>
                     </div>
                     <div className="post-rating">
@@ -290,9 +274,7 @@ export default function BlogPage() {
 
             {blogPosts.length === 0 && (
               <div className="no-posts">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#9CA3AF" viewBox="0 0 16 16" className="no-posts-icon">
-                  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.5l-1 1h4.5a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h4.5l-1-1H2a2 2 0 0 1-2-2V2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"/>
-                </svg>
+                <MessageCircle size={64} color="#9CA3AF" />
                 <p>Aún no hay reseñas. ¡Sé el primero en compartir tu experiencia!</p>
               </div>
             )}
