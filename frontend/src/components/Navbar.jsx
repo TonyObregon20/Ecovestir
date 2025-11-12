@@ -77,8 +77,8 @@ export default function Navbar({ onCartClick }) {
           <Link to="/" className={`navbar-link ${isActive('/') ? 'active' : ''}`}>Inicio</Link>
           <Link to="/productos" className={`navbar-link ${isActive('/productos') ? 'active' : ''}`}>Productos</Link>
           <Link to="/categorias" className={`navbar-link ${isActive('/categorias') ? 'active' : ''}`}>Categorías</Link>
-          <Link to="/blog" className={`navbar-link ${isActive('/blog') ? 'active' : ''}`}>Blog</Link>
           <Link to="/sobre-nosotros" className={`navbar-link ${isActive('/sobre-nosotros') ? 'active' : ''}`}>Sobre Nosotros</Link>
+          <Link to="/blog" className={`navbar-link ${isActive('/blog') ? 'active' : ''}`}>Blog</Link>
           <Link to="/contacto" className={`navbar-link ${isActive('/contacto') ? 'active' : ''}`}>Contacto</Link>
         </nav>
 

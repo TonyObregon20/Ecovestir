@@ -140,7 +140,7 @@ export default function BlogPage() {
             <div className="stat">
                 <div className="stat-rating">
                 {calculateAverageRating()}
-                <Star size={24} color="#FFD700" />
+                <Star size={30} color="#FFD700" fill="#FFD700" />
               </div>
               <div className="stat-label">Calificación Promedio</div>
             </div>
@@ -216,7 +216,11 @@ export default function BlogPage() {
                           onClick={() => setFormData({ ...formData, rating: star })}
                           className="rating-star-btn"
                         >
-                          <Star size={32} color={star <= formData.rating ? '#FFD700' : '#D1D5DB'} />
+                          <Star 
+                            size={32} 
+                            color={star <= formData.rating ? '#FFD700' : '#D1D5DB'}
+                            fill={star <= formData.rating ? '#FFD700' : 'none'}
+                          />
                         </button>
                       ))}
                     </div>
@@ -258,7 +262,12 @@ export default function BlogPage() {
                     </div>
                     <div className="post-rating">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={16} color={i < post.rating ? '#FFD700' : '#E5E7EB'} />
+                        <Star 
+                          key={i} 
+                          size={20} 
+                          color={i < post.rating ? '#FFD700' : '#E5E7EB'}
+                          fill={i < post.rating ? '#FFD700' : 'none'}
+                        />
                       ))}
                     </div>
                   </div>
