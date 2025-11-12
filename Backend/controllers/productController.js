@@ -291,3 +291,44 @@ exports.reducirStockTalla = async (req, res, next) => {
     return next(err);
   }
 };
+
+
+// 🔍 Buscar producto por nombre (para Voiceflow o buscadores)
+exports.searchProductByName = async (req, res) => {
+  try {
+    const nombre = req.params.nombre?.trim();
+    console.log('🔍 Buscando producto con nombre:', nombre);
+
+    const producto = await Product.findOne({ name: { $regex: nombre, $options: 'i' } });
+
+    if (!producto) {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
+    // Calcular stock total (sumando todas las tallas)
+    const totalStock = producto.sizeStock && producto.sizeStock.length > 0
+      ? producto.sizeStock.reduce((sum, item) => sum + item.stock, 0)
+      : 0;
+
+    // Crear texto limpio y bien formateado
+    const precioFormateado = `S/ ${Number(producto.price).toFixed(2)}`;
+    const tallasDisponibles = producto.sizes && producto.sizes.length > 0
+      ? producto.sizes.join(', ')
+      : 'No disponible';
+
+    // ✅ Respuesta ideal para Voiceflow
+    const mensaje = `Tenemos la ${producto.name} a ${precioFormateado}. Tallas disponibles: ${tallasDisponibles}. Stock disponible: ${totalStock} unidades.`;
+
+    res.json({
+      nombre: producto.name,
+      precio: precioFormateado,
+      talla: tallasDisponibles,
+      stock: totalStock,
+      mensaje
+    });
+  } catch (error) {
+    console.error('❌ Error al buscar producto:', error);
+    res.status(500).json({ message: 'Error al buscar el producto' });
+  }
+};
+

@@ -3,7 +3,11 @@ const router = express.Router();
 const productCtrl = require('../controllers/productController');
 const { protect, admin } = require('../middlewares/authMiddleware');
 
-// Endpoints públicos para consulta
+// 🆕 Ruta pública para buscar producto por nombre (para Voiceflow o buscadores)
+// ⚠️ Debe ir antes de '/:id' para evitar conflictos con Express
+router.get('/search/:nombre', productCtrl.searchProductByName);
+
+// Endpoints públicos para consulta general
 router.get('/', productCtrl.getProducts);
 router.get('/:id', productCtrl.getProduct);
 router.get('/:id/stock/:size', productCtrl.verificarStockTalla);  // Verificar stock de una talla (público)
