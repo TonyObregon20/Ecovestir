@@ -374,7 +374,12 @@
   font-size: 0.875rem;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+}
+
+.blog-page .post-date svg {
+  flex-shrink: 0;
+  color: #9ca3af;
 }
 
 .blog-page .post-rating {

@@ -17,6 +17,7 @@ const cartRoutes = require('./routes/cart');
 const ordersRoutes = require('./routes/orders');
 const reservationRoutes = require('./routes/reservations');
 const contactRoutes = require('./routes/contact');
+const reviewRoutes = require('./routes/reviews');
 
 const app = express();
 app.use(helmet());
@@ -32,6 +33,7 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 
 // error handler (último middleware)
