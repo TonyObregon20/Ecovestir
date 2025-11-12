@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import ProductosPage from "./pages/ProductosPage";
 import AboutPage from "./pages/About" // 👈 Ya importado
 import Contacto from "./pages/Contacto";
+import Blog from "./pages/Blog";
 import Footer from "./components/Footer";
 import "./index.css";
 
@@ -66,6 +67,18 @@ function App() {
               <>
                 <Navbar onCartClick={() => openCart()} />
                 <ProductosPage />
+                <Footer />
+              </>
+            }
+          />
+
+          {/* Ruta blog agregada */}
+          <Route
+            path="/blog"
+            element={
+              <>
+                <Navbar onCartClick={() => openCart()} />
+                <Blog />
                 <Footer />
               </>
             }
