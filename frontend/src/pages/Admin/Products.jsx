@@ -1,5 +1,7 @@
 // src/pages/Admin/Products.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { AiFillStar } from 'react-icons/ai';
+import { Edit, Trash2 } from 'lucide-react';
 import {
   listarProductos,
   crearProducto,
@@ -12,6 +14,9 @@ import { getCategories } from "../../api/categories";
 export default function GestionarProductos() {
   // ESTADO: Lista de productos del backend
   const [productos, setProductos] = useState([]);
+  const [displayed, setDisplayed] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchTimer = useRef(null);
   // ESTADO: Producto en edición (null = no hay edición)
   const [modoEdicion, setModoEdicion] = useState(null);
   // ESTADO: Mostrar/ocultar formulario de creación/edición
@@ -29,6 +34,7 @@ export default function GestionarProductos() {
     try {
       const data = await listarProductos();
       setProductos(data);
+      setDisplayed(data);
     } catch (error) {
       console.error("Error al listar productos:", error);
     }
@@ -54,6 +60,35 @@ export default function GestionarProductos() {
     loadCats();
     return () => { mounted = false; };
   }, []);
+
+  // Debounce search and filter displayed products client-side
+  useEffect(() => {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    searchTimer.current = setTimeout(() => {
+      const term = (searchTerm || "").trim().toLowerCase();
+      if (!term) {
+        setDisplayed(productos);
+        return;
+      }
+      const filtered = (productos || []).filter((p) => {
+        const name = (p.name || "").toLowerCase();
+        const material = (p.material || "").toLowerCase();
+        let catName = "";
+        if (p.category) {
+          if (typeof p.category === 'object') catName = (p.category.name || "").toLowerCase();
+          else catName = (categoriesMap[p.category] || "").toLowerCase();
+        }
+        return (
+          name.includes(term) ||
+          material.includes(term) ||
+          catName.includes(term) ||
+          (p._id || "").toLowerCase().includes(term)
+        );
+      });
+      setDisplayed(filtered);
+    }, 220);
+    return () => clearTimeout(searchTimer.current);
+  }, [searchTerm, productos, categoriesMap]);
 
   // MANEJADOR: Crear nuevo producto
   const handleCrear = async (producto) => {
@@ -129,21 +164,25 @@ export default function GestionarProductos() {
       {/* Tarjetas de resumen */}
       <div className="summary-cards">
         <div className="summary-card">
+          <div className="card-indicator dot-neutral" />
           <h3>Total Productos</h3>
           <span>{totalProductos}</span>
           <small>+2 desde el mes pasado</small>
         </div>
         <div className="summary-card">
+          <div className="card-indicator dot-ok" />
           <h3>Productos Activos</h3>
           <span>{productosActivos}</span>
           <small>{totalProductos ? Math.round((productosActivos / totalProductos) * 100) : 0}% del total</small>
         </div>
         <div className="summary-card">
+          <div className="card-indicator dot-out" />
           <h3>Sin Stock</h3>
           <span>{sinStock}</span>
           <small>Requieren reabastecimiento</small>
         </div>
         <div className="summary-card">
+          <div className="card-indicator dot-low" />
           <h3>Stock Bajo</h3>
           <span>{stockBajo}</span>
           <small>Menos de 10 unidades</small>
@@ -155,7 +194,8 @@ export default function GestionarProductos() {
         <input
           type="text"
           placeholder="Buscar productos por nombre, categoría o material..."
-          disabled
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
@@ -191,7 +231,7 @@ export default function GestionarProductos() {
             </tr>
           </thead>
           <tbody>
-            {productos.map((p) => (
+            {displayed.map((p) => (
               <tr key={p._id}>
                 <td>
                   <img
@@ -203,7 +243,9 @@ export default function GestionarProductos() {
                 <td>
                   <strong>{p.name}</strong>
                   <div className="rating">
-                    ⭐ {p.rating || 0} ({p.reviews || 0} reseñas)
+                    <AiFillStar size={14} style={{ color: '#f59e0b' }} />
+                    <strong style={{ marginLeft: 6 }}>{p.rating || 0}</strong>
+                    <span style={{ marginLeft: 8, color: '#6b7280', fontSize: '0.9rem' }}>({p.reviews || 0} reseñas)</span>
                   </div>
                 </td>
                 <td>
@@ -246,9 +288,10 @@ export default function GestionarProductos() {
                         ))}
                         {/* SIN STOCK: Mostrar mensaje si no hay stock en ninguna talla */}
                         {stockItems.length === 0 && <span className="size-badge out">Sin stock</span>}
-                        {/* TOTAL: Badge con el stock total de todas las tallas */}
-                        <div className="total-stock-badge">
-                          Total: {totalStock}
+                        {/* TOTAL: Mostrar punto de color y total en formato grande */}
+                        <div style={{ marginTop: 8 }}>
+                          <span className={`stock-dot ${totalStock === 0 ? 'out' : totalStock <= 10 ? 'low' : 'ok'}`}></span>
+                          <span className="stock-display">{totalStock} unidades</span>
                         </div>
                       </div>
                     );
@@ -261,19 +304,21 @@ export default function GestionarProductos() {
                 </td>
                 <td>
                   <button
-                    className="action-btn edit"
+                    className="admin-btn admin-btn-outline admin-btn-sm edit"
+                    aria-label="Editar producto"
                     onClick={() => {
                       setModoEdicion(p);
                       setMostrarFormulario(true);
                     }}
                   >
-                    ✏️
+                    <Edit className="w-4 h-4" />
                   </button>
                   <button
-                    className="action-btn delete"
+                    className="admin-btn admin-btn-outline admin-btn-sm delete"
+                    aria-label="Eliminar producto"
                     onClick={() => handleEliminar(p._id)}
                   >
-                    🗑️
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </td>
               </tr>

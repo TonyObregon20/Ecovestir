@@ -77,7 +77,7 @@ export default function AdminPage() {
             Cerrar sesión
           </button>
         </header>
-        <section className="admin-content">
+        <section className={"admin-content" + (location.pathname === '/admin' ? ' admin-dashboard-grid' : '')}>
           <Outlet />
         </section>
       </main>
