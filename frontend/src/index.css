@@ -767,6 +767,69 @@ a:hover {
   animation: slideIn 0.3s ease-out;
 }
 
+/* Grid layout for the product form: main + sidebar */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Back button in header */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6eef3;
+  background: white;
+  cursor: pointer;
+}
+
+/* Small outline button for image actions in the sidebar */
+.sidebar-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e6eef3;
+  background: white;
+  cursor: pointer;
+}
+
+/* Ensure modal buttons' text is visible (override global button defaults) */
+.formulario-producto-modal .sidebar-action-btn,
+.formulario-producto-modal .back-btn,
+.formulario-producto-modal .close-btn,
+.formulario-producto-modal .btn-cancel,
+.formulario-producto-modal .btn-submit {
+  color: #374151 !important; /* visible dark text */
+}
+
+.formulario-producto-modal .btn-submit {
+  background: var(--verde-primario) !important;
+  color: var(--blanco) !important;
+}
+
+/* Icons inside modal buttons should inherit text color */
+.formulario-producto-modal button svg {
+  stroke: currentColor !important;
+  fill: currentColor !important;
+}
+
+/* Hover states for modal buttons */
+.formulario-producto-modal .sidebar-action-btn:hover {
+  background: #f3f4f6;
+  color: #111827 !important;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -781,8 +844,9 @@ a:hover {
 /* Header del formulario */
 .formulario-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* keep back button and title together */
   align-items: center;
+  gap: 12px; /* smaller gap between back and title */
   padding: 24px 32px;
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
@@ -790,6 +854,7 @@ a:hover {
   background: white;
   z-index: 10;
   border-radius: 16px 16px 0 0;
+  position: relative;
 }
 
 .formulario-header h2 {
@@ -812,6 +877,8 @@ a:hover {
   justify-content: center;
   border-radius: 8px;
   transition: all 0.2s;
+  position: absolute; /* pin to right of header */
+  right: 24px;
 }
 
 .close-btn:hover {
@@ -822,6 +889,8 @@ a:hover {
 /* Formulario */
 .formulario-form {
   padding: 24px 32px 32px;
+  max-width: 760px; /* center content inside modal */
+  margin: 0 auto;
 }
 
 /* Secciones del formulario */
@@ -929,6 +998,15 @@ a:hover {
   padding: 12px;
   border-radius: 8px;
   transition: background 0.2s;
+}
+
+/* Reduce espacio y padding entre checkboxes dentro del modal */
+.formulario-producto-modal .checkbox-group {
+  gap: 8px;
+}
+.formulario-producto-modal .checkbox-label {
+  padding: 8px;
+  gap: 8px;
 }
 
 .checkbox-label:hover {
@@ -1105,7 +1183,7 @@ a:hover {
 /* Grid de 4 columnas para los inputs de tallas (S, M, L, XL) */
 .size-stock-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
+  grid-template-columns: repeat(4, minmax(96px, 1fr)); /* 4 columnas ligeramente más anchas */
   gap: 12px; /* Espacio entre inputs */
   margin-bottom: 12px;
 }

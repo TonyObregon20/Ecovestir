@@ -1,5 +1,6 @@
 // src/components/FormularioProducto.jsx
 import { useState, useEffect } from "react";
+import { ArrowLeft, Upload, X } from 'lucide-react';
 import api from "../api/api";
 
 export default function FormularioProducto({ producto, onSubmit, onCancel }) {
@@ -163,121 +164,159 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
     <div className="formulario-producto-overlay">
       <div className="formulario-producto-modal">
         <div className="formulario-header">
-          <h2>{producto ? "Editar Producto" : "Agregar Nuevo Producto"}</h2>
-          <button type="button" className="close-btn" onClick={onCancel}>✕</button>
+          <button type="button" className="back-btn" onClick={onCancel}>
+            <ArrowLeft className="w-4 h-4" /> Volver
+          </button>
+          <div>
+            <h2>{producto ? "Editar Producto" : "Agregar Nuevo Producto"}</h2>
+            <p className="text-gray-600 mt-1">{producto ? 'Modifica la información del producto' : 'Completa la información para crear un nuevo producto'}</p>
+          </div>
+          <button type="button" className="close-btn" onClick={onCancel}><X className="w-4 h-4" /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="formulario-form">
-          {/* Información Básica */}
-          <div className="form-section">
-            <h3 className="section-title">Información Básica</h3>
-            
-            <div className="form-group">
-              <label htmlFor="name">Nombre del Producto *</label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Ej: Camiseta de Algodón Orgánico Premium"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="description">Descripción</label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows="4"
-                placeholder="Describe las características y beneficios del producto..."
-              />
-            </div>
-
-            <div className="form-row">
+          {/* Main column */}
+          <div>
+            {/* Información Básica */}
+            <div className="form-section">
+              <h3 className="section-title">Información Básica</h3>
               <div className="form-group">
-                <label htmlFor="category">Categoría *</label>
-                <select
-                  id="category"
-                  name="category"
-                  value={formData.category}
+                <label htmlFor="name">Nombre del Producto *</label>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
+                  placeholder="Ej. camiseta blanca"
                   required
-                >
-                  <option value="">Selecciona una categoría</option>
-                  {categorias.map(cat => (
-                    <option key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
 
               <div className="form-group">
-                <label htmlFor="material">Material *</label>
-                <input
-                  id="material"
-                  type="text"
-                  name="material"
-                  value={formData.material}
+                <label htmlFor="description">Descripción</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
                   onChange={handleChange}
-                  placeholder="Selecciona el material"
+                  rows="4"
+                  placeholder="Describe las características del producto"
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="category">Categoría *</label>
+                  <select
+                    id="category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Selecciona una</option>
+                    {categorias.map(cat => (
+                      <option key={cat._id} value={cat._id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="material">Material *</label>
+                  <input
+                    id="material"
+                    type="text"
+                    name="material"
+                    value={formData.material}
+                    onChange={handleChange}
+                    placeholder=""
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="price">Precio ($)*</label>
+                <input
+                  id="price"
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  placeholder="0.00"
                   required
+                  min="0"
+                  step="0.01"
                 />
               </div>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="price">Precio ($)*</label>
-              <input
-                id="price"
-                type="number"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                placeholder="0.00"
-                required
-                min="0"
-                step="0.01"
-              />
-            </div>
-          </div>
-
-          {/* Stock por Talla */}
-          <div className="form-section">
-            <h3 className="section-title">Inventario</h3>
-            
-            <div className="size-stock-section">
-              <label>Stock por Talla *</label>
-              <div className="size-stock-grid">
-                {formData.sizeStock.map((item) => (
-                  <div key={item.size} className="size-stock-item">
-                    <label className="size-label">{item.size}</label>
-                    <input
-                      type="number"
-                      value={item.stock}
-                      onChange={(e) => handleSizeStockChange(item.size, e.target.value)}
-                      min="0"
-                      className="size-stock-input"
-                      placeholder="0"
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className="total-stock">
-                <strong>Stock Total:</strong> {getTotalStock()} unidades
+            {/* Stock por Talla */}
+            <div className="form-section">
+              <h3 className="section-title">Inventario</h3>
+              <div className="size-stock-section">
+                <label>Stock por Talla *</label>
+                <div className="size-stock-grid">
+                  {formData.sizeStock.map((item) => (
+                    <div key={item.size} className="size-stock-item">
+                      <label className="size-label">{item.size}</label>
+                      <input
+                        type="number"
+                        value={item.stock}
+                        onChange={(e) => handleSizeStockChange(item.size, e.target.value)}
+                        min="0"
+                        className="size-stock-input"
+                        placeholder="0"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="total-stock">
+                  <strong>Stock Total:</strong> {getTotalStock()} unidades
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Configuración Adicional */}
-          <div className="form-section">
-            <h3 className="section-title">Configuración</h3>
-            
-            <div className="form-row">
+            {/* After Inventario: Imagen y Propiedades (moved from sidebar) */}
+            {/* Image */}
+            <div className="form-section">
+              <h3 className="section-title">Imagen del Producto *</h3>
+              {formData.images && formData.images[0] ? (
+                <div className="relative">
+                  <img src={formData.images[0]} alt="Preview" className="w-full h-48 object-cover rounded-md" />
+                  <button type="button" className="sidebar-action-btn" style={{ position: 'absolute', top: 8, right: 8 }} onClick={() => handleImageChange(0, '')}>
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                  <p className="text-gray-600">No hay imagen seleccionada</p>
+                </div>
+              )}
+
+              <div className="form-group" style={{ marginTop: 12 }}>
+                <label htmlFor="imageUrl">URL de la Imagen *</label>
+                <input
+                  id="imageUrl"
+                  value={formData.images[0] || ''}
+                  onChange={(e) => handleImageChange(0, e.target.value)}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                />
+                <div style={{ marginTop: 8 }}>
+                  <button type="button" className="sidebar-action-btn" onClick={() => { const url = prompt('Ingresa la URL de la imagen:'); if (url) handleImageChange(0, url); }}>
+                    <Upload className="w-4 h-4" /> Agregar Imagen
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Properties */}
+            <div className="form-section">
+              <h3 className="section-title">Propiedades</h3>
               <div className="form-group">
                 <label htmlFor="rating">Calificación (0-5)</label>
                 <input
@@ -305,74 +344,27 @@ export default function FormularioProducto({ producto, onSubmit, onCancel }) {
                   placeholder="0"
                 />
               </div>
+
+              <div className="form-group">
+                <label className="checkbox-label">
+                  <input type="checkbox" name="ecoFriendly" checked={formData.ecoFriendly} onChange={handleChange} />
+                  <span>Producto Ecológico</span>
+                </label>
+              </div>
+
+              <div className="form-group">
+                <label className="checkbox-label">
+                  <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleChange} />
+                  <span>Producto Activo</span>
+                </label>
+              </div>
             </div>
 
-            <div className="checkbox-group">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="ecoFriendly"
-                  checked={formData.ecoFriendly}
-                  onChange={handleChange}
-                />
-                <span>Producto Ecológico</span>
-              </label>
-
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="isActive"
-                  checked={formData.isActive}
-                  onChange={handleChange}
-                />
-                <span>Producto Activo</span>
-              </label>
+            {/* Actions: buttons at the very bottom (no container) */}
+            <div className="formulario-botones" style={{ flexDirection: 'column', borderTop: 'none', paddingTop: 12, marginTop: 12 }}>
+              <button type="submit" className="btn-submit" style={{ width: '100%' }}>{producto ? 'Actualizar Producto' : 'Crear Producto'}</button>
+              <button type="button" className="btn-cancel" style={{ width: '100%' }} onClick={onCancel}>Cancelar</button>
             </div>
-          </div>
-
-          {/* Imágenes */}
-          <div className="form-section">
-            <h3 className="section-title">Imágenes</h3>
-            
-            <div className="form-group">
-              <label>URLs de Imágenes</label>
-              {formData.images.map((url, index) => (
-                <div key={index} className="image-input-row">
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => handleImageChange(index, e.target.value)}
-                    placeholder="https://ejemplo.com/imagen.jpg"
-                  />
-                  {formData.images.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeImageField(index)}
-                      className="remove-image-btn"
-                    >
-                      ❌
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={addImageField}
-                className="add-image-btn"
-              >
-                + Añadir Imagen
-              </button>
-            </div>
-          </div>
-
-          {/* Botones de Acción */}
-          <div className="formulario-botones">
-            <button type="button" onClick={onCancel} className="btn-cancel">
-              Cancelar
-            </button>
-            <button type="submit" className="btn-submit">
-              {producto ? "Actualizar Producto" : "Crear Producto"}
-            </button>
           </div>
         </form>
       </div>
