@@ -1,0 +1,66 @@
+/* Styles for CategoryManagement (plain CSS, not Tailwind) */
+.cm-container{padding:24px;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif}
+.cm-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+.cm-title{font-size:28px;margin:0;color:#0f172a;font-weight:800}
+.cm-sub{color:#6b7280;margin-top:6px}
+.cm-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;border:1px solid transparent;cursor:pointer;font-weight:600}
+.cm-btn-primary{background:#16a34a;color:#fff}
+.cm-btn-primary:hover{background:#15803d}
+.cm-btn-outline{background:#fff;border:1px solid #d1d5db}
+.cm-icon{width:16px;height:16px}
+
+.cm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+.cm-card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(2,6,23,.04);border:1px solid #eef2f6}
+.cm-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.cm-card-title{font-size:13px;color:#334155;font-weight:700}
+.cm-card-icon{color:#94a3b8}
+.cm-card-icon.green{color:#10b981}
+.cm-card-value{font-size:22px;font-weight:700;margin-bottom:4px}
+.cm-card-sub{font-size:12px;color:#6b7280}
+
+.cm-search-card{display:flex;align-items:center;background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;margin-bottom:18px}
+.cm-search-icon{color:#9ca3af;margin-right:8px}
+.cm-search-input{flex:1;border:0;outline:none;font-size:14px}
+
+.cm-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:18px}
+@media(min-width:720px){.cm-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.cm-grid{grid-template-columns:repeat(3,1fr)}}
+
+.cm-cat{overflow:hidden}
+.cm-img-wrap{position:relative;height:160px;overflow:hidden;border-radius:8px 8px 0 0}
+.cm-img{width:100%;height:100%;object-fit:cover;display:block}
+.cm-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center}
+.cm-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#111827;font-weight:600;font-size:12px}
+.cm-badge-secondary{background:#111827;color:#fff}
+
+.cm-content{padding:12px}
+.cm-row{display:flex;justify-content:space-between;align-items:flex-start}
+.cm-name{margin:0;font-size:18px;font-weight:700}
+.cm-slug{font-size:12px;color:#6b7280}
+.cm-actions{display:flex;align-items:center;gap:8px}
+.cm-icon-btn{border:0;background:transparent;padding:6px;border-radius:6px;cursor:pointer}
+.cm-dropdown{position:relative}
+.cm-dropdown-content{position:absolute;right:0;top:28px;background:#fff;border:1px solid #e6e9ef;border-radius:8px;box-shadow:0 8px 20px rgba(2,6,23,.08);display:flex;flex-direction:column;min-width:160px;padding:6px;z-index:30;visibility:hidden;opacity:0;transform:translateY(-6px);transition:all .12s}
+.cm-dropdown:hover .cm-dropdown-content{visibility:visible;opacity:1;transform:translateY(0)}
+.cm-dd-item{background:transparent;border:0;padding:8px 10px;text-align:left;display:flex;align-items:center;gap:8px;cursor:pointer}
+.cm-dd-item.cm-danger{color:#dc2626}
+.cm-desc{color:#374151;font-size:13px;margin:10px 0 12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cm-footer{display:flex;justify-content:space-between;align-items:center}
+.cm-meta{display:flex;align-items:center;gap:6px;color:#6b7280}
+.cm-badge-active{background:#ecfdf5;color:#065f46;padding:6px 10px;border-radius:999px}
+.cm-badge-inactive{background:#f3f4f6;color:#374151;padding:6px 10px;border-radius:999px}
+
+.cm-empty{text-align:center;padding:26px;background:#fff;border-radius:10px;border:1px solid #eef2f6}
+.cm-empty-icon{width:48px;height:48px;color:#9ca3af;margin-bottom:8px}
+
+/* Modal */
+.cm-modal{position:fixed;inset:0;background:rgba(2,6,23,.45);display:flex;align-items:center;justify-content:center;z-index:60}
+.cm-modal-content{background:#fff;padding:20px;border-radius:10px;max-width:520px;width:94%;box-shadow:0 10px 30px rgba(2,6,23,.2)}
+.cm-form label{display:block;font-weight:600;margin-bottom:6px}
+.cm-form input,.cm-form textarea{width:100%;padding:8px 10px;border:1px solid #e6e9ef;border-radius:8px}
+.cm-form .mt{margin-top:12px}
+.cm-checkbox{display:flex;align-items:center;gap:8px;margin-top:12px}
+.cm-form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+
+/* Small helpers */
+.cm-card{background:#fff}

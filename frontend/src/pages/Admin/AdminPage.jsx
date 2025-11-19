@@ -6,6 +6,7 @@ import {
   Users,
   ShoppingCart,
   BarChart3,
+  Tag,
   Home
 } from 'lucide-react';
 import "../../index.css";
@@ -28,6 +29,7 @@ export default function AdminPage() {
   const menuItems = [
     { path: "/admin", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
     { path: "/admin/products", label: "Productos", icon: <Package size={20} /> },
+    { path: "/admin/categories", label: "Categorías", icon: <Tag size={20} /> },
     { path: "/admin/Users", label: "Usuarios", icon: <Users size={20} /> },
     { path: "/admin/orders", label: "Pedidos", icon: <ShoppingCart size={20} /> },
     { path: "/admin/reports", label: "Reportes", icon: <BarChart3 size={20} /> },

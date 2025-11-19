@@ -19,6 +19,7 @@ import AdminPage from "./pages/Admin/AdminPage";
 import Dashboard from "./pages/Admin/Dashboard";
 import Products from "./pages/Admin/Products";
 import UsersPage from "./pages/Admin/UsersPage";
+import CategoryManagement from "./pages/Admin/CategoryManagement";
 import Login from "./pages/Login"; // 👈 Nuevo
 import CategoryPage from "./pages/categories/CategoryPage"; // Página de categorías
 import ProductDetail from "./pages/ProductDetail"; // Detalle de producto
@@ -149,6 +150,7 @@ function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="products" element={<Products />} />
+            <Route path="categories" element={<CategoryManagement />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="orders" element={<div>Órdenes (próximamente)</div>} />
             <Route path="reports" element={<div>Reportes (próximamente)</div>} />
