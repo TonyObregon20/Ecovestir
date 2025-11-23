@@ -2,13 +2,14 @@
 
 /* Sección: Nuestras Categorías */
 .categorias-section {
-  padding: 10px 10px;
+  padding: 60px 0;
   background-color: #ffffff;
 }
 
 .categorias-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 40px;
 }
 
 .categorias-title {
@@ -33,13 +34,14 @@
 
 /* Sección: ¿Por Qué Elegir Ropa Orgánica? */
 .porque-organica-section {
-  padding: 60px 20px;
+  padding: 60px 0;
   background-color: #e8f5e9;
 }
 
 .porque-organica-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 40px;
 }
 
 .porque-organica-title {
@@ -107,7 +109,11 @@
 
 @media (max-width: 576px) {
   .categorias-section {
-    padding: 30px 16px;
+    padding: 30px 0;
+  }
+
+  .categorias-container {
+    padding: 0 20px;
   }
 
   .categorias-title {
@@ -119,7 +125,11 @@
   }
 
   .porque-organica-section {
-    padding: 30px 16px;
+    padding: 30px 0;
+  }
+
+  .porque-organica-container {
+    padding: 0 20px;
   }
 
   .porque-organica-title {

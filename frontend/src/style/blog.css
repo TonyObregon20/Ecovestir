@@ -13,7 +13,7 @@
   position: relative;
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
-  padding: 80px 20px;
+  padding: 80px 0;
   text-align: center;
   overflow: hidden;
 }
@@ -32,8 +32,9 @@
 .blog-page .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 0 40px;
   text-align: center;
 }
 
@@ -106,7 +107,7 @@
 .blog-page .blog-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 64px 20px;
+  padding: 64px 40px;
 }
 
 .blog-page .blog-grid {

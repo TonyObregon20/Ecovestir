@@ -6,7 +6,9 @@ import {
   Users,
   ShoppingCart,
   BarChart3,
-  Home
+  Tag,
+  Home,
+  Hand
 } from 'lucide-react';
 import "../../index.css";
 
@@ -28,6 +30,7 @@ export default function AdminPage() {
   const menuItems = [
     { path: "/admin", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
     { path: "/admin/products", label: "Productos", icon: <Package size={20} /> },
+    { path: "/admin/categories", label: "Categorías", icon: <Tag size={20} /> },
     { path: "/admin/Users", label: "Usuarios", icon: <Users size={20} /> },
     { path: "/admin/orders", label: "Pedidos", icon: <ShoppingCart size={20} /> },
     { path: "/admin/reports", label: "Reportes", icon: <BarChart3 size={20} /> },
@@ -38,8 +41,8 @@ export default function AdminPage() {
       {/* Sidebar compacto */}
       <aside className="admin-sidebar-compact">
         <div className="sidebar-logo">
-          <span className="logo-icon">🍃</span>
-          <h2>EcoVestir</h2>
+          <img src="/logo.png" alt="EcoVestir" className="logo-icon" />
+          {/* <h2>EcoVestir</h2> */}
         </div>
 
         <nav>
@@ -67,9 +70,12 @@ export default function AdminPage() {
       {/* Contenido principal */}
       <main className="admin-main">
         <header className="admin-header">
-          {/* 👇 Saludo personalizado en lugar de "Panel de Administración" */}
+          {/* 👇 Saludo personalizado con icono */}
           {user ? (
-            <h1>Bienvenido, {user.name} 👋</h1>
+            <div className="admin-welcome">
+              <h1>Bienvenido {user.name.charAt(0).toUpperCase() + user.name.slice(1)}  </h1>
+              <Hand className="welcome-icon" />
+            </div>
           ) : (
             <h1>Cargando...</h1>
           )}
@@ -77,7 +83,7 @@ export default function AdminPage() {
             Cerrar sesión
           </button>
         </header>
-        <section className="admin-content">
+        <section className={"admin-content" + (location.pathname === '/admin' ? ' admin-dashboard-grid' : '')}>
           <Outlet />
         </section>
       </main>

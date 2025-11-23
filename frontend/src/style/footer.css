@@ -2,17 +2,17 @@
 .footer {
   background-color: #1f2937;
   color: #ffffff;
-  padding: 40px 40px 0 40px;
+  padding: 40px 0 0 0;
   font-family: 'Arial', sans-serif;
 }
 
 .footer-container {
   max-width: 1200px;
   margin: 0 auto 48px auto;
+  padding: 0 40px 48px 40px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 48px;
-  padding-bottom: 48px;
   border-bottom: 1px solid #374151;
 }
 
@@ -168,7 +168,7 @@
   gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 40px;
   text-align: center;
 }
 

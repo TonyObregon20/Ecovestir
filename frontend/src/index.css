@@ -18,6 +18,11 @@
   --amarillo-acento: #FACC15;  /* Destacar ofertas / promociones */
 }
 
+/* Global box-sizing to avoid inputs overflowing their containers */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* ======================================
    Estilos Globales
 ====================================== */
@@ -99,234 +104,6 @@ a:hover {
 .border-verde-primario {
   border: 1px solid var(--verde-primario);
 }
-
-/* Navbar - Estilos antiguos comentados (ahora se usa navbar.css) */
-/* .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 32px;
-  background-color: var(--blanco);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.logo {
-  height: 40px;
-}
-
-.logo-text {
-  font-weight: bold;
-  font-size: 1.25rem;
-  color: var(--verde-primario);
-}
-
-.navbar-links {
-  display: flex;
-  gap: 24px;
-}
-
-.navbar-links a {
-  color: var(--gris-oscuro);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.navbar-links a:hover {
-  color: var(--verde-claro);
-}
-
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.search-input {
-  padding: 6px 10px;
-  border: 1px solid var(--gris-medio);
-  border-radius: 6px;
-}
-
-.cart-button {
-  background-color: var(--verde-primario);
-  color: var(--blanco);
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.cart-button:hover {
-  background-color: var(--verde-oscuro);
-} */
-
-/* ======================================
-   Hero Section (COMENTADO - Usando hero.css)
-====================================== */
-/* .hero-section {
-  background: linear-gradient(to right, var(--gris-claro), var(--blanco));
-  padding: 64px 24px;
-}
-
-.hero-container {
-  max-width: 1200px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-  align-items: center;
-}
-
-@media (min-width: 768px) {
-  .hero-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.hero-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--gris-oscuro);
-  margin-bottom: 8px;
-}
-
-.hero-subtitle {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--verde-primario);
-  margin-bottom: 24px;
-}
-
-.hero-description {
-  color: var(--gris-medio);
-  margin-bottom: 24px;
-}
-
-.hero-features {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 32px;
-}
-
-.hero-features li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.feature-dot {
-  width: 10px;
-  height: 10px;
-  background-color: var(--verde-claro);
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 16px;
-}
-
-.btn-primary {
-  background-color: var(--verde-primario);
-  color: var(--blanco);
-  padding: 12px 24px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-primary:hover {
-  background-color: var(--verde-oscuro);
-}
-
-.btn-secondary {
-  background-color: var(--blanco);
-  color: var(--gris-oscuro);
-  padding: 12px 24px;
-  border-radius: 12px;
-  border: 1px solid var(--gris-medio);
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-secondary:hover {
-  background-color: var(--gris-claro);
-}
-
-.hero-image img {
-  width: 100%;
-  border-radius: 16px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-} */
-
-/* ======================================
-   Productos Públicos (COMENTADO - Usando products.css)
-====================================== */
-/* .productos-section {
-  padding: 50px 20px;
-  background-color: var(--blanco);
-}
-
-.productos-title {
-  color: var(--verde-primario);
-  font-size: 2rem;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.productos-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-.product-card {
-  flex: 1 1 200px;
-  border: 1px solid var(--gris-claro);
-  border-radius: 8px;
-  padding: 16px;
-  background-color: var(--blanco);
-  text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.product-title {
-  color: var(--gris-oscuro);
-  font-size: 1.2rem;
-  margin-bottom: 8px;
-}
-
-.product-description {
-  color: var(--gris-medio);
-  font-size: 0.95rem;
-  margin-bottom: 12px;
-}
-
-.product-price {
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-.productos-footer {
-  text-align: center;
-  margin-top: 30px;
-} */
 
 /* ======================================
    Página de Productos con Filtros
@@ -442,13 +219,15 @@ a:hover {
 .sidebar-logo {
   text-align: center;
   margin-bottom: 30px;
+  padding: 8px 0;
 }
 
 .logo-icon {
-  font-size: 1.8rem;
-  color: var(--verde-primario);
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
   display: block;
-  margin-bottom: 8px;
+  margin: 0 auto 8px;
 }
 
 .admin-sidebar-compact h2 {
@@ -552,6 +331,26 @@ a:hover {
   border-bottom: 1px solid #dee2e6;
 }
 
+.admin-welcome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-welcome h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.admin-welcome .welcome-icon {
+  width: 32px;
+  height: 32px;
+  color: #00a63e;
+  stroke-width: 2;
+}
+
 .btn-logout {
   background: #ef4444;
   color: white;
@@ -567,6 +366,11 @@ a:hover {
 
 .admin-content {
   padding: 20px;
+  display: block; /* changed to block so nested route pages (Outlet) can be full width */
+}
+
+/* Use this grid helper on the dashboard view only */
+.admin-dashboard-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
@@ -594,7 +398,7 @@ a:hover {
    Admin - Gestión de Productos
 ====================================== */
 .admin-products-container {
-  padding: 20px;
+  padding: 24px;
   background-color: #f8f9fa;
   min-height: 100vh;
 }
@@ -603,18 +407,19 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
-
 .page-header h1 {
-  font-size: 2rem;
-  color: #212529;
-  margin-bottom: 8px;
+  font-size: 2.4rem;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  font-weight: 800;
 }
 
 .page-header p {
   color: #6c757d;
   font-size: 1rem;
+  margin: 0;
 }
 
 .add-product-btn {
@@ -641,11 +446,29 @@ a:hover {
 
 .summary-card {
   background: white;
-  border: 1px solid #dee2e6;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border: 1px solid #eef2f6;
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+  position: relative;
 }
+
+/* Indicador circular en la esquina superior derecha de la tarjeta */
+.summary-card .card-indicator {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(2,6,23,0.08);
+}
+
+/* Colored dots used for summary/status */
+.dot-ok { background: #16a34a; }
+.dot-low { background: #f59e0b; }
+.dot-out { background: #dc2626; }
+.dot-neutral { background: #94a3b8; }
 
 .summary-card h3 {
   font-size: 0.95rem;
@@ -668,50 +491,96 @@ a:hover {
 
 .search-bar input {
   width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #ced4da;
-  border-radius: 10px;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 12px;
   font-size: 1rem;
-  background-color: white;
+  background-color: #f3f4f6;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  box-sizing: border-box; /* ensure padding doesn't add to width */
+  max-width: 100%;
+  display: block;
+}
+
+.search-bar {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.03);
+  margin-bottom: 18px;
+  overflow: hidden; /* keep inner input inside rounded container */
 }
 
 .table-container {
   background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(15,23,42,0.06);
 }
 
 .products-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.95rem;
 }
 
 .products-table th,
 .products-table td {
-  padding: 16px;
+  padding: 18px 20px;
   text-align: left;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
 }
 
 .products-table th {
-  background-color: #f8f9fa;
-  font-weight: 600;
-  color: #495057;
+  background-color: transparent;
+  font-weight: 700;
+  color: #374151;
   font-size: 0.95rem;
 }
 
 .product-image {
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(2,6,23,0.06);
 }
 
 .rating {
-  color: #ffc107;
-  font-size: 0.85rem;
+  color: #f59e0b;
+  font-size: 0.9rem;
   margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Small colored dot used inline near stock counts */
+.stock-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.stock-dot.ok { background: #16a34a; }
+.stock-dot.low { background: #f59e0b; }
+.stock-dot.out { background: #dc2626; }
+
+/* Rating icon style: ensure the lucide star appears filled in amarillo */
+.products-table .rating svg {
+  color: #f59e0b;
+  stroke: none;
+  fill: currentColor;
+}
+
+/* Action icons inside buttons: consistent sizing and inherit color */
+.action-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .material-tag {
@@ -748,7 +617,7 @@ a:hover {
   height: 36px;
   border: 1px solid #dee2e6;
   border-radius: 8px;
-  background: white;
+  background: none;
   cursor: pointer;
   margin-right: 8px;
   display: inline-flex;
@@ -764,6 +633,38 @@ a:hover {
 .action-btn.delete:hover {
   background-color: #fee2e2;
   color: #dc3545;
+}
+
+/* Ensure action icons are visible: use currentColor for stroke and inherit color */
+.action-btn {
+  color: #6b7280; /* default icon color */
+}
+
+.action-btn:hover {
+  color: #374151; /* darker on hover */
+}
+
+.action-btn svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* Specific colors to match the screenshot: view/edit = dark, delete = red */
+.action-btn.view {
+  /* removed: view button not used */
+  display: none;
+}
+.action-btn.edit {
+  color: #111827; /* dark icon */
+}
+.action-btn.delete {
+  color: #dc2626; /* red icon */
+  border-color: rgba(220,38,37,0.12);
+  background-color: #fff7f7; /* very light red tint to hint danger */
+}
+.action-btn.delete:hover {
+  background-color: #fee2e2;
 }
 
 .form-overlay {
@@ -787,10 +688,39 @@ a:hover {
 
 .admin-products-container,
 .admin-dashboard-container {
-  padding: 20px;
+  padding: 24px;
   background-color: #f8f9fa;
   min-height: 100vh;
   margin-left: 80px;
+}
+
+/* Scoped admin button styles for action buttons (outline, small) - won't interfere with global .action-btn */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  background: white;
+  border: 1px solid #e6eef3;
+  color: #374151;
+}
+.admin-btn-sm {
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  font-size: 0.9rem;
+}
+.admin-btn-outline {
+  background: white;
+}
+.admin-btn .w-4 { width: 16px; height: 16px; display: block; }
+.admin-btn.edit { color: #111827; }
+.admin-btn.delete { color: #dc2626; border-color: rgba(220,38,37,0.12); background-color: #fff7f7; }
+.admin-btn.delete:hover { background-color: #fee2e2; }
+/* Small gap between adjacent admin action buttons */
+.admin-btn + .admin-btn {
+  margin-left: 8px;
 }
 
 .scrollable-table-container {
@@ -859,6 +789,69 @@ a:hover {
   animation: slideIn 0.3s ease-out;
 }
 
+/* Grid layout for the product form: main + sidebar */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Back button in header */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6eef3;
+  background: white;
+  cursor: pointer;
+}
+
+/* Small outline button for image actions in the sidebar */
+.sidebar-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e6eef3;
+  background: white;
+  cursor: pointer;
+}
+
+/* Ensure modal buttons' text is visible (override global button defaults) */
+.formulario-producto-modal .sidebar-action-btn,
+.formulario-producto-modal .back-btn,
+.formulario-producto-modal .close-btn,
+.formulario-producto-modal .btn-cancel,
+.formulario-producto-modal .btn-submit {
+  color: #374151 !important; /* visible dark text */
+}
+
+.formulario-producto-modal .btn-submit {
+  background: var(--verde-primario) !important;
+  color: var(--blanco) !important;
+}
+
+/* Icons inside modal buttons should inherit text color */
+.formulario-producto-modal button svg {
+  stroke: currentColor !important;
+  fill: currentColor !important;
+}
+
+/* Hover states for modal buttons */
+.formulario-producto-modal .sidebar-action-btn:hover {
+  background: #f3f4f6;
+  color: #111827 !important;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -873,8 +866,9 @@ a:hover {
 /* Header del formulario */
 .formulario-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* keep back button and title together */
   align-items: center;
+  gap: 12px; /* smaller gap between back and title */
   padding: 24px 32px;
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
@@ -882,6 +876,7 @@ a:hover {
   background: white;
   z-index: 10;
   border-radius: 16px 16px 0 0;
+  position: relative;
 }
 
 .formulario-header h2 {
@@ -904,6 +899,8 @@ a:hover {
   justify-content: center;
   border-radius: 8px;
   transition: all 0.2s;
+  position: absolute; /* pin to right of header */
+  right: 24px;
 }
 
 .close-btn:hover {
@@ -914,6 +911,8 @@ a:hover {
 /* Formulario */
 .formulario-form {
   padding: 24px 32px 32px;
+  max-width: 760px; /* center content inside modal */
+  margin: 0 auto;
 }
 
 /* Secciones del formulario */
@@ -1021,6 +1020,15 @@ a:hover {
   padding: 12px;
   border-radius: 8px;
   transition: background 0.2s;
+}
+
+/* Reduce espacio y padding entre checkboxes dentro del modal */
+.formulario-producto-modal .checkbox-group {
+  gap: 8px;
+}
+.formulario-producto-modal .checkbox-label {
+  padding: 8px;
+  gap: 8px;
 }
 
 .checkbox-label:hover {
@@ -1197,7 +1205,7 @@ a:hover {
 /* Grid de 4 columnas para los inputs de tallas (S, M, L, XL) */
 .size-stock-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
+  grid-template-columns: repeat(4, minmax(96px, 1fr)); /* 4 columnas ligeramente más anchas */
   gap: 12px; /* Espacio entre inputs */
   margin-bottom: 12px;
 }
@@ -1453,14 +1461,27 @@ a:hover {
 }
 
 .total-stock-badge {
-  font-weight: 700;
+  font-weight: 800;
   color: #16a34a;
   margin-top: 4px;
-  padding: 4px 8px;
-  background: #f0fdf4;
+  padding: 0;
+  background: transparent;
   border-radius: 6px;
-  border: 2px solid #16a34a;
+  font-size: 0.95rem;
+}
+
+.stock-display {
+  font-weight: 800;
+  color: #16a34a;
+  font-size: 0.95rem;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
   font-size: 0.85rem;
+  font-weight: 700;
 }
 
 /* Esta sección duplicada se puede eliminar en una futura limpieza del CSS */

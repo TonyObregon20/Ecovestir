@@ -17,7 +17,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const navigate = useNavigate();
   const { refetchCart } = useCart();
@@ -281,18 +280,9 @@ export default function Login() {
             </div>
           )}
 
-          {/* Recordarme y Olvidaste contraseña - solo en login */}
+          {/* Olvidaste contraseña - solo en login */}
           {mode === 'login' && (
             <div className="remember-forgot-container">
-              <div className="remember-me">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
-                <label htmlFor="rememberMe">Recordarme</label>
-              </div>
               <div className="forgot-password">
                 <a href="#" onClick={(e) => e.preventDefault()}>
                   ¿Olvidaste tu contraseña?
