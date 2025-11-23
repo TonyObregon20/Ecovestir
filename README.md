@@ -114,3 +114,4 @@ Si quieres, puedo ahora:
 - o crear un archivo `README_CONTEXT.md` más corto para pegar directamente a otra IA.
 
 Indica cuál prefieres que haga a continuación.
+ 

@@ -7,6 +7,7 @@ const { protect, admin } = require('../middlewares/authMiddleware');
 // ⚠️ Debe ir antes de '/:id' para evitar conflictos con Express
 router.get('/search/:nombre', productCtrl.searchProductByName);
 
+
 // Endpoints públicos para consulta general
 router.get('/', productCtrl.getProducts);
 router.get('/:id', productCtrl.getProduct);
