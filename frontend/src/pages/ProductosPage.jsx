@@ -187,16 +187,16 @@ const ProductosPage = () => {
 
   return (
     <div className="products-page">
-      {/* Page Header */}
-      <div className="products-header" style={{ backgroundColor: '#f5f5f5ff', padding: '20px', borderRadius: '8px' }}>
-        <h1 className="products-title">
-          Nuestra Colección Orgánica
-        </h1>
-        <p className="products-subtitle">
-          Descubre nuestra completa gama de ropa sostenible fabricada con materiales 100% orgánicos. 
-          Cada prenda está cuidadosamente seleccionada para ofrecer calidad, comodidad y respeto por el medio ambiente.
-        </p>
-      </div>
+        {/* Page Header */}
+        <div className="products-header" style={{ backgroundColor: '#f5f5f5ff', padding: '20px', borderRadius: '8px' }}>
+          <h1 className="products-title">
+            Nuestra Colección Orgánica
+          </h1>
+          <p className="products-subtitle">
+            Descubre nuestra completa gama de ropa sostenible fabricada con materiales 100% orgánicos. 
+            Cada prenda está cuidadosamente seleccionada para ofrecer calidad, comodidad y respeto por el medio ambiente.
+          </p>
+        </div>
 
       <div className="products-main">
         {/* Sidebar con filtros */}

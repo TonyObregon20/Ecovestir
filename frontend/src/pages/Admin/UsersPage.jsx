@@ -1,5 +1,5 @@
 // src/pages/Admin/UsersPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function UsersPage() {
@@ -7,7 +7,12 @@ export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all');
+  const [roleFilter, setRoleFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const roleRef = useRef(null);
+  const statusRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   // Modal de nuevo usuario
@@ -36,7 +41,12 @@ export default function UsersPage() {
 
       if (!response.ok) throw new Error('Error al cargar usuarios');
       const data = await response.json();
-      setUsers(data);
+      // Normalizar campo status por si falta en algunos documentos
+      const normalized = (data || []).map(u => ({
+        ...u,
+        status: typeof u.status !== 'undefined' && u.status !== null ? u.status : 'active'
+      }));
+      setUsers(normalized);
     } catch (err) {
       setError('No se pudieron cargar los usuarios.');
     } finally {
@@ -50,13 +60,27 @@ export default function UsersPage() {
 
   // Filtrar usuarios
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = filter === 'all' || 
-                        (filter === 'admin' && user.role === 'admin') ||
-                        (filter === 'customer' && user.role === 'customer');
-    return matchesSearch && matchesRole;
+    const q = (searchTerm || '').toLowerCase();
+    const matchesSearch = (user.name || '').toLowerCase().includes(q) ||
+                          (user.email || '').toLowerCase().includes(q);
+    const matchesRole = roleFilter === 'all' ||
+                        (roleFilter === 'admin' && user.role === 'admin') ||
+                        (roleFilter === 'customer' && user.role === 'customer');
+    const matchesStatus = statusFilter === 'all' ||
+                          (statusFilter === 'active' && user.status === 'active') ||
+                          (statusFilter === 'inactive' && user.status === 'inactive');
+    return matchesSearch && matchesRole && matchesStatus;
   });
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (roleRef.current && !roleRef.current.contains(e.target)) setShowRoleDropdown(false);
+      if (statusRef.current && !statusRef.current.contains(e.target)) setShowStatusDropdown(false);
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, []);
 
   // Estadísticas
   const totalUsers = users.length;
@@ -259,63 +283,117 @@ export default function UsersPage() {
       </div>
 
       {/* Filtros */}
-      <div className="formulario-producto" style={{ marginBottom: '24px' }}>
-        <h2>Filtros</h2>
-        <p style={{ color: 'var(--gris-medio)', marginBottom: '16px' }}>Busca y filtra usuarios</p>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ flex: 1, minWidth: '250px' }}>
-            <label>Buscar por nombre o email</label>
-            <input
-              type="text"
-              placeholder="Ej. Juan Pérez o juan@example.com"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: '100%' }}
-            />
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+          <div style={{ flex: 1, minWidth: 260 }}>
+            <div className="search-bar" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {/* Search icon (inline SVG) */}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: '#9ca3af' }}>
+                <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="11" cy="11" r="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Buscar por nombre o email"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ width: '100%', border: 'none', background: 'transparent', outline: 'none' }}
+              />
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <button
-              onClick={() => setFilter('all')}
-              style={{
-                backgroundColor: filter === 'all' ? 'var(--verde-primario)' : 'white',
-                color: filter === 'all' ? 'white' : 'var(--gris-oscuro)',
-                border: filter === 'all' ? 'none' : '1px solid var(--gris-medio)',
-                padding: '8px 16px',
-                fontSize: '0.9rem',
-                borderRadius: '6px',
-                cursor: 'pointer',
-              }}
-            >
-              Todos
-            </button>
-            <button
-              onClick={() => setFilter('admin')}
-              style={{
-                backgroundColor: filter === 'admin' ? 'var(--verde-primario)' : 'white',
-                color: filter === 'admin' ? 'white' : 'var(--gris-oscuro)',
-                border: filter === 'admin' ? 'none' : '1px solid var(--gris-medio)',
-                padding: '8px 16px',
-                fontSize: '0.9rem',
-                borderRadius: '6px',
-                cursor: 'pointer',
-              }}
-            >
-              Admin
-            </button>
-            <button
-              onClick={() => setFilter('customer')}
-              style={{
-                backgroundColor: filter === 'customer' ? 'var(--verde-primario)' : 'white',
-                color: filter === 'customer' ? 'white' : 'var(--gris-oscuro)',
-                border: filter === 'customer' ? 'none' : '1px solid var(--gris-medio)',
-                padding: '8px 16px',
-                fontSize: '0.9rem',
-                borderRadius: '6px',
-                cursor: 'pointer',
-              }}
-            >
-              Customer
-            </button>
+
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <div ref={roleRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setShowRoleDropdown(s => !s)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  backgroundColor: 'var(--blanco)',
+                  color: 'var(--gris-oscuro)',
+                  border: '1px solid var(--gris-claro)',
+                  padding: '10px 14px',
+                  fontSize: '0.95rem',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  minWidth: 180,
+                  justifyContent: 'space-between'
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: '#6b7280' }}>
+                    <path d="M10 3v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4 7h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {roleFilter === 'all' ? 'Todos los roles' : roleFilter === 'admin' ? 'Administradores' : 'Clientes'}
+                </span>
+                <span style={{ color: '#9ca3af' }}>▾</span>
+              </button>
+
+              {showRoleDropdown && (
+                <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', zIndex: 1100, minWidth: 220, background: '#fff', border: '1px solid #e6e9ef', borderRadius: 8, boxShadow: '0 8px 20px rgba(2,6,23,.08)', overflow: 'hidden' }}>
+                  <button onClick={() => { setRoleFilter('all'); setShowRoleDropdown(false); }} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '10px 12px', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                    <span>Todos los roles</span>
+                    {roleFilter === 'all' && <span>✓</span>}
+                  </button>
+                  <button onClick={() => { setRoleFilter('admin'); setShowRoleDropdown(false); }} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '10px 12px', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                    <span>Administradores</span>
+                    {roleFilter === 'admin' && <span>✓</span>}
+                  </button>
+                  <button onClick={() => { setRoleFilter('customer'); setShowRoleDropdown(false); }} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '10px 12px', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                    <span>Clientes</span>
+                    {roleFilter === 'customer' && <span>✓</span>}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div ref={statusRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setShowStatusDropdown(s => !s)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  backgroundColor: 'var(--blanco)',
+                  color: 'var(--gris-oscuro)',
+                  border: '1px solid var(--gris-claro)',
+                  padding: '10px 14px',
+                  fontSize: '0.95rem',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  minWidth: 180,
+                  justifyContent: 'space-between'
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: '#6b7280' }}>
+                    <path d="M10 3v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4 7h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {statusFilter === 'all' ? 'Todos los estados' : statusFilter === 'active' ? 'Activos' : 'Inactivos'}
+                </span>
+                <span style={{ color: '#9ca3af' }}>▾</span>
+              </button>
+
+              {showStatusDropdown && (
+                <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', zIndex: 1100, minWidth: 220, background: '#fff', border: '1px solid #e6e9ef', borderRadius: 8, boxShadow: '0 8px 20px rgba(2,6,23,.08)', overflow: 'hidden' }}>
+                  <button onClick={() => { setStatusFilter('all'); setShowStatusDropdown(false); }} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '10px 12px', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                    <span>Todos los estados</span>
+                    {statusFilter === 'all' && <span>✓</span>}
+                  </button>
+                  <button onClick={() => { setStatusFilter('active'); setShowStatusDropdown(false); }} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '10px 12px', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                    <span>Activos</span>
+                    {statusFilter === 'active' && <span>✓</span>}
+                  </button>
+                  <button onClick={() => { setStatusFilter('inactive'); setShowStatusDropdown(false); }} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, padding: '10px 12px', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                    <span>Inactivos</span>
+                    {statusFilter === 'inactive' && <span>✓</span>}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

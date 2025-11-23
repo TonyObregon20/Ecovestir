@@ -1,7 +1,7 @@
 // src/components/Navbar.jsx
 import React from 'react';
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ShoppingCart, Search, LogOut, User } from 'lucide-react';
+import { ShoppingCart, Search, LogOut, User, Settings } from 'lucide-react';
 import api from '../api/api';
 import { useCart } from '../Context/useCart'; 
 import "../style/navbar.css";
@@ -14,8 +14,11 @@ export default function Navbar({ onCartClick }) {
 
   const [searchText, setSearchText] = React.useState('');
   const [suggestions, setSuggestions] = React.useState([]);
-  // const [suggestionsLoading, setSuggestionsLoading] = React.useState(false);
   const [searchFocused, setSearchFocused] = React.useState(false);
+  const [showUserMenu, setShowUserMenu] = React.useState(false);
+  const userMenuRef = React.useRef(null);
+  
+  // const [suggestionsLoading, setSuggestionsLoading] = React.useState(false);
   // Keep navbar input in sync with ?q= on productos route
   React.useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -50,10 +53,25 @@ export default function Navbar({ onCartClick }) {
 
   const user = JSON.parse(localStorage.getItem('user'));
 
+  // Close user menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
+    };
+    
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showUserMenu]);
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     clearCart();
+    setShowUserMenu(false);
     navigate('/');
   };
 
@@ -135,28 +153,38 @@ export default function Navbar({ onCartClick }) {
           </button>
 
           {user ? (
-            <div className="navbar-user-info">
+            <div className="navbar-user-info" ref={userMenuRef}>
               {user.role === 'admin' ? (
-                <Link to="/admin" className="navbar-auth-button admin">
-                  Panel de Admin
+                <Link to="/admin" className="navbar-admin-icon-btn" title="Panel de Admin">
+                  <Settings size={20} />
                 </Link>
               ) : (
-                <span className="navbar-user-greeting">
-                  Hola, <strong>{user.name}</strong>
-                </span>
+                <>
+                  <div 
+                    className="navbar-user-avatar" 
+                    title={user.name}
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                  >
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  {showUserMenu && (
+                    <div className="navbar-user-dropdown">
+                      <div className="navbar-user-dropdown-header">
+                        <span className="navbar-user-dropdown-greeting">¡Hola, {user.name}!</span>
+                      </div>
+                      <div className="navbar-user-dropdown-divider"></div>
+                      <button className="navbar-user-dropdown-item" onClick={handleLogout}>
+                        <LogOut size={16} />
+                        <span>Cerrar sesión</span>
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
-              <button 
-                className="navbar-logout-btn"
-                onClick={handleLogout}
-                title="Cerrar sesión"
-              >
-                <LogOut size={16} />
-              </button>
             </div>
           ) : (
-            <Link to="/login" className="navbar-auth-button login">
-              <User size={18} />
-              <span>Iniciar Sesión</span>
+            <Link to="/login" className="navbar-auth-button login" title="Iniciar Sesión">
+              <User size={20} />
             </Link>
           )}
         </div>

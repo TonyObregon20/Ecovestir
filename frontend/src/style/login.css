@@ -237,37 +237,13 @@
   color: #9ca3af;
 }
 
-/* Remember me & Forgot password container */
+/* Forgot password container (aligned right now that "Recordarme" was removed) */
 .remember-forgot-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: -4px;
   margin-bottom: 4px;
-}
-
-/* Remember me */
-.remember-me {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.remember-me input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  /* Use global brand color for checked state */
-  accent-color: var(--brand);
-  border-radius: 4px;
-  border: 1px solid #d1d5db; /* subtle neutral border */
-}
-
-.remember-me label {
-  font-size: 14px;
-  color: #6b7280;
-  cursor: pointer;
-  user-select: none;
 }
 
 /* Forgot password */

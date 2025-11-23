@@ -7,7 +7,8 @@ import {
   ShoppingCart,
   BarChart3,
   Tag,
-  Home
+  Home,
+  Hand
 } from 'lucide-react';
 import "../../index.css";
 
@@ -40,8 +41,8 @@ export default function AdminPage() {
       {/* Sidebar compacto */}
       <aside className="admin-sidebar-compact">
         <div className="sidebar-logo">
-          <span className="logo-icon">🍃</span>
-          <h2>EcoVestir</h2>
+          <img src="/logo.png" alt="EcoVestir" className="logo-icon" />
+          {/* <h2>EcoVestir</h2> */}
         </div>
 
         <nav>
@@ -69,9 +70,12 @@ export default function AdminPage() {
       {/* Contenido principal */}
       <main className="admin-main">
         <header className="admin-header">
-          {/* 👇 Saludo personalizado en lugar de "Panel de Administración" */}
+          {/* 👇 Saludo personalizado con icono */}
           {user ? (
-            <h1>Bienvenido, {user.name} 👋</h1>
+            <div className="admin-welcome">
+              <h1>Bienvenido {user.name.charAt(0).toUpperCase() + user.name.slice(1)}  </h1>
+              <Hand className="welcome-icon" />
+            </div>
           ) : (
             <h1>Cargando...</h1>
           )}

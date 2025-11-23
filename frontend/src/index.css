@@ -219,13 +219,15 @@ a:hover {
 .sidebar-logo {
   text-align: center;
   margin-bottom: 30px;
+  padding: 8px 0;
 }
 
 .logo-icon {
-  font-size: 1.8rem;
-  color: var(--verde-primario);
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
   display: block;
-  margin-bottom: 8px;
+  margin: 0 auto 8px;
 }
 
 .admin-sidebar-compact h2 {
@@ -327,6 +329,26 @@ a:hover {
   padding: 20px;
   background-color: white;
   border-bottom: 1px solid #dee2e6;
+}
+
+.admin-welcome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-welcome h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.admin-welcome .welcome-icon {
+  width: 32px;
+  height: 32px;
+  color: #00a63e;
+  stroke-width: 2;
 }
 
 .btn-logout {

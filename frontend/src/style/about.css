@@ -7,7 +7,7 @@
 /* Hero Section */
 .about-page .hero-section {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1706535426949-e90f953f0d6d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwY290dG9uJTIwZmFjdG9yeSUyMHN1c3RhaW5hYmxlJTIwcHJvZHVjdGlvbnxlbnwxfHx8fDE3NTg1MDEzMzR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral') center/cover no-repeat;
-  padding: 60px 40px !important;
+  padding: 60px 0 !important;
   height: auto !important;
   min-height: auto !important;
   display: flex !important;
@@ -18,6 +18,9 @@
 }
 
 .about-page .hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,13 +63,14 @@
 
 /* Mission Section */
 .mission-section {
-  padding: 1rem 2rem;
+  padding: 60px 0;
   background-color: #f9fafb;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 40px;
 }
 
 .mission-section h2 {

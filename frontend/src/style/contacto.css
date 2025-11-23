@@ -34,7 +34,7 @@
    ======================================== */
 .contacto-page .contacto-hero {
   background: #00a63e;
-  padding: 40px 40px;
+  padding: 60px 0;
   text-align: center;
   color: white;
   display: flex;
@@ -46,7 +46,7 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,7 +86,7 @@
   color: white;
   opacity: 1;
   text-align: center;
-  padding: 0 20px;
+  padding: 0;
   display: block;
   width: 100%;
 }
@@ -95,12 +95,13 @@
    MAIN CONTENT
    ======================================== */
 .contacto-main {
-  padding: 60px 20px;
+  padding: 60px 0;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 40px;
 }
 
 .contacto-grid {
