@@ -6,7 +6,7 @@ const { protect, admin } = require('../middlewares/authMiddleware');
 // Rutas públicas
 router.get('/', reviewController.getReviews);
 router.get('/:id', reviewController.getReview);
-router.post('/', reviewController.createReview);
+router.post('/', protect, reviewController.createReview);
 
 // Rutas admin
 router.get('/admin/all', protect, admin, reviewController.getAllReviewsAdmin);

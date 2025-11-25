@@ -9,8 +9,6 @@ export default function BlogPage() {
   const [stats, setStats] = useState({ averageRating: 0, totalReviews: 0 });
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    author: '',
-    email: '',
     title: '',
     content: '',
     rating: 5,
@@ -42,8 +40,15 @@ export default function BlogPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.author || !formData.email || !formData.title || !formData.content) {
+    if (!formData.title || !formData.content) {
       alert('Por favor completa todos los campos');
+      return;
+    }
+
+    // Verificar que el usuario esté autenticado
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Debes iniciar sesión para publicar una reseña');
       return;
     }
 
@@ -57,8 +62,6 @@ export default function BlogPage() {
         
         // Reset form
         setFormData({
-          author: '',
-          email: '',
           title: '',
           content: '',
           rating: 5,
@@ -131,32 +134,6 @@ export default function BlogPage() {
               </div>
               <div className="form-content">
                 <form onSubmit={handleSubmit} className="review-form">
-                  <div className="form-group">
-                    <label htmlFor="author">Nombre *</label>
-                    <input
-                      id="author"
-                      value={formData.author}
-                      onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                      placeholder="Tu nombre"
-                      required
-                      disabled={submitting}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="email">Email *</label>
-                    <input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      placeholder="tu@email.com"
-                      required
-                      disabled={submitting}
-                    />
-                    <p className="form-help">No será publicado</p>
-                  </div>
-
                   <div className="form-group">
                     <label htmlFor="title">Título *</label>
                     <input
@@ -259,15 +236,6 @@ export default function BlogPage() {
                     <h3 className="post-title">{post.title}</h3>
                     <p className="post-content">{post.content}</p>
                   </div>
-                  {post.productName && post.productImage && (
-                    <div className="post-product">
-                      <img src={post.productImage} alt={post.productName} className="product-image" />
-                      <div className="product-info">
-                        <span className="product-label">Producto reseñado:</span>
-                        <span className="product-name">{post.productName}</span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
