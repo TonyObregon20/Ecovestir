@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 // Obtener todas las reseñas (públicas aprobadas)
 exports.getReviews = async (req, res, next) => {
   try {
-    const { page = 1, limit = 50, rating, sortBy = '-createdAt' } = req.query;
+    const { page = 1, limit = 1000, rating, sortBy = '-createdAt' } = req.query;
 
     // Filtros
     const filter = { status: 'approved' };
@@ -15,7 +15,7 @@ exports.getReviews = async (req, res, next) => {
       .sort(sortBy)
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .populate('product', 'name images')
+      .populate('product', 'name')
       .select('-email -meta'); // No exponer emails públicamente
 
     const total = await Review.countDocuments(filter);
@@ -50,20 +50,20 @@ exports.getReviews = async (req, res, next) => {
 // Crear nueva reseña
 exports.createReview = async (req, res, next) => {
   try {
-    const { author, email, title, content, rating, productId } = req.body;
+    const { title, content, rating, productId } = req.body;
 
     // Validaciones
-    if (!author || !email || !title || !content || !rating) {
+    if (!title || !content || !rating) {
       return res.status(400).json({
         success: false,
         message: 'Todos los campos son requeridos'
       });
     }
 
-    // Datos de la reseña
+    // Datos de la reseña (usar info del usuario autenticado)
     const reviewData = {
-      author,
-      email,
+      author: req.user.name,
+      email: req.user.email,
       title,
       content,
       rating,
@@ -79,7 +79,6 @@ exports.createReview = async (req, res, next) => {
       if (product) {
         reviewData.product = productId;
         reviewData.productName = product.name;
-        reviewData.productImage = product.images?.[0] || '';
       }
     }
 
@@ -99,7 +98,7 @@ exports.createReview = async (req, res, next) => {
 exports.getReview = async (req, res, next) => {
   try {
     const review = await Review.findById(req.params.id)
-      .populate('product', 'name images');
+      .populate('product', 'name');
 
     if (!review) {
       return res.status(404).json({

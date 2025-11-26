@@ -46,7 +46,6 @@ const ReviewSchema = new mongoose.Schema({
     ref: 'Product'
   },
   productName: String,
-  productImage: String,
   
   // Estado y verificación
   verified: {
