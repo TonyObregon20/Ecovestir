@@ -7,7 +7,7 @@ const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
 
 // ==========================
-// 🔌 Conexión a base de datos
+// 🔌 Conexión a DB
 // ==========================
 connectDB().catch(err => {
   console.error("❌ Error conectando a MongoDB:", err.message);
@@ -50,8 +50,9 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // ==========================
-// 🌐 CORS CONFIG
+// 🌐 CORS
 // ==========================
+
 const allowedOrigins = [
   "http://localhost:5173",
   "https://ecovestir-ztc7.vercel.app",
@@ -62,17 +63,23 @@ app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-
-      console.log("❌ CORS bloqueado para:", origin);
-      return callback(new Error("Not allowed by CORS"));
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        console.log("❌ CORS bloqueado para:", origin);
+        return callback(new Error("Not allowed by CORS"));
+      }
     },
     credentials: true,
   })
 );
 
-// Permitir preflight OPTIONS
-app.options("*", cors());
+// ❗❗ FIX DEL ERROR ❗❗
+// ESTA LÍNEA ES LA QUE DABA ERROR EN RENDER
+// app.options("*", cors());
+
+// ✔️ OPCIÓN CORRECTA
+app.use(cors()); // permite preflight sin romper Express
 
 // ==========================
 // 📌 RUTAS API
@@ -87,13 +94,6 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
-
-// ==========================
-// 🔚 RUTA 404 (Express 5 compatible)
-// ==========================
-app.use((req, res) => {
-  res.status(404).json({ message: "Ruta no encontrada" });
-});
 
 // ==========================
 // 🛑 MANEJADOR DE ERRORES
