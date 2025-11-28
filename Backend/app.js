@@ -31,12 +31,11 @@ const app = express();
 // ==========================
 app.disable("x-powered-by");
 
-// Helmet SÍ PERO sin bloquear CORS
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
     crossOriginEmbedderPolicy: false,
-    contentSecurityPolicy: false, // evita bloqueos al consumir API desde dominio externo
+    contentSecurityPolicy: false,
   })
 );
 
@@ -53,31 +52,26 @@ app.use(express.json());
 // ==========================
 // 🌐 CORS CONFIG
 // ==========================
-
-// 👇 Whitelist de dominios permitidos
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://ecovestir-ztc7.vercel.app", // FRONTEND PRODUCCIÓN VERCE
+  "https://ecovestir-ztc7.vercel.app",
   process.env.CLIENT_URL
 ].filter(Boolean);
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // Permitir Postman / backend interno
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        console.log("❌ CORS bloqueado para:", origin);
-        return callback(new Error("Not allowed by CORS"));
-      }
+      console.log("❌ CORS bloqueado para:", origin);
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
   })
 );
 
-// Permitir preflight OPTIONS (importante para Render + Vercel)
+// Permitir preflight OPTIONS
 app.options("*", cors());
 
 // ==========================
@@ -85,7 +79,7 @@ app.options("*", cors());
 // ==========================
 app.use('/api/users', usersRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes); 
+app.use('/api/admin', adminRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/orders', ordersRoutes);
@@ -93,6 +87,13 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
+
+// ==========================
+// 🔚 RUTA 404 (Express 5 compatible)
+// ==========================
+app.use((req, res) => {
+  res.status(404).json({ message: "Ruta no encontrada" });
+});
 
 // ==========================
 // 🛑 MANEJADOR DE ERRORES
