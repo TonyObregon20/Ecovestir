@@ -6,7 +6,10 @@ const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
 
-connectDB();
+// Conexión a DB (no detener app si falla)
+connectDB().catch(err => {
+  console.error("❌ Error conectando a MongoDB:", err.message);
+});
 
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
@@ -20,10 +23,29 @@ const contactRoutes = require('./routes/contact');
 const reviewRoutes = require('./routes/reviews');
 
 const app = express();
+
+// 🔐 Seguridad
+app.disable("x-powered-by");
 app.use(helmet());
+
+// 📜 Logs
 app.use(morgan('dev'));
+
+// 📝 JSON
 app.use(express.json());
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+
+// 🌐 CORS (ahora con whitelist)
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.CLIENT_URL,  // tu frontend de Netlify
+].filter(Boolean);
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
+// 📌 Rutas API
 app.use('/api/users', usersRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes); 
@@ -35,8 +57,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
 
-
-// error handler (último middleware)
+// 🛑 Middleware de errores
 app.use(errorHandler);
 
 module.exports = app;
