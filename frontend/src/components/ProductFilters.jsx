@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Filter, Search, SlidersHorizontal, X } from 'lucide-react';
 import api from '../api/api';
 import { getCategories } from '../api/categories';
-import '../style/productFilters.css';
+import '../style/productfilters.css';
 
 const Checkbox = ({ id, checked, onChange, children }) => (
   <div className="product-filters-checkbox-item">
