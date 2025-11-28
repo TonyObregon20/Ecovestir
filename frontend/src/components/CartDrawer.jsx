@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { useCart } from '../Context/useCart';
-import './CartDrawer.css';
+import './Cartdrawer.css';
 
 function CartDrawer({ isOpen, onClose }) {
   const navigate = useNavigate();
