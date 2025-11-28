@@ -53,11 +53,14 @@ app.use(express.json());
 // 🌐 CORS
 // ==========================
 
+
 const allowedOrigins = [
   "http://localhost:5173",
   "https://ecovestir-ztc7.vercel.app",
+  "https://ecovestir.vercel.app",
   process.env.CLIENT_URL
 ].filter(Boolean);
+
 
 app.use(
   cors({
@@ -78,8 +81,7 @@ app.use(
 // ESTA LÍNEA ES LA QUE DABA ERROR EN RENDER
 // app.options("*", cors());
 
-// ✔️ OPCIÓN CORRECTA
-app.use(cors()); // permite preflight sin romper Express
+
 
 // ==========================
 // 📌 RUTAS API
