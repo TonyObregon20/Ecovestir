@@ -35,7 +35,8 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:4000/api/users', {
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+  const response = await fetch(`${baseURL}/api/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -113,7 +114,8 @@ export default function UsersPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/api/users', {
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+  const response = await fetch(`${baseURL}/api/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +164,8 @@ export default function UsersPage() {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/users/${editingUser._id}`, {
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+  const response = await fetch(`${baseURL}/api/users/${editingUser._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -207,7 +210,8 @@ export default function UsersPage() {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/users/${userId}`, {
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+  const response = await fetch(`${baseURL}/api/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -9,6 +9,7 @@ const CartProvider = ({ children }) => {
   const pendingUpdatesRef = useRef({});
 
   const getToken = () => localStorage.getItem('token');
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
   const mapServerCart = (cartData) => cartData.map((item) => {
     const prodId = item.productId._id;
@@ -29,7 +30,7 @@ const CartProvider = ({ children }) => {
     if (!token) { setCartItems([]); setLoading(false); return; }
 
     try {
-      const res = await fetch('http://localhost:4000/api/cart', { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${baseURL}/api/cart`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         const cartData = await res.json();
         setCartItems(mapServerCart(cartData));
@@ -61,7 +62,7 @@ const CartProvider = ({ children }) => {
     setCartItems(optimistic);
 
     try {
-      const resReserve = await fetch('http://localhost:4000/api/reservations', {
+      const resReserve = await fetch(`${baseURL}/api/reservations`, {
         method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ productId: prodId, size, quantity: 1 }),
       });
@@ -72,7 +73,7 @@ const CartProvider = ({ children }) => {
         return false;
       }
 
-      const res = await fetch('http://localhost:4000/api/cart/items', {
+      const res = await fetch(`${baseURL}/api/cart/items`, {
         method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ productId: prodId, quantity: 1, size }),
       });
@@ -85,7 +86,7 @@ const CartProvider = ({ children }) => {
 
       const errorData = await res.json().catch(() => ({}));
       // persist failed: release reservation
-      await fetch('http://localhost:4000/api/reservations', {
+      await fetch(`${baseURL}/api/reservations`, {
         method: 'DELETE', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ productId: prodId, size }),
       }).catch(() => {});
@@ -126,11 +127,10 @@ const CartProvider = ({ children }) => {
 
     try {
       // release reservation
-      await fetch('http://localhost:4000/api/reservations', {
+      await fetch(`${baseURL}/api/reservations`, {
         method: 'DELETE', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, size }),
       }).catch(() => {});
-
-      const url = `http://localhost:4000/api/cart/items/${prodId}${size ? `?size=${encodeURIComponent(size)}` : ''}`;
+      const url = `${baseURL}/api/cart/items/${prodId}${size ? `?size=${encodeURIComponent(size)}` : ''}`;
       const res = await fetch(url, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         const body = await res.json().catch(() => null);
@@ -173,20 +173,20 @@ const CartProvider = ({ children }) => {
       try {
         if (newQty <= 0) {
           // remove
-          await fetch(`http://localhost:4000/api/reservations`, { method: 'DELETE', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, size }) }).catch(() => {});
-          const delRes = await fetch(`http://localhost:4000/api/cart/items/${prodId}${size ? `?size=${encodeURIComponent(size)}` : ''}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+          await fetch(`${baseURL}/api/reservations`, { method: 'DELETE', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, size }) }).catch(() => {});
+          const delRes = await fetch(`${baseURL}/api/cart/items/${prodId}${size ? `?size=${encodeURIComponent(size)}` : ''}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
           if (!delRes.ok) { const err = await delRes.json().catch(() => ({})); setCartItems(prevItems); alert(err.message || 'No se pudo eliminar el producto.'); }
           else { const body = await delRes.json().catch(() => null); if (Array.isArray(body)) setCartItems(mapServerCart(body)); else await loadCart(); }
         } else {
           // release old
-          await fetch('http://localhost:4000/api/reservations', { method: 'DELETE', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, size }) }).catch(() => {});
+          await fetch(`${baseURL}/api/reservations`, { method: 'DELETE', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, size }) }).catch(() => {});
           // reserve new qty
-          const reserveRes = await fetch('http://localhost:4000/api/reservations', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, size, quantity: newQty }) });
+          const reserveRes = await fetch(`${baseURL}/api/reservations`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, size, quantity: newQty }) });
           if (!reserveRes.ok) { const err = await reserveRes.json().catch(() => ({})); setCartItems(prevItems); alert(err.message || 'No se pudo reservar la nueva cantidad.'); }
           else {
             // persist change in cart (delete + add)
-            await fetch(`http://localhost:4000/api/cart/items/${prodId}${size ? `?size=${encodeURIComponent(size)}` : ''}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
-            const addRes = await fetch('http://localhost:4000/api/cart/items', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, quantity: newQty, size }) });
+            await fetch(`${baseURL}/api/cart/items/${prodId}${size ? `?size=${encodeURIComponent(size)}` : ''}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+            const addRes = await fetch(`${baseURL}/api/cart/items`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ productId: prodId, quantity: newQty, size }) });
             if (addRes.ok) { const cartData = await addRes.json().catch(() => null); if (Array.isArray(cartData)) setCartItems(mapServerCart(cartData)); else await loadCart(); }
             else { const err = await addRes.json().catch(() => ({})); console.error('Error updating cart qty', err); setCartItems(prevItems); alert(err.message || 'No se pudo actualizar la cantidad.'); }
           }
@@ -211,8 +211,8 @@ const CartProvider = ({ children }) => {
     setCartItems([]);
     try {
       // release all reservations for user
-      await fetch('http://localhost:4000/api/reservations', { method: 'DELETE', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({}) }).catch(() => {});
-      const res = await fetch('http://localhost:4000/api/cart', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+      await fetch(`${baseURL}/api/reservations`, { method: 'DELETE', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({}) }).catch(() => {});
+      const res = await fetch(`${baseURL}/api/cart`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) { const data = await res.json().catch(() => null); if (Array.isArray(data)) setCartItems(mapServerCart(data)); else await loadCart(); }
       else { const err = await res.json().catch(() => ({})); console.error('clearCart server error', err); setCartItems(prev); alert(err.message || 'No se pudo vaciar el carrito.'); }
     } catch (err) { console.error('clearCart error', err); setCartItems(prev); alert('Error de conexión.'); }
