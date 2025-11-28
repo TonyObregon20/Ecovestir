@@ -6,7 +6,9 @@ const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/errorHandler');
 require('dotenv').config();
 
-// Conexión a DB (no detener app si falla)
+// ==========================
+// 🔌 Conexión a DB
+// ==========================
 connectDB().catch(err => {
   console.error("❌ Error conectando a MongoDB:", err.message);
 });
@@ -24,31 +26,67 @@ const reviewRoutes = require('./routes/reviews');
 
 const app = express();
 
+// ==========================
 // 🔐 Seguridad
+// ==========================
 app.disable("x-powered-by");
-app.use(helmet());
 
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: false,
+  })
+);
+
+// ==========================
 // 📜 Logs
-app.use(morgan('dev'));
+// ==========================
+app.use(morgan("dev"));
 
+// ==========================
 // 📝 JSON
+// ==========================
 app.use(express.json());
 
-// 🌐 CORS (ahora con whitelist)
+// ==========================
+// 🌐 CORS
+// ==========================
+
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.CLIENT_URL,  // tu frontend de Netlify
+  "https://ecovestir-ztc7.vercel.app",
+  process.env.CLIENT_URL
 ].filter(Boolean);
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        console.log("❌ CORS bloqueado para:", origin);
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
-// 📌 Rutas API
+// ❗❗ FIX DEL ERROR ❗❗
+// ESTA LÍNEA ES LA QUE DABA ERROR EN RENDER
+// app.options("*", cors());
+
+// ✔️ OPCIÓN CORRECTA
+app.use(cors()); // permite preflight sin romper Express
+
+// ==========================
+// 📌 RUTAS API
+// ==========================
 app.use('/api/users', usersRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes); 
+app.use('/api/admin', adminRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/orders', ordersRoutes);
@@ -57,7 +95,9 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
 
-// 🛑 Middleware de errores
+// ==========================
+// 🛑 MANEJADOR DE ERRORES
+// ==========================
 app.use(errorHandler);
 
 module.exports = app;
