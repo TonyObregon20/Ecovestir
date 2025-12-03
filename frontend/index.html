@@ -17,15 +17,15 @@
       var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
       v.onload = function() {
         window.voiceflow.chat.load({
-          verify: { projectID: '690da1abbf631d757bab1702' },
+          verify: { projectID: '692e2eedbf6fe4e7b6d06a53' },
           url: 'https://general-runtime.voiceflow.com',
           versionID: 'production',
-          voice: { url: "https://runtime-api.voiceflow.com" }
+          voice: {
+            url: "https://runtime-api.voiceflow.com"
+          }
         });
       }
-      v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; 
-      v.type = "text/javascript"; 
-      s.parentNode.insertBefore(v, s);
+      v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
   })(document, 'script');
 </script>
 
